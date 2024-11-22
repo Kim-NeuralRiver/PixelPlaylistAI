@@ -1,0 +1,16 @@
+{
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "semi": true,
+  "useTabs": false,
+  "bracketSameLine": false,
+  "jsxSingleQuote": false,
+  "arrowParens": "always",
+  "singleQuote": true,
+  "printWidth": 120,
+  "importOrder": ["<THIRD_PARTY_MODULES>", "@react(.*)","@eva-design(.*)","@ui-kitten/(.*)$", "@screens/(.*)$", "@components/(.*)$" ,"@theme/(.*)$" , "^[./]" ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"]
+}
