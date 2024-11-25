@@ -17,14 +17,14 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email, image }: Prisma.UserCreateInput = body;
+    const { name, email, image, username }: Prisma.UserCreateInput = body;
 
     if (!name || !email) {
       return NextResponse.json({ error: "Name and email are required" }, { status: 400 });
     }
 
     const newUser = await prisma.user.create({
-      data: { name, email, image },
+      data: { name, email, image, username },
     });
 
     return NextResponse.json(newUser, { status: 201 });
