@@ -9,7 +9,10 @@ env:
 on:
   push:
     branches:
-        - main
+      - main
+    paths:
+      - 'src/**'
+      - 'public/**'
 
 jobs:
   Deploy-Production:
