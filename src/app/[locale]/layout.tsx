@@ -15,10 +15,9 @@ export const generateStaticParams = () => {
 
 interface IRootLayout {
   children: React.ReactNode;
-  params: {
-    locale: string;
-  };
+  params: Promise<{ locale: string }>;
 }
+
 const RootLayout: React.FC<IRootLayout> = async ({ children, params }) => {
   const { locale } = await params;
   const { resources } = await initTranslations(locale, ['common', 'home', 'auth']);
