@@ -1,0 +1,128 @@
+name: Vercel Preview Deployment
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  I18NEXUS_API_KEY: ${{ secrets.I18NEXUS_API_KEY }}
+
+on:
+  pull_request:
+    types:
+      - ready_for_review
+  issue_comment:
+    types:
+      - created
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dummy Test
+        run: echo "Dummy test"
+
+  deploy-preview:
+    needs: [test]
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    if: |
+      (github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '/deploy')) ||
+      (github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set Branch for Deployment
+        id: set-branch
+        run: |
+          if [ "${{ github.event_name }}" == "issue_comment" ]; then
+          # Extract branch name from the comment if provided
+          DEPLOY_BRANCH=$(echo "${{ github.event.comment.body }}" | awk '{print $2}')
+          
+            if [ -z "$DEPLOY_BRANCH" ]; then
+              # Use the pull request branch if the comment does not specify a branch
+              PR_URL="${{ github.event.issue.pull_request.url }}"
+              echo "Fetching pull request branch information from $PR_URL"
+              
+              PR_DATA=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$PR_URL")
+              DEPLOY_BRANCH=$(echo "$PR_DATA" | jq -r '.head.ref')
+              
+              if [ -z "$DEPLOY_BRANCH" ]; then
+                echo "Error: Could not fetch branch name from pull request."
+                exit 1
+              fi
+              echo "No branch specified in comment. Using PR branch: $DEPLOY_BRANCH"
+            fi
+
+          elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            # Use the branch from the "Use workflow from" dropdown
+            DEPLOY_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+            echo "Branch for manual workflow run: $DEPLOY_BRANCH"
+
+          else
+            echo "Error: Unsupported event type for branch extraction."
+            exit 1
+          fi
+
+          echo "branch=$DEPLOY_BRANCH" >> $GITHUB_ENV
+
+      - name: Notify User (start)
+        if: ${{ github.event_name == 'issue_comment' }}
+        id: notify-start
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issueNumber = context.payload.issue.number;
+            const branch = process.env.branch || 'unknown';
+            const comment = await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: `Deploy preview for branch \`${branch}\` is starting. Please wait...`
+            });
+            core.setOutput("comment-id", comment.data.id);
+        env:
+          branch: ${{ env.branch }}
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Project Artifacts
+        id: deploy-vercel
+        run: |
+          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} > deployment_log.txt
+          DEPLOY_URL=$(grep -o 'https://.*\.vercel\.app' deployment_log.txt | head -n 1)
+          echo "deploy_url=$DEPLOY_URL" >> $GITHUB_ENV
+
+      - name: Notify User (complete)
+        if: ${{ github.event_name == 'issue_comment' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const comment = context.payload.comment;
+            const issueNumber = comment.issue_url.split('/').pop();
+            const deploymentUrl = process.env.deploy_url || 'Deployment failed';
+            await github.rest.issues.updateComment({
+              ...context.repo,
+              comment_id: ${{ steps.notify-start.outputs.comment-id }},
+              body: `Deploy preview for branch \`${process.env.branch}\` is complete: ${deploymentUrl}`
+            }); 
+        env:
+          branch: ${{ env.branch }}
+          deploy_url: ${{ env.deploy_url }}
+
+      - name: Output Deployment URL
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          echo "Deployment complete: ${{ env.deploy_url }}"
