@@ -1,3 +1,4 @@
+import { Roboto_Flex } from 'next/font/google';
 import localFont from 'next/font/local';
 import React from 'react';
 
@@ -13,6 +14,11 @@ const geistMono = localFont({
   variable: '--font-geist-mono',
   weight: '100 900',
 });
+const robotoFlex = Roboto_Flex({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-roboto-flex',
+  display: 'swap',
+});
 
 interface IRootLayout {
   children: React.ReactNode;
@@ -20,7 +26,7 @@ interface IRootLayout {
 
 const RootLayout: React.FC<IRootLayout> = ({ children }) => (
   <html lang="en">
-    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+    <body className={`${robotoFlex.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
   </html>
 );
 
