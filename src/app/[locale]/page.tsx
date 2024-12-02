@@ -2,13 +2,16 @@
 
 import LanguageChanger from '@/components/LanguageChanger';
 import PrivateRoute from '@/components/PrivateRoute';
-import { useAuth } from '@/hooks/useAuth';
+import { useSession, signOut } from 'next-auth/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 const Home: React.FC = () => {
   const { t } = useTranslation(['common', 'home', 'auth']);
-  const { isAuthenticated, user, signOut } = useAuth();
+  const { data: session, status } = useSession();
+
+  const isAuthenticated = status === 'authenticated';
+  const user = session?.user?.name || session?.user?.email;
 
   return (
     <PrivateRoute>
@@ -16,7 +19,11 @@ const Home: React.FC = () => {
         <main className="flex flex-col items-center justify-center">
           <h1 className="text-4xl font-bold mb-4">{t('home:title')}</h1>
           <p className="text-xl mb-8">{t('home:description')}</p>
-          {isAuthenticated && <p className="text-lg mb-4">{t('home:welcome', { username: user })}</p>}
+          {isAuthenticated ? (
+            <p className="text-lg mb-4">{t('home:welcome', { username: user })}</p>
+          ) : (
+            <p className="text-lg mb-4 text-red-500">{t('auth:invalidToken')}</p>
+          )}
           <div className="mb-8 w-full">
             <h2 className="text-2xl font-semibold mb-2">{t('home:features.title')}</h2>
             <ul className="list-disc list-inside">
@@ -25,10 +32,14 @@ const Home: React.FC = () => {
               ))}
             </ul>
           </div>
-          <button onClick={signOut} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mb-4">
-            {t('auth:signOut')}
-          </button>
-
+          {isAuthenticated && (
+            <button
+              onClick={() => signOut()}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mb-4"
+            >
+              {t('auth:signOut')}
+            </button>
+          )}
           <LanguageChanger />
         </main>
         <footer className="mt-8 text-gray-600">{t('common:footer')}</footer>

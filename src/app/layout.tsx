@@ -1,5 +1,6 @@
 import localFont from 'next/font/local';
 import React from 'react';
+import { SessionProvider } from 'next-auth/react';
 
 import './globals.css';
 
@@ -20,7 +21,9 @@ interface IRootLayout {
 
 const RootLayout: React.FC<IRootLayout> = ({ children }) => (
   <html lang="en">
-    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <SessionProvider>{children}</SessionProvider>
+    </body>
   </html>
 );
 

@@ -3,17 +3,16 @@ import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { signIn } from 'next-auth/react';
 
 const SignUp: React.FC = () => {
   const [username, setUsername] = useState('');
-  const [name,setName] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const router = useRouter();
   const { t } = useTranslation(['auth']);
-  const { signIn } = useAuth();
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,9 +29,10 @@ const SignUp: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: username,
+          username,
           email,
-          name: name
+          name,
+          password, // Pass the plain password to be hashed server-side
         }),
       });
 
@@ -43,8 +43,19 @@ const SignUp: React.FC = () => {
       }
 
       alert(t('auth:signUpSuccess'));
-      signIn(username);
-      router.push('/');
+
+      // Optionally log in the user automatically after sign-up
+      const loginResponse = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (loginResponse?.error) {
+        alert(loginResponse.error);
+      } else {
+        router.push('/');
+      }
     } catch (error) {
       console.error('Error during sign-up:', error);
       alert(t('auth:signUpError'));
