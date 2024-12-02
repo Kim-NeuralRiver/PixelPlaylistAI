@@ -15,7 +15,14 @@ const LanguageChanger = () => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLocale = e.target.value;
 
-    // redirect to the new locale path
+    // Handle the case where currentPathname is null
+    if (!currentPathname) {
+      console.error('Error: currentPathname is null. Redirecting to home.');
+      router.push('/' + newLocale); // Fallback behavior
+      return;
+    }
+
+    // Redirect to the new locale path
     if (currentLocale === i18nConfig.defaultLocale) {
       router.push('/' + newLocale + currentPathname);
     } else {
