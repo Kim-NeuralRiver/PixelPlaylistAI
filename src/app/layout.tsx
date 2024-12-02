@@ -1,3 +1,4 @@
+import { Roboto_Flex } from 'next/font/google';
 import localFont from 'next/font/local';
 import React from 'react';
 import { SessionProvider } from 'next-auth/react';
@@ -13,6 +14,11 @@ const geistMono = localFont({
   src: './fonts/GeistMonoVF.woff',
   variable: '--font-geist-mono',
   weight: '100 900',
+});
+const robotoFlex = Roboto_Flex({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-roboto-flex',
+  display: 'swap',
 });
 
 interface IRootLayout {
