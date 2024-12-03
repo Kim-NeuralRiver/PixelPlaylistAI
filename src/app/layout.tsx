@@ -2,6 +2,7 @@ import { Roboto_Flex } from 'next/font/google';
 import localFont from 'next/font/local';
 import React from 'react';
 
+import { Providers } from '../providers';
 import './globals.css';
 
 const geistSans = localFont({
@@ -26,7 +27,9 @@ interface IRootLayout {
 
 const RootLayout: React.FC<IRootLayout> = ({ children }) => (
   <html lang="en">
-    <body className={`${robotoFlex.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+    <body className={`${geistSans.variable} ${geistMono.variable} ${robotoFlex.variable} antialiased`}>
+      <Providers>{children}</Providers>
+    </body>
   </html>
 );
 
