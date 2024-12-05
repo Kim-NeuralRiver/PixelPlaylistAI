@@ -1,7 +1,6 @@
 import { NextAuthOptions, DefaultSession } from "next-auth";
-import { JWT } from "next-auth/jwt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient, User as PrismaUser } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
@@ -40,28 +39,28 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Invalid credentials");
         }
-
-        // Find the user by email
+      
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
-
-        if (!user) {
-          throw new Error("User not found");
+      
+        if (!user || !user.password) {
+          throw new Error("User not found or password is missing");
         }
+      
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
-
+      
         if (!isPasswordValid) {
           throw new Error("Invalid password");
         }
-
+      
         return {
           id: user.id,
           name: user.name,
           email: user.email,
           image: user.image,
         };
-      },
+      },      
     }),
   ],
   session: {
@@ -76,14 +75,15 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    async jwt({ token, user }: { token: JWT; user?: PrismaUser | null }) {
-      if (user) {
-        token.sub = user.id ?? token.sub; 
-        token.name = user.name ?? token.name;
-        token.email = user.email ?? token.email;
-      }
-      return token;
-    },
+    async jwt({ token, user }) {
+        if (user) {
+          token.sub = user.id || token.sub || "";
+          token.name = user.name || token.name || "";
+          token.email = user.email || token.email || "";
+        }
+        return token;
+      },
+      
   },
   pages: {
     signIn: "/auth/signin",
