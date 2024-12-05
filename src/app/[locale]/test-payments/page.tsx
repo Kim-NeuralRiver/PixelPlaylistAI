@@ -10,33 +10,40 @@ const TestPaymentsPage = () => {
   const handleOneTimePayment = async () => {
     setLoading(true);
     setError(null);
-  
+
     try {
       const stripe = await getStripe();
+      if (!stripe) {
+        throw new Error('Stripe is not available.');
+      }
+
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-  
+
       if (!response.ok) {
         throw new Error(`Failed to create session: ${response.statusText}`);
       }
-  
-      const { id } = await response.json();
-      const result = await stripe?.redirectToCheckout({ sessionId: id });
-  
-      if (result?.error) {
-        setError(result.error.message);
+
+      const data: { id: string } = await response.json();
+      const result = await stripe.redirectToCheckout({ sessionId: data.id });
+
+      if (result.error) {
+        setError(result.error.message || 'An unknown error occurred.');
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred.');
+      }
     } finally {
       setLoading(false);
     }
   };
-  
 
   const handleSubscription = async () => {
     setLoading(true);
@@ -44,6 +51,10 @@ const TestPaymentsPage = () => {
 
     try {
       const stripe = await getStripe();
+      if (!stripe) {
+        throw new Error('Stripe is not available.');
+      }
+
       const response = await fetch('/api/create-subscription', {
         method: 'POST',
         headers: {
@@ -54,14 +65,22 @@ const TestPaymentsPage = () => {
         }),
       });
 
-      const { id } = await response.json();
-      const result = await stripe?.redirectToCheckout({ sessionId: id });
-
-      if (result?.error) {
-        setError(result.error.message);
+      if (!response.ok) {
+        throw new Error(`Failed to create subscription: ${response.statusText}`);
       }
-    } catch (err: any) {
-      setError(err.message);
+
+      const data: { id: string } = await response.json();
+      const result = await stripe.redirectToCheckout({ sessionId: data.id });
+
+      if (result.error) {
+        setError(result.error.message || 'An unknown error occurred.');
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred.');
+      }
     } finally {
       setLoading(false);
     }

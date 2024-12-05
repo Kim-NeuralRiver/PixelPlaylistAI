@@ -1,5 +1,4 @@
 'use client';
-import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';

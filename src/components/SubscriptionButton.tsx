@@ -33,8 +33,12 @@ const SubscriptionButton = ({ priceId }: { priceId: string }) => {
       if (result?.error) {
         setError(result.error.message ?? 'An unknown error occurred');
       }
-    } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred');
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred.');
+      }
     } finally {
       setLoading(false);
     }
