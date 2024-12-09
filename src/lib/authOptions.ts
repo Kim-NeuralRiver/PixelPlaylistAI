@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import GoogleProvider from "next-auth/providers/google";
+import EmailProvider from "next-auth/providers/email";
 
 const prisma = new PrismaClient();
 
@@ -30,6 +31,17 @@ declare module "next-auth/jwt" {
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
+    EmailProvider({
+      server: {
+        host: "smtp.mailgun.org",
+        port: 587,
+        auth: {
+          user: process.env.MAILGUN_FROM_EMAIL,
+          pass: process.env.MAILGUN_API_KEY,
+        },
+      },
+      from: process.env.MAILGUN_FROM_EMAIL,
+    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
