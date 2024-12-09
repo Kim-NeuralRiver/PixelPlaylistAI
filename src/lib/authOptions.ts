@@ -3,6 +3,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
+import GoogleProvider from "next-auth/providers/google";
 
 const prisma = new PrismaClient();
 
@@ -29,6 +30,11 @@ declare module "next-auth/jwt" {
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      allowDangerousEmailAccountLinking: true
+    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -39,28 +45,27 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Invalid credentials");
         }
-      
+
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
-      
+
         if (!user || !user.password) {
           throw new Error("User not found or password is missing");
         }
-      
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
-      
+
         if (!isPasswordValid) {
           throw new Error("Invalid password");
         }
-      
+
         return {
           id: user.id,
           name: user.name,
           email: user.email,
           image: user.image,
         };
-      },      
+      },
     }),
   ],
   session: {
@@ -76,15 +81,18 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async jwt({ token, user }) {
-        if (user) {
-          token.sub = user.id || token.sub || "";
-          token.name = user.name || token.name || "";
-          token.email = user.email || token.email || "";
-        }
-        return token;
-      },
-      
-  },
+      if (user) {
+        token.sub = user.id || token.sub || "";
+        token.name = user.name || token.name || "";
+        token.email = user.email || token.email || "";
+      }
+      return token;
+    },
+    redirect({ url, baseUrl }) {
+      return baseUrl;
+    }
+    
+    },
   pages: {
     signIn: "/auth/signin",
   },
