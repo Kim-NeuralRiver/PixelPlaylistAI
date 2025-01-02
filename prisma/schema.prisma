@@ -23,6 +23,7 @@ model User {
   username      String?
   accounts      Account[]
   sessions      Session[]
+  role          String?
 }
 
 model Account {
