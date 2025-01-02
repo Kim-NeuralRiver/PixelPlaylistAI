@@ -31,7 +31,8 @@ const SignUp: React.FC = () => {
           username,
           email,
           name,
-          password, // Pass the plain password to be hashed server-side
+          password,
+          role: 'USER',
         }),
       });
 
