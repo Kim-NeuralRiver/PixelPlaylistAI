@@ -26,7 +26,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email, image, username, password }: Prisma.UserCreateInput & { password?: string } = body;
+    const { name, email, image, username, password, role }: Prisma.UserCreateInput & { password?: string; role: string } = body;
 
     if (!name || !email || !password) {
       return NextResponse.json({ error: "Name, email, and password are required" }, { status: 400 });
@@ -42,6 +42,7 @@ export async function POST(req: Request) {
         image,
         username,
         password: hashedPassword,
+        role,
       },
     });
 

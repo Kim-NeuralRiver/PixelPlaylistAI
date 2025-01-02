@@ -10,21 +10,32 @@ const prisma = new PrismaClient();
 
 
 declare module "next-auth" {
+  interface User {
+    id: string;
+    name: string | null; 
+    email: string | null;
+    image: string | null;
+    role: string | null;
+  }
   interface Session extends DefaultSession {
     user: {
       id: string;
       name: string;
       email: string;
       image?: string;
+      role: string;
     };
   }
 }
+
+
 
 declare module "next-auth/jwt" {
   interface JWT {
     sub: string;
     name: string;
     email: string;
+    role: string;
   }
 }
 
@@ -76,6 +87,7 @@ export const authOptions: NextAuthOptions = {
           name: user.name,
           email: user.email,
           image: user.image,
+          role: user.role,
         };
       },
     }),
@@ -89,6 +101,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.sub;
         session.user.name = token.name;
         session.user.email = token.email;
+        session.user.role = token.role;
       }
       return session;
     },
@@ -97,6 +110,7 @@ export const authOptions: NextAuthOptions = {
         token.sub = user.id || token.sub || "";
         token.name = user.name || token.name || "";
         token.email = user.email || token.email || "";
+        token.role = user.role || token.role || "";
       }
       return token;
     },
