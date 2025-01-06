@@ -1,5 +1,6 @@
 import initTranslations from '@/app/i18n';
 import ClientProvider from '@/components/ClientProvider';
+import NavBar from '@/components/NavBar';
 import TranslationsProvider from '@/components/TranslationsProvider';
 import { dir } from 'i18next';
 import { Roboto_Flex } from 'next/font/google';
@@ -29,6 +30,7 @@ const RootLayout: React.FC<IRootLayout> = async ({ children, params }) => {
   return (
     <html lang={locale} dir={dir(locale)}>
       <body className={robotoFlex.className}>
+        <NavBar />
         <TranslationsProvider namespaces={[]} locale={locale} resources={resources}>
           <ClientProvider lang={locale}>{children}</ClientProvider>
         </TranslationsProvider>
