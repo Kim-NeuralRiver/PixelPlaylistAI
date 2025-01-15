@@ -2,9 +2,17 @@
 
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { useSession, signOut } from 'next-auth/react';
+import Image from "next/image";
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { data: session } = useSession();
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 px-4 py-3">
@@ -48,6 +56,49 @@ export default function NavBar() {
           <Link href="/privacy-policy" className="text-gray-600 hover:text-blue-900">
             Privacy Policy
           </Link>
+        </div>
+        <div>
+          <div
+            className="rounded-full overflow-hidden border-2 border-gray-300 cursor-pointer"
+            onClick={toggleDropdown}
+          >
+            <Image
+              src="/Missing_avatar.svg"
+              alt="User Avatar"
+              width={48}
+              height={48}
+              className="object-cover"
+            />
+          </div>
+
+          {isDropdownOpen && (
+            <div
+              className="absolute right-4 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg"
+            >
+              <ul className="py-1 text-gray-700">
+                {session ? (
+                  <>
+                    <li
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => signOut()}
+                    >
+                      Sign Out
+                    </li>
+                  </>
+                ) : (
+                  <li
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => {
+                      window.location.href = "/sign-in";
+                    }
+                    }
+                  >
+                    Sign In
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
 
