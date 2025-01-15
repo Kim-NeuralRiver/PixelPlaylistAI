@@ -47,11 +47,11 @@ export const authOptions: NextAuthOptions = {
         host: "smtp.mailgun.org",
         port: 587,
         auth: {
-          user: process.env.MAILGUN_FROM_EMAIL,
-          pass: process.env.MAILGUN_API_KEY,
+          user: process.env.MAILGUN_USERNAME,
+          pass: process.env.MAILGUN_PASSWORD,
         },
       },
-      from: process.env.MAILGUN_FROM_EMAIL,
+      from: process.env.MAILGUN_FROM,
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
