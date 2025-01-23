@@ -97,6 +97,42 @@ export default function NavBar() {
                   </li>
                 )}
               </ul>
+              {session ? (
+                <ul className="py-1 text-gray-700">
+                  <>
+                    <li
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={
+                        () => {
+                          window.location.href = "/settings";
+                        }
+                      }
+                    >
+                      Settings
+                    </li>
+                  </>
+                </ul>
+              ) : (
+                <></>
+              )}
+              {!session ? (
+                <ul className="py-1 text-gray-700">
+                  <>
+                    <li
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={
+                        () => {
+                          window.location.href = "/sign-up";
+                        }
+                      }
+                    >
+                      Sign Up
+                    </li>
+                  </>
+                </ul>
+              ) : (
+                <></>
+              )}
             </div>
           )}
         </div>

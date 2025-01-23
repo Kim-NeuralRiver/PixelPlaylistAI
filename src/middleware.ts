@@ -10,7 +10,7 @@ export const middleware = async (request: NextRequest) => {
 
   // Define private and public routes
   const publicRoutes = ['/sign-in', '/sign-up', '/about', '/faq', '/contact-us', '/privacy-policy'];
-  const privateRoutes = ['/admin-page'];
+  const privateRoutes = ['/admin-page','/settings'];
 
   const isPublicRoute = publicRoutes.some((route) => url.pathname.startsWith(route));
   const isPrivateRoute = privateRoutes.some((route) => url.pathname.startsWith(route));
