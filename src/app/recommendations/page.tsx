@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useEffect } from 'react';
 import { fetchGameRecommendations, RecommendationQuery, GameRecommendation } from '@/utils/api/recommendations';
+import { fetchGenres, Genre } from '@/utils/api/genres';
 
 export default function RecommendationsPage() {
     const [genreIds, setGenreIds] = useState<number[]>([12]);
@@ -10,6 +12,21 @@ export default function RecommendationsPage() {
     const [recommendations, setRecommendations] = useState<GameRecommendation[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [genreOptions, setGenreOptions] = useState<Genre[]>([]);
+    const [genresLoading, setGenresLoading] = useState(true);
+    const [genresError, setGenresError] = useState<string | null>(null);
+
+    useEffect(() => { // Fetch genres on component mount
+        fetchGenres()
+            .then((genres) => {
+                setGenreOptions(genres);
+                setGenresLoading(false);
+            })
+            .catch((err) => {
+                setGenresError(err.message);
+                setGenresLoading(false);
+            });
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -39,12 +56,26 @@ export default function RecommendationsPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
             <div>
             <label className="block font-medium">Genres (comma-separated IGDB IDs)</label>
-            <input
-                type="text"
-                value={genreIds.join(',')}
-                onChange={(e) => setGenreIds(e.target.value.split(',').map(Number))}
+            {genresLoading ? (
+                <p>Loading genres!</p>
+            ) : genresError ? (
+                <p className="text-red-500">{genresError}</p>
+            ) : (
+                <select
+                multiple
+                value={genreIds.map(String)}
+                onChange={(e) =>
+                    setGenreIds(Array.from(e.target.selectedOptions, (option) => Number(option.value)))
+                }
                 className="w-full p-2 border rounded"
-            />
+                >
+                {genreOptions.map((genre) => (
+                    <option key={genre.id} value={genre.id}>
+                    {genre.name}
+                    </option>
+                ))}
+                </select>    
+             )}
             </div>
             <div>
             <label className="block font-medium">Platform (IGDB ID)</label>

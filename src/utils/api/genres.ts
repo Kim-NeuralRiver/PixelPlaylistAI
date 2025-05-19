@@ -7,7 +7,7 @@ export interface Genre {
 
 // Fetch list of genres from Django backend
 export async function fetchGenres(): Promise<Genre[]> {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL; // Note to self: double check api key is in env
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL; 
 
     if (!apiUrl) {
         throw new Error("API URL is not defined in the environment variables.");
