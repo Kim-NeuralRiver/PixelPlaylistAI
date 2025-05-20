@@ -55,7 +55,7 @@ export default function RecommendationsPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-            <label className="block font-medium">Genres (comma-separated IGDB IDs)</label>
+            <label className="block font-medium">Genres (comma-separated IGDB IDs)</label> 
             {genresLoading ? (
                 <p>Loading genres!</p>
             ) : genresError ? (
