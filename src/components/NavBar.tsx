@@ -19,7 +19,7 @@ export default function NavBar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo or App Name */}
         <Link href="/" className="text-xl font-bold text-blue-600">
-          Neural Spring
+          PixelPlaylistAI
         </Link>
 
         {/* Hamburger Button */}

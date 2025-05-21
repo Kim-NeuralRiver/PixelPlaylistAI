@@ -51,7 +51,7 @@ export default function RecommendationsPage() {
   try { // Render the recommendations page
     return (
       <main className="p-6 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-4">PixelPlaylistAI - Recommendations</h1> 
+        <h1 className="text-3xl font-bold mb-4">Recommendations</h1> 
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -89,7 +89,7 @@ export default function RecommendationsPage() {
           </div>
 
           <div>
-            <label className="block font-medium">Budget</label> 
+            <label className="block font-medium">Budget (£)</label> 
             <input
               type="number"
               value={budget}
