@@ -28,6 +28,7 @@
 # misc
 .DS_Store
 *.pem
+structure.txt
 
 # debug
 npm-debug.log*

@@ -3,7 +3,7 @@
 export interface RecommendationQuery {
     genres: number[]; // IGDB Genre IDs
     platforms: number[]; // IGDB Platform IDs
-    budget: number; // User's budget number (unused in backendrn)
+    budget: number; // User's budget number
 }
 
 // Expected response format from backend
@@ -14,6 +14,13 @@ export interface GameRecommendation {
     platforms: string[]; // List of platform names
     summary: string; // Game summary
     genres: string[]; // List of genre names
+    price?: {
+        price: number | null; // Game price
+        store: string | null; // Store name
+        discount: string | null; // Discount %
+        currency: string | null; // Currency (in this instance, GBP)
+        url: string | null; // URL to reach store
+    };
 }
 
 /* Call PixelPlaylistAI Django API to get game recommendations, see:
