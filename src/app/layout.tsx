@@ -34,3 +34,9 @@ const RootLayout: React.FC<IRootLayout> = ({ children }) => (
 );
 
 export default RootLayout;
+
+export const metadata = {
+  title: "PixelPlaylistAI",
+  description: "Get AI-powered game recommendations",
+};
+export const dynamic = 'force-dynamic'; // Test
