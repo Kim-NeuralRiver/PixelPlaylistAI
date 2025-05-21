@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "i18nexus pull && next dev --turbopack",
+    "dev": "i18nexus pull && next dev",
     "build": "i18nexus pull && next build",
     "start": "i18nexus pull && next start",
     "lint": "next lint",
@@ -37,7 +37,10 @@
     "react-i18next": "^15.1.2",
     "react-redux": "^9.1.2",
     "rimraf": "^6.0.1",
-    "stripe": "^17.4.0"
+    "stripe": "^17.4.0",
+    "turbopack": "^0.0.1",
+    "turbotrace": "^0.3.0",
+    "webpack": "^5.99.9"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",

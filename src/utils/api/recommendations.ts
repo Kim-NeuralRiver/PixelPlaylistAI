@@ -14,6 +14,13 @@ export interface GameRecommendation {
     platforms: string[]; // List of platform names
     summary: string; // Game summary
     genres: string[]; // List of genre names
+    price?: {
+        price: number | null; // Game price
+        store: string | null; // Store name
+        discount: string | null; // Discount %
+        currency: string | null; // Currency (in this instance, GBP)
+        url: string | null; // URL to reach store
+    };
 }
 
 /* Call PixelPlaylistAI Django API to get game recommendations, see:
