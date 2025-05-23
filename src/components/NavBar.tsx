@@ -63,6 +63,11 @@ export default function NavBar() {
             className={`text-gray-600 hover:text-blue-900 ${pathname === "/faq" ? "font-bold text-blue-700" : ""}`}>
             FAQ
           </Link>
+                    <Link href="/playlists"
+            className={`text-gray-600 hover:text-blue-900 ${pathname === "/faq" ? "font-bold text-blue-700" : ""}`}>
+            Playlists
+          </Link>
+
         </div>
         <div>
           <div

@@ -1,4 +1,4 @@
-export const PLATFORM_MAP: Record<number, string> = {
+export const PLATFORM_MAP: Record<number, string> = { // Map IGDB platform IDs to human-readable names
   3: "Linux",
   4: "Nintendo 64",
   5: "Wii",

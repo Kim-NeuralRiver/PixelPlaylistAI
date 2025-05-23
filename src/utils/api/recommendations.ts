@@ -24,14 +24,14 @@ export interface GameRecommendation {
     blurb?: string | null; // Game blurb
 }
 
-/* Call PixelPlaylistAI Django API to get game recommendations, see:
+/* Call PixelPlaylistAI Django backend to get game recommendations, see:
  * 
  * @param query - Object containing genres, platform, and budget.
  * @returns - Promise of an array of GameRecommendation objects.
  * @throws - Error if the API call fails.
  */
 
-export async function fetchGameRecommendations(query: RecommendationQuery): Promise<GameRecommendation[]> {
+export async function fetchGameRecommendations(query: RecommendationQuery): Promise<GameRecommendation[]> { // Fetch game recommendations from the API
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/recommendations/`, {
     method: 'POST',
     headers: {

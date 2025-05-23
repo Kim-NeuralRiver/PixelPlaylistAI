@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { fetchGameRecommendations, RecommendationQuery, GameRecommendation } from '@/utils/api/recommendations';
 import { fetchGenres, Genre } from '@/utils/api/genres';
 import { PLATFORM_MAP } from '@/utils/platforms';
+import { savePlaylist } from '@/utils/api/playlists';
+import React from 'react';
+
 
 export default function RecommendationsPage() {
   const [genreIds, setGenreIds] = useState<number[]>([12]);
@@ -16,8 +19,12 @@ export default function RecommendationsPage() {
   const [genresLoading, setGenresLoading] = useState(true);
   const [genresError, setGenresError] = useState<string | null>(null);
   const [renderError, setRenderError] = useState<Error | null>(null); // for render-level issues
+  const [playlistName, setPlaylistName] = useState('');
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
+  const [saveError, setSaveError] = useState<string | null>(null);
+  
 
-  useEffect(() => {
+  useEffect(() => { // Fetch genres on component mount
     try {
       fetchGenres()
         .then((genres) => {
@@ -33,7 +40,7 @@ export default function RecommendationsPage() {
     }
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => { // Handle form submission
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -45,12 +52,36 @@ export default function RecommendationsPage() {
     };
 
     try {
-      const result = await fetchGameRecommendations(query);
+      const result = await fetchGameRecommendations(query); // Fetch recommendations
       setRecommendations(result);
     } catch (err: any) {
       setError(err.message || "An unknown error occurred.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSavePlaylist = async () => { // Save the playlist
+    if (!playlistName.trim()) {
+      setSaveError('Please enter a playlist name.');
+      return;
+    }
+    setSaveStatus('saving');
+    setSaveError(null);
+    try {
+      const res = await fetch('/api/playlists', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: playlistName,
+          recommendations,
+        }),
+      });
+      if (!res.ok) throw new Error('Failed to save playlist');
+      setSaveStatus('success');
+    } catch (e: any) {
+      setSaveStatus('error');
+      setSaveError(e.message || 'Failed to save playlist');
     }
   };
 
@@ -65,7 +96,7 @@ export default function RecommendationsPage() {
 
   return (
     <main className="p-6 max-w-4xl mx-auto min-h-screen bg-gray-50">
-      <h1 className="text-3xl font-bold mb-4">Recommendations</h1>
+      <h1 className="text-3xl font-bold mb-4">Recommendations</h1> {/* // Form to get game recommendations */}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -103,10 +134,10 @@ export default function RecommendationsPage() {
             id="platformID"
             name="platformID"
             value={platformId}
-            onChange={(e) => setPlatformId(Number(e.target.value))}
+            onChange={(e) => setPlatformId(Number(e.target.value))} // Update platform ID
             className="w-full p-2 border rounded"
           >
-            {Object.entries(PLATFORM_MAP).map(([id, name]) => (
+            {Object.entries(PLATFORM_MAP).map(([id, name]) => ( // Map platform IDs to names
               <option key={id} value={id}>
                 {name}
               </option>
@@ -123,7 +154,7 @@ export default function RecommendationsPage() {
             type="number"
             autoComplete="off"
             value={budget}
-            onChange={(e) => setBudget(Number(e.target.value))}
+            onChange={(e) => setBudget(Number(e.target.value))} // Update budget
             className="w-full p-2 border rounded"
           />
         </div>
@@ -132,8 +163,8 @@ export default function RecommendationsPage() {
           type="submit"
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          Get Recommendations
-        </button>
+          Get Recommendations 
+        </button> 
       </form>
 
       {loading && <p className="mt-4">Loading...</p>}
@@ -155,12 +186,12 @@ export default function RecommendationsPage() {
             <h2 className="text-xl font-semibold">{game.title}</h2>
             <p className="text-sm">{game.summary}</p>
 
-            {Array.isArray(game.genres) && (
+            {Array.isArray(game.genres) && ( // Check if genres is an array
               <p className="text-sm text-gray-600">
                 Genres: {game.genres.join(', ')}
               </p>
             )}
-            {Array.isArray(game.platform) && (
+            {Array.isArray(game.platform) && ( // Check if platform is an array (it shouldnt be)
               <p className="text-sm text-gray-600">
                 Platform: {""}
                 {game.platform
@@ -202,6 +233,41 @@ export default function RecommendationsPage() {
           </div>
         ))}
       </div>
+
+      {recommendations.length > 0 && (
+        <div className="mt-8 p-4 border rounded bg-white shadow">
+          <h3 className="text-lg font-semibold mb-2">Save This Playlist</h3>
+          <input
+            type="text"
+            placeholder="Playlist name"
+            value={playlistName}
+            onChange={(e) => setPlaylistName(e.target.value)}
+            className="w-full border p-2 rounded mb-2"
+          />
+          <button
+            onClick={async () => {
+              try {
+                await savePlaylist(playlistName, recommendations);
+                setSaveStatus('success');
+                setPlaylistName('');
+              } catch (err) {
+                setSaveStatus('error');
+                console.error(err);
+              }
+            }}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Save Playlist
+          </button>
+          {saveStatus === 'success' && (
+            <p className="mt-2 text-sm text-green-700">Playlist saved successfully!</p>
+          )}
+          {saveStatus === 'error' && (
+            <p className="mt-2 text-sm text-red-700">Failed to save playlist.</p>
+          )}
+        </div>
+      )}
+
     </main>
   );
 }
