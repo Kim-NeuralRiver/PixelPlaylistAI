@@ -2,7 +2,7 @@
 
 export interface RecommendationQuery {
     genres: number[]; // IGDB Genre IDs
-    platforms: number[]; // IGDB Platform IDs
+    platform: number; // IGDB Platform IDs
     budget: number; // User's budget number
 }
 
@@ -11,7 +11,7 @@ export interface RecommendationQuery {
 export interface GameRecommendation {
     title: string;
     cover: string | null; // URL to the cover image
-    platforms: string[]; // List of platform names
+    platform: string; // List of platform names
     summary: string; // Game summary
     genres: string[]; // List of genre names
     price?: {
@@ -21,6 +21,7 @@ export interface GameRecommendation {
         currency: string | null; // Currency (in this instance, GBP)
         url: string | null; // URL to reach store
     };
+    blurb?: string | null; // Game blurb
 }
 
 /* Call PixelPlaylistAI Django API to get game recommendations, see:
@@ -31,24 +32,19 @@ export interface GameRecommendation {
  */
 
 export async function fetchGameRecommendations(query: RecommendationQuery): Promise<GameRecommendation[]> {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL; // Make sure this is defined in .env.local
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/recommendations/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(query),
+  });
 
-    if (!apiUrl) {
-        throw new Error("API URL is not defined in the environment variables.");
-    }
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`API Error: ${res.status} - ${errorText}`);
+  }
 
-    const response = await fetch(`${apiUrl}/recommendations/`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(query),
-    });
-
-    if (!response.ok) {
-        const errorBody = await response.text();
-        throw new Error(`API Error: ${response.status} - ${errorBody}`);
-    }
-
-    return await response.json();
+  return res.json();
 }
+

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import Image from "next/image";
+import { usePathname } from 'next/navigation';
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +14,8 @@ export default function NavBar() {
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
+
+  const pathname = usePathname();
 
   return (
     <nav className="bg-white border-b border-gray-200 px-4 py-3">
@@ -44,17 +47,21 @@ export default function NavBar() {
 
         {/* Desktop Menu */}
         <div className="hidden space-x-6 md:flex">
-          <Link href="/" className="text-gray-600 hover:text-blue-900">
+          <Link href="/"
+            className={`text-gray-600 hover:text-blue-900 ${pathname === "/" ? "font-bold text-blue-700" : ""}`}>
             Home
           </Link>
-          <Link href="/faq" className="text-gray-600 hover:text-blue-900">
-            FAQ
+          <Link href="/recommendations"
+            className={`text-gray-600 hover:text-blue-900 ${pathname === "/recommendations" ? "font-bold text-blue-700" : ""}`}>
+            Recommendations
           </Link>
-          <Link href="/contact-us" className="text-gray-600 hover:text-blue-900">
+          <Link href="/contact-us"
+            className={`text-gray-600 hover:text-blue-900 ${pathname === "/contact-us" ? "font-bold text-blue-700" : ""}`}>
             Contact Us
           </Link>
-          <Link href="/privacy-policy" className="text-gray-600 hover:text-blue-900">
-            Privacy Policy
+          <Link href="/faq"
+            className={`text-gray-600 hover:text-blue-900 ${pathname === "/faq" ? "font-bold text-blue-700" : ""}`}>
+            FAQ
           </Link>
         </div>
         <div>
