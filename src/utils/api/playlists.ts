@@ -5,3 +5,4 @@ export const getPlaylists = async () => {
   });
   return await res.json();
 };
+

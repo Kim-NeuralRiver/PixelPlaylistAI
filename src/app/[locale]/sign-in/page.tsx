@@ -1,10 +1,11 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { signIn } from 'next-auth/react';
+
 
 const SignIn: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'credentials' | 'magic-link' | 'google'>('credentials');
@@ -14,21 +15,38 @@ const SignIn: React.FC = () => {
   const router = useRouter();
   const { t } = useTranslation(['auth']);
 
-  const handleCredentialsSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+const handleCredentialsSubmit = async (e: React.FormEvent) => { // Django creds
+  e.preventDefault();
+  setMessage('');
 
-    const result = await signIn('credentials', {
-      redirect: false,
-      email,
-      password,
+  try {
+    const res = await fetch('http://localhost:8000/api/token/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: email, 
+        password: password,
+      }),
     });
 
-    if (result?.error) {
-      alert(t('auth:signInError'));
-    } else {
-      router.push('/');
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.detail || 'Login failed');
     }
-  };
+
+    localStorage.setItem('access_token', data.access);
+    localStorage.setItem('refresh_token', data.refresh);
+
+    router.push('/');
+  } catch (err) {
+    alert(t('auth:signInError'));
+    console.error('Login error:', err);
+  }
+};
+
 
   const handleMagicLinkSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
