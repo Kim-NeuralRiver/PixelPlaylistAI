@@ -1,5 +1,7 @@
 // Request payload interface for game recommendations, frontend logic for making POST requests to the /api/recommendations/ endpoint
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'; // Base URL for API requests
+
 export interface RecommendationQuery {
     genres: number[]; // IGDB Genre IDs
     platform: number; // IGDB Platform IDs
@@ -32,7 +34,7 @@ export interface GameRecommendation {
  */
 
 export async function fetchGameRecommendations(query: RecommendationQuery): Promise<GameRecommendation[]> { // Fetch game recommendations from the API
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/recommendations/`, {
+  const res = await fetch(`${BASE_URL}/api/recommendations/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
