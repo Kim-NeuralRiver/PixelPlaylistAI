@@ -1,4 +1,4 @@
-// Request payload interface for game recommendations 
+// Request payload interface for game recommendations, frontend logic for making POST requests to the /api/recommendations/ endpoint
 
 export interface RecommendationQuery {
     genres: number[]; // IGDB Genre IDs

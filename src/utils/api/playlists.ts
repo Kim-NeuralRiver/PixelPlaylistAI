@@ -1,3 +1,5 @@
+// Handles GET and POST requests to save and fetch playlists via the /api/playlists/ endpoint. Auth tokens are attached here for user-based access control.
+
 export const getPlaylists = async () => { // Fetch all playlists
   const token = localStorage.getItem('token');
   const res = await fetch('http://localhost:8000/api/playlists/', {

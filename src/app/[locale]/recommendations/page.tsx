@@ -1,4 +1,5 @@
 'use client';
+// Main UI page where users select genres, platform, and budget to generate game recommendations
 
 import { useState, useEffect } from 'react';
 import { fetchGameRecommendations, RecommendationQuery, GameRecommendation } from '@/utils/api/recommendations';

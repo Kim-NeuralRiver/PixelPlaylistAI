@@ -1,3 +1,5 @@
+// Token refresh utility for handling JWT tokens in a web application
+
 export const refreshToken = async (): Promise<void> => {
   const refresh = localStorage.getItem('refresh');
   if (!refresh) return;
