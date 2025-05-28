@@ -6,6 +6,7 @@ import { fetchGameRecommendations, RecommendationQuery, GameRecommendation } fro
 import { fetchGenres, Genre } from '@/utils/api/genres';
 import { PLATFORM_MAP } from '@/utils/platforms';
 import { savePlaylist } from '@/utils/api/playlists';
+import { getPlaylists } from '@/utils/api/playlists';
 import React from 'react';
 
 
@@ -54,15 +55,18 @@ export default function RecommendationsPage() {
 
     try {
       const result = await fetchGameRecommendations(query); // Fetch recommendations
+      console.log('Fetched recommendations:', result); // Debug, remove later
       setRecommendations(result);
     } catch (err: any) {
       setError(err.message || "An unknown error occurred.");
     } finally {
       setLoading(false);
     }
+    
   };
 
-  const handleSavePlaylist = async () => { // Save the playlist
+
+  const savePlaylist = async (playlistName: string, recommendations: GameRecommendation[]) => { // Save the playlist
     if (!playlistName.trim()) {
       setSaveError('Please enter a playlist name.');
       return;
@@ -80,195 +84,196 @@ export default function RecommendationsPage() {
       });
       if (!res.ok) throw new Error('Failed to save playlist');
       setSaveStatus('success');
+      setTimeout(() => setSaveStatus('idle'), 5000); // Clear success message after 5 seconds
+      const confirmReset = window.confirm('Playlist saved successfully! Do you want to clear the playlist name?');
+      if (confirmReset) {
+        setPlaylistName('');
+      }
     } catch (e: any) {
-      setSaveStatus('error');
+      console.error('Error saving playlist:', e); // Log the error for debugging
+      setSaveError(e.message || 'Failed to save playlist. Please check your network connection or try again later.');
       setSaveError(e.message || 'Failed to save playlist');
     }
   };
 
-  if (renderError) {
+    const handleSavePlaylist = async () => {
+      await savePlaylist(playlistName, recommendations);
+    };
+
+    if (renderError) {
+      return (
+        <main className="p-6 max-w-4xl mx-auto text-red-600">
+          <h1 className="text-2xl font-bold">Something went wrong</h1>
+          <p>{renderError.message}</p>
+        </main>
+      );
+    }
+
     return (
-      <main className="p-6 max-w-4xl mx-auto text-red-600">
-        <h1 className="text-2xl font-bold">Something went wrong</h1>
-        <p>{renderError.message}</p>
-      </main>
-    );
-  }
+      <main className="p-6 max-w-4xl mx-auto min-h-screen bg-gray-50">
+        <h1 className="text-3xl font-bold mb-4">Recommendations</h1> {/* // Form to get game recommendations */}
 
-  return (
-    <main className="p-6 max-w-4xl mx-auto min-h-screen bg-gray-50">
-      <h1 className="text-3xl font-bold mb-4">Recommendations</h1> {/* // Form to get game recommendations */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block font-medium">
+              Genres (select one or more)
+            </label>
+            {genresLoading ? (
+              <p>Loading genres...</p>
+            ) : genresError ? (
+              <p className="text-red-500">{genresError}</p>
+            ) : (
+              <select
+                multiple
+                id="genres"
+                name="genres"
+                autoComplete="off"
+                value={genreIds.map(String)}
+                onChange={(e) =>
+                  setGenreIds(Array.from(e.target.selectedOptions, (option) => Number(option.value)))
+                }
+                className="w-full p-2 border rounded"
+              >
+                {genreOptions.map((genre) => (
+                  <option key={genre.id} value={genre.id}>
+                    {genre.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block font-medium">
-            Genres (select one or more)
-          </label>
-          {genresLoading ? (
-            <p>Loading genres...</p>
-          ) : genresError ? (
-            <p className="text-red-500">{genresError}</p>
-          ) : (
+          <div>
+            <label htmlFor="platformID" className="block font-medium">Platform</label>
             <select
-              multiple
-              id="genres"
-              name="genres"
-              autoComplete="off"
-              value={genreIds.map(String)}
-              onChange={(e) =>
-                setGenreIds(Array.from(e.target.selectedOptions, (option) => Number(option.value)))
-              }
+              id="platformID"
+              name="platformID"
+              value={platformId}
+              onChange={(e) => setPlatformId(Number(e.target.value))} // Update platform ID
               className="w-full p-2 border rounded"
             >
-              {genreOptions.map((genre) => (
-                <option key={genre.id} value={genre.id}>
-                  {genre.name}
+              {Object.entries(PLATFORM_MAP).map(([id, name]) => ( // Map platform IDs to names
+                <option key={id} value={id}>
+                  {name}
                 </option>
               ))}
             </select>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="platformID" className="block font-medium">Platform</label>
-          <select
-            id="platformID"
-            name="platformID"
-            value={platformId}
-            onChange={(e) => setPlatformId(Number(e.target.value))} // Update platform ID
-            className="w-full p-2 border rounded"
-          >
-            {Object.entries(PLATFORM_MAP).map(([id, name]) => ( // Map platform IDs to names
-              <option key={id} value={id}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="budget" className="block font-medium">
-            Budget (£)
-          </label>
-          <input
-            id="budget"
-            name="budget"
-            type="number"
-            autoComplete="off"
-            value={budget}
-            onChange={(e) => setBudget(Number(e.target.value))} // Update budget
-            className="w-full p-2 border rounded"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Get Recommendations 
-        </button> 
-      </form>
-
-      {loading && <p className="mt-4">Loading...</p>}
-      {error && <p className="mt-4 text-red-500">{error}</p>}
-
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-        {recommendations.map((game) => (
-          <div
-            key={game.title}
-            className="bg-white border rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg"
-          >
-            {typeof game.cover === 'string' && (
-              <img
-                src={game.cover}
-                alt={game.title}
-                className="w-full h-auto mb-2 object-cover rounded"
-              />
-            )}
-            <h2 className="text-xl font-semibold">{game.title}</h2>
-            <p className="text-sm">{game.summary}</p>
-
-            {Array.isArray(game.genres) && ( // Check if genres is an array
-              <p className="text-sm text-gray-600">
-                Genres: {game.genres.join(', ')}
-              </p>
-            )}
-            {Array.isArray(game.platform) && ( // Check if platform is an array (it shouldnt be)
-              <p className="text-sm text-gray-600">
-                Platform: {""}
-                {game.platform
-                ?.map((id) => PLATFORM_MAP[id] || `ID ${id}`)
-                .join(', ')}
-              </p>
-            )}
-            {game.blurb ? (
-              <p className="mt-2 text-sm italic text-blue-800 bg-blue-50 p-2 rounded">
-                {game.blurb}
-              </p>
-            ) : (
-              <p className="mt-2 text-sm italic text-gray-400">No blurb available.</p>
-            )}
-            {game.price && typeof game.price.price === 'number' ? (
-              <div className="mt-2 text-sm bg-green-50 border border-green-200 p-2 rounded">
-                <p>
-                  <strong>Store:</strong> {game.price.store || 'Unknown'}
-                </p>
-                <p>
-                  <strong>Price:</strong> {game.price.currency || 'GBP'}{' '}
-                  {game.price.price.toFixed(2)}
-                </p>
-                <p>{game.price.discount || 'No discount info available'}</p>
-                {game.price.url && (
-                  <a
-                    href={game.price.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline"
-                  >
-                    View Deal
-                  </a>
-                )}
-              </div>
-            ) : (
-              <p className="mt-2 text-sm text-gray-400">No pricing information available.</p>
-            )}
           </div>
-        ))}
-      </div>
+          <div>
+            <label htmlFor="budget" className="block font-medium">
+              Budget (£)
+            </label>
+            <input
+              id="budget"
+              name="budget"
+              type="number"
+              autoComplete="off"
+              value={budget}
+              onChange={(e) => setBudget(Number(e.target.value))} // Update budget
+              className="w-full p-2 border rounded"
+            />
+          </div>
 
-      {recommendations.length > 0 && (
-        <div className="mt-8 p-4 border rounded bg-white shadow">
-          <h3 className="text-lg font-semibold mb-2">Save This Playlist</h3>
-          <input
-            type="text"
-            placeholder="Playlist name"
-            value={playlistName}
-            onChange={(e) => setPlaylistName(e.target.value)}
-            className="w-full border p-2 rounded mb-2"
-          />
           <button
-            onClick={async () => {
-              try {
-                await savePlaylist(playlistName, recommendations);
-                setSaveStatus('success');
-                setPlaylistName('');
-              } catch (err) {
-                setSaveStatus('error');
-                console.error(err);
-              }
-            }}
+            type="submit"
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
-            Save Playlist
-          </button>
-          {saveStatus === 'success' && (
-            <p className="mt-2 text-sm text-green-700">Playlist saved successfully!</p>
-          )}
-          {saveStatus === 'error' && (
-            <p className="mt-2 text-sm text-red-700">Failed to save playlist.</p>
-          )}
-        </div>
-      )}
+            Get Recommendations 
+          </button> 
+        </form>
 
-    </main>
-  );
-}
+        {loading && <p className="mt-4">Loading...</p>}
+        {error && <p className="mt-4 text-red-500">{error}</p>}
+
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+          {recommendations.slice(0, 5).map((game) => (
+            <div
+              key={game.title}
+              className="bg-white border rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg"
+            >
+              {typeof game.cover === 'string' && (
+                <img
+                  src={game.cover}
+                  alt={game.title}
+                  className="w-full h-auto mb-2 object-cover rounded"
+                />
+              )}
+              <h2 className="text-xl font-semibold">{game.title}</h2>
+              <p className="text-sm">{game.summary}</p>
+
+              {Array.isArray(game.genres) && ( // Check if genres is an array
+                <p className="text-sm text-gray-600">
+                  Genres: {game.genres.join(', ')}
+                </p>
+              )}
+              {Array.isArray(game.platform) && ( // Check if platform is an array (it shouldnt be)
+                <p className="text-sm text-gray-600">
+                  Platform: {""}
+                  {game.platform
+                  ?.map((id: string | number) => PLATFORM_MAP[Number(id)] || `ID ${id}`)
+                  .join(', ')}
+                </p>
+              )}
+              {game.blurb ? (
+                <p className="mt-2 text-sm italic text-blue-800 bg-blue-50 p-2 rounded">
+                  {game.blurb}
+                </p>
+              ) : (
+                <p className="mt-2 text-sm italic text-gray-400">No blurb available.</p>
+              )}
+              {game.price && typeof game.price.price === 'number' ? ( // Check if price is available and is a number
+                <div className="mt-2 text-sm bg-green-50 border border-green-200 p-2 rounded">
+                  <p>
+                    <strong>Store:</strong> {game.price.store || 'Unknown'}
+                  </p>
+                  <p>
+                    <strong>Price:</strong> {game.price.currency || 'GBP'}{' '}
+                    {game.price.price.toFixed(2)}
+                  </p>
+                  <p>{game.price.discount || 'No discount info available'}</p> {/* Display price information if available */}
+                  {game.price.url && (
+                    <a
+                      href={game.price.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      View Deal
+                    </a>
+                  )}
+                </div>
+              ) : ( // Check if price is available
+                <p className="mt-2 text-sm text-gray-400">No pricing information available.</p>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {recommendations.length > 0 && ( // If there are recommendations, show the save playlist section
+          <div className="mt-8 p-4 border rounded bg-white shadow">
+            <h3 className="text-lg font-semibold mb-2">Save This Playlist</h3>
+            <input
+              type="text" // Input for playlist name
+              placeholder="Playlist name"
+              value={playlistName}
+              onChange={(e) => setPlaylistName(e.target.value)}
+              className="w-full border p-2 rounded mb-2"
+            />
+            <button
+              onClick={handleSavePlaylist} // Save playlist button
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Save Playlist
+            </button>
+            {saveStatus === 'success' && (
+              <p className="mt-2 text-sm text-green-700">Playlist saved successfully!</p>
+            )}
+            {saveStatus === 'error' && (
+              <p className="mt-2 text-sm text-red-700">Failed to save playlist.</p>
+            )}
+          </div>
+        )}
+
+      </main>
+    );
+  }
