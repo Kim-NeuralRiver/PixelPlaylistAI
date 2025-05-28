@@ -1,10 +1,13 @@
-import type { NextConfig } from "next";
+import path from 'path';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    resolveAlias: {
-      '@locales': './locales',
-    },
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@locales': path.resolve(__dirname, 'src/locales'),
+    };
+    return config;
   },
 };
 
