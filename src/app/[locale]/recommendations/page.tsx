@@ -191,9 +191,9 @@ export default function RecommendationsPage() {
               key={game.title}
               className="bg-white border rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg"
             >
-              {typeof game.cover === 'string' && (
+              {typeof game.cover_url === 'string' && (
                 <img
-                  src={game.cover}
+                  src={game.cover_url}
                   alt={game.title}
                   className="w-full h-auto mb-2 object-cover rounded"
                 />

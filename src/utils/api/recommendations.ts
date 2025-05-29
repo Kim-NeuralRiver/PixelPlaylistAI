@@ -12,7 +12,7 @@ export interface RecommendationQuery {
 
 export interface GameRecommendation {
     title: string;
-    cover: string | null; // URL to the cover image
+    cover_url: string | null; // URL to the cover image
     platform: string; // List of platform names
     summary: string; // Game summary
     genres: string[]; // List of genre names
@@ -34,10 +34,12 @@ export interface GameRecommendation {
  */
 
 export async function fetchGameRecommendations(query: RecommendationQuery): Promise<GameRecommendation[]> { // Fetch game recommendations from the API
+  const token = localStorage.getItem('token');
   const res = await fetch(`${BASE_URL}/api/recommendations/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(query),
   });
