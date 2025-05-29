@@ -65,39 +65,27 @@ export default function RecommendationsPage() {
     
   };
 
-
-  const savePlaylist = async (playlistName: string, recommendations: GameRecommendation[]) => { // Save the playlist
-    if (!playlistName.trim()) {
-      setSaveError('Please enter a playlist name.');
-      return;
-    }
-    setSaveStatus('saving');
-    setSaveError(null);
-    try {
-      const res = await fetch('/api/playlists', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: playlistName,
-          recommendations,
-        }),
-      });
-      if (!res.ok) throw new Error('Failed to save playlist');
-      setSaveStatus('success');
-      setTimeout(() => setSaveStatus('idle'), 5000); // Clear success message after 5 seconds
-      const confirmReset = window.confirm('Playlist saved successfully! Do you want to clear the playlist name?');
-      if (confirmReset) {
-        setPlaylistName('');
-      }
-    } catch (e: any) {
-      console.error('Error saving playlist:', e); // Log the error for debugging
-      setSaveError(e.message || 'Failed to save playlist. Please check your network connection or try again later.');
-      setSaveError(e.message || 'Failed to save playlist');
-    }
-  };
-
     const handleSavePlaylist = async () => {
-      await savePlaylist(playlistName, recommendations);
+      if (!playlistName.trim()) {
+        setSaveError('Please enter a playlist name. :(');
+        return;
+      }
+
+      setSaveStatus('saving');
+      setSaveError(null);
+
+      try {
+        await savePlaylist(playlistName, recommendations);
+        setSaveStatus('success');
+        setTimeout(() => setSaveStatus('idle'), 5000); // Reset success msg after 5s
+
+        const confirmReset = window.confirm('Playlist saved! Want to clear the playlist name?');
+        if (confirmReset) setPlaylistName('');
+      } catch (error: any) {
+        console.error('Error saving playlist:', error);
+        setSaveStatus('error');
+        setSaveError(error.message || 'An error occurred while saving your playlist.')
+      }
     };
 
     if (renderError) {
@@ -186,7 +174,7 @@ export default function RecommendationsPage() {
         {error && <p className="mt-4 text-red-500">{error}</p>}
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          {recommendations.slice(0, 5).map((game) => (
+          {recommendations.map((game) => (
             <div
               key={game.title}
               className="bg-white border rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg"
