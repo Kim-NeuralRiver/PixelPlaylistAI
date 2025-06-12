@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { signIn } from 'next-auth/react';
-
+import { useAuth } from '@/hooks/useAuth';
 
 const SignIn: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'credentials' | 'magic-link' | 'google'>('credentials');
@@ -14,35 +14,22 @@ const SignIn: React.FC = () => {
   const [message, setMessage] = useState('');
   const router = useRouter();
   const { t } = useTranslation(['auth']);
+  const { signIn: signInWithCredentials } = useAuth();
 
-const handleCredentialsSubmit = async (e: React.FormEvent) => { // Django creds
+const handleCredentialsSubmit = async (e: React.FormEvent) => { // Handle sign in w/ creds
   e.preventDefault();
   setMessage('');
 
   try {
-    const res = await fetch('http://localhost:8000/api/token/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: email, 
-        password: password,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.detail || 'Login failed');
+    const result = await signInWithCredentials(email, password); // call sign in from useAuth hook
+    
+    if (result.success) {
+      router.push('/');
+    } else {
+      setMessage(result.error || t('auth:signInError'));
     }
-
-    localStorage.setItem('access_token', data.access);
-    localStorage.setItem('refresh_token', data.refresh);
-
-    router.push('/');
-  } catch (err) {
-    alert(t('auth:signInError'));
+  } catch (err: any) {
+    setMessage(t('auth:signInError'));
     console.error('Login error:', err);
   }
 };

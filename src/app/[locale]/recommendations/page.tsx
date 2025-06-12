@@ -49,7 +49,7 @@ export default function RecommendationsPage() {
 
     const query: RecommendationQuery = {
       genres: genreIds,
-      platform: platformId,
+      platform: [platformId], // CHANGED: Wrap in array to match backend
       budget,
     };
 
@@ -174,67 +174,71 @@ export default function RecommendationsPage() {
         {error && <p className="mt-4 text-red-500">{error}</p>}
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          {recommendations.map((game) => (
+            {recommendations.map((game) => (
             <div
               key={game.title}
               className="bg-white border rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg"
             >
               {typeof game.cover_url === 'string' && (
-                <img
-                  src={game.cover_url}
-                  alt={game.title}
-                  className="w-full h-auto mb-2 object-cover rounded"
-                />
+              <img
+                src={game.cover_url}
+                alt={game.title}
+                className="w-full h-auto mb-2 object-cover rounded"
+              />
               )}
               <h2 className="text-xl font-semibold">{game.title}</h2>
               <p className="text-sm">{game.summary}</p>
 
               {Array.isArray(game.genres) && ( // Check if genres is an array
-                <p className="text-sm text-gray-600">
-                  Genres: {game.genres.join(', ')}
-                </p>
+              <p className="text-sm text-gray-600">
+                Genres: {game.genres.join(', ')}
+              </p>
               )}
-              {Array.isArray(game.platform) && ( // Check if platform is an array (it shouldnt be)
-                <p className="text-sm text-gray-600">
-                  Platform: {""}
-                  {game.platform
-                  ?.map((id: string | number) => PLATFORM_MAP[Number(id)] || `ID ${id}`)
-                  .join(', ')}
-                </p>
+              {typeof game.platform === 'string' && ( // CHANGED: Handle string platform
+              <p className="text-sm text-gray-600">
+                Platform: {game.platform}
+              </p>
+              )}
+              {Array.isArray(game.platform) && ( // Handle array of platform names
+              <p className="text-sm text-gray-600">
+                Platform: {game.platform.join(', ')}
+              </p>
               )}
               {game.blurb ? (
-                <p className="mt-2 text-sm italic text-blue-800 bg-blue-50 p-2 rounded">
-                  {game.blurb}
-                </p>
+              <p className="mt-2 text-sm italic text-blue-800 bg-blue-50 p-2 rounded">
+                {game.blurb}
+              </p>
               ) : (
-                <p className="mt-2 text-sm italic text-gray-400">No blurb available.</p>
+              <p className="mt-2 text-sm italic text-gray-400">No blurb available.</p>
               )}
               {game.price && typeof game.price.price === 'number' ? ( // Check if price is available and is a number
-                <div className="mt-2 text-sm bg-green-50 border border-green-200 p-2 rounded">
-                  <p>
-                    <strong>Store:</strong> {game.price.store || 'Unknown'}
-                  </p>
-                  <p>
-                    <strong>Price:</strong> {game.price.currency || 'GBP'}{' '}
-                    {game.price.price.toFixed(2)}
-                  </p>
-                  <p>{game.price.discount || 'No discount info available'}</p> {/* Display price information if available */}
-                  {game.price.url && (
-                    <a
-                      href={game.price.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline"
-                    >
-                      View Deal
-                    </a>
-                  )}
-                </div>
-              ) : ( // Check if price is available
-                <p className="mt-2 text-sm text-gray-400">No pricing information available.</p>
+              <div className="mt-2 text-sm bg-green-50 border border-green-200 p-2 rounded">
+                <p>
+                <strong>Store:</strong> {game.price.store || 'Unknown'}
+                </p>
+                <p>
+                <strong>Price:</strong> {game.price.currency || 'GBP'}{' '}
+                {game.price.price.toFixed(2)}
+                </p>
+                <p>{game.price.discount || 'No discount info available'}</p> {/* Display price information if available */}
+                {game.price.url && (
+                <a
+                  href={game.price.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  View Deal
+                </a>
+                )}
+              </div>
+              ) : ( // CHANGED: Show price_note if available
+              <div className="mt-2 text-sm text-gray-400">
+                {game.price_note || 'No pricing information available.'}
+              </div>
               )}
             </div>
-          ))}
+            ))}
         </div>
 
         {recommendations.length > 0 && ( // If there are recommendations, show the save playlist section

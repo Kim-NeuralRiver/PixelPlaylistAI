@@ -45,19 +45,21 @@ const SignUp: React.FC = () => {
       alert(t('auth:signUpSuccess'));
 
       // Optionally log in the user automatically after sign-up
-      const loginResponse = await signIn('credentials', {
-        redirect: false,
-        email,
-        password,
+      const loginRes = await fetch('http://localhost:8000/api/token/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: email, password }),
       });
-
-      if (loginResponse?.error) {
-        alert(loginResponse.error);
-      } else {
+      const data = await loginRes.json();
+      if (loginRes.ok) {
+        localStorage.setItem('token', data.access);
+        localStorage.setItem('refresh', data.refresh);
         router.push('/');
+      } else {
+        console.error('Login after sign-up failed:', data);
       }
     } catch (error) {
-      console.error('Error during sign-up:', error);
+      console.error('Sign up error:', error);
       alert(t('auth:signUpError'));
     }
   };

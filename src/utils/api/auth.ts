@@ -1,19 +1,22 @@
-// Token refresh utility for handling JWT tokens in a web application
+// Legacy auth utilities - most functionality moved to tokenManager.ts
+// Token manager dedicated ts was easier option, as I'm using JWT and nextauth
+
+/**
+ * @deprecated Use tokenManager.ensureValidToken() instead
+ * This function is kept for backward compatibility
+ * and for future reference. :)
+ */
+
+import { tokenManager } from './tokenManager';
 
 export const refreshToken = async (): Promise<void> => {
-  const refresh = localStorage.getItem('refresh');
-  if (!refresh) return;
-
-  const res = await fetch('http://localhost:8000/api/token/refresh/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ refresh }),
-  });
-
-  const data = await res.json();
-  if (data.access) {
-    localStorage.setItem('token', data.access);
-  } else {
-    console.warn('Failed to refresh token:', data);
+  console.warn('refreshToken() is deprecated. Use tokenManager.ensureValidToken() instead.');
+  
+  try {
+    await tokenManager.ensureValidToken();
+  } catch (error) {
+    throw new Error('Failed to refresh token');
   }
 };
+
+// All new code will use tokenManager directly
