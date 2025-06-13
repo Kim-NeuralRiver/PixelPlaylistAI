@@ -1,8 +1,9 @@
 'use client';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { signIn } from 'next-auth/react';
+import { useAuth } from '@/hooks/useAuth';
 
 const SignUp: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -10,139 +11,192 @@ const SignUp: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState<'success' | 'error'>('error');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { t } = useTranslation(['auth']);
+  const { signUp } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMessage('');
+    setLoading(true);
+
+    // Validate passwords
 
     if (password !== confirmPassword) {
-      alert(t('auth:passwordMismatch'));
+      setMessage('Passwords do not match');
+      setMessageType('error');
+      setLoading(false);
+      return;
+    }
+
+    if (password.length < 8) {
+      setMessage('Password must be at least 8 characters long, sorry!');
+      setMessageType('error');
+      setLoading(false);
       return;
     }
 
     try {
-      const res = await fetch('/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username,
-          email,
-          name,
-          password,
-          role: 'USER',
-        }),
-      });
+      const result = await signUp(username, email, password, name);
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        alert(errorData.error || t('auth:signUpError'));
-        return;
-      }
-
-      alert(t('auth:signUpSuccess'));
-
-      // Optionally log in the user automatically after sign-up
-      const loginRes = await fetch('http://localhost:8000/api/token/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: email, password }),
-      });
-      const data = await loginRes.json();
-      if (loginRes.ok) {
-        localStorage.setItem('token', data.access);
-        localStorage.setItem('refresh', data.refresh);
-        router.push('/');
+      if (result.success) {
+        setMessage(result.message || 'Account created successfully! You may now sign in. :)');
+        setMessageType('success');
+        // Redir to signin after 2 secs
+        setTimeout(() => {
+          router.push('/sign-in');
+        }, 2000);
       } else {
-        console.error('Login after sign-up failed:', data);
+        setMessage(result.error || 'Sign up failed, please try again.');
+        setMessageType('error');
       }
-    } catch (error) {
-      console.error('Sign up error:', error);
-      alert(t('auth:signUpError'));
+    } catch (err: any) {
+      setMessage(err.message || 'An unexpected error occurred during sign up.');
+      setMessageType('error');
+      console.error('Sign up error:', err);
+    } finally {
+      setLoading(false); // Reset load state
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-2xl font-bold mb-6 text-center text-blue-600">{t('auth:signUp')}</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-              {t('auth:name')}
-            </label>
-            <input
-              type="text"
+      <div className="bg-white max-w-md w-full p-8 rounded-lg shadow-md">
+        <div>
+          <h2 className="mt-6 text-center text-3x1 font-extrabold text-blue-900">
+            Create an Account
+          </h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Already have an account?{' '}
+            <Link href="/sign-in" className="font-medium text-blue-600 hover:text-blue-500">
+              Sign in
+            </Link>
+          </p>
+        </div>
+
+        {message && (
+          <div className={`rounded-md p-4 ${
+            messageType === 'success'
+            ? 'bg-green-50 border border-green-200'
+            : 'bg-red-50 border border-red-200'
+          }`}>
+            <p className={`text-sm ${
+              messageType === 'success' ? 'text-green-700' : 'text-red-700'
+            }`}>
+              {message}
+            </p>
+          </div>
+        )}
+
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="username" className="block text-sm font-medium text-blue-900">
+                Username
+              </label>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-blue-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Choose a username"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-blue-900">
+                Name (Optional!)
+              </label>
+              <input
               id="name"
+              name="name"
+              type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
+              className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-blue-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="Your name (optional)"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-blue-900">
+                Email address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-blue-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Your email address"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-blue-900">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-blue-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Your password"
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                Your password must be at least 8 characters long!
+              </p>
+            </div>
+
+            <div>
+              <label htmlFor="confirm-password" className="block text-sm font-medium text-blue-900">
+                Confirm Password
+              </label>
+              <input
+                id="confirm-password"
+                name="confirm-password"
+                type="password"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-blue-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Confirm your password"
+              />
           </div>
-          <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-              {t('auth:username')}
-            </label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              {t('auth:email')}
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              {t('auth:password')}
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-              {t('auth:confirmPassword')}
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        </div>
+        <div>
+          <button 
+          type="submit"
+          disabled={loading}
+          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {t('auth:signUp')}
+            {loading ? (
+              <span className="flex items-center">
+                <svg className="animate-spin -m1-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2.93 6.364A8.001 8.001 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3.93-1.574zM12 20a8.001 8.001 0 01-6.364-2.93l-3.93 1.574A11.95 11.95 0 0012 24v-4zm6.364-2.93A8.001 8.001 0 0120 12h4c0 3.042-1.135 5.824-3 7.938l-3.636-1.568zM20 12a8.001 8.001 0 01-2.93-6.364l3.636-1.568A11.95 11.95 0 0024 12h-4z"></path>
+                </svg>
+                Creating account...
+              </span>
+            ) : (
+              'Create Account'
+            )}
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
+  </div>
   );
 };
 

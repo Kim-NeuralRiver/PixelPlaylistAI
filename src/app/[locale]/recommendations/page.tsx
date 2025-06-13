@@ -8,7 +8,8 @@ import { PLATFORM_MAP } from '@/utils/platforms';
 import { savePlaylist } from '@/utils/api/playlists';
 import { getPlaylists } from '@/utils/api/playlists';
 import React from 'react';
-
+import AuthModal from '@/components/AuthModal';
+import { useAuth } from '@/hooks/useAuth'; 
 
 export default function RecommendationsPage() {
   const [genreIds, setGenreIds] = useState<number[]>([12]);
@@ -24,7 +25,9 @@ export default function RecommendationsPage() {
   const [playlistName, setPlaylistName] = useState('');
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
   const [saveError, setSaveError] = useState<string | null>(null);
-  
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [playlists, setPlaylists] = useState<string[]>([]); // Store user's playlists
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => { // Fetch genres on component mount
     try {
@@ -49,7 +52,7 @@ export default function RecommendationsPage() {
 
     const query: RecommendationQuery = {
       genres: genreIds,
-      platform: [platformId], // CHANGED: Wrap in array to match backend
+      platform: [platformId],
       budget,
     };
 
@@ -59,36 +62,50 @@ export default function RecommendationsPage() {
       setRecommendations(result);
     } catch (err: any) {
       setError(err.message || "An unknown error occurred.");
-    } finally {
-      setLoading(false);
-    }
-    
-  };
-
-    const handleSavePlaylist = async () => {
-      if (!playlistName.trim()) {
-        setSaveError('Please enter a playlist name. :(');
-        return;
-      }
-
-      setSaveStatus('saving');
-      setSaveError(null);
-
-      try {
-        await savePlaylist(playlistName, recommendations);
-        setSaveStatus('success');
-        setTimeout(() => setSaveStatus('idle'), 5000); // Reset success msg after 5s
-
-        const confirmReset = window.confirm('Playlist saved! Want to clear the playlist name?');
-        if (confirmReset) setPlaylistName('');
-      } catch (error: any) {
-        console.error('Error saving playlist:', error);
-        setSaveStatus('error');
-        setSaveError(error.message || 'An error occurred while saving your playlist.')
+      } finally {
+        setLoading(false);
       }
     };
-
-    if (renderError) {
+  
+    const handleSavePlaylist = async () => {
+      if (!isAuthenticated) {
+        setShowAuthModal(true);
+        return;
+      }
+  
+      if (!playlistName.trim()) {
+        setSaveError('Please enter a playlist name.');
+        setSaveStatus('error');
+        return;
+      }
+  
+      setSaveStatus('saving');
+      setSaveError(null);
+  
+      try {
+        setRecommendations((currentRecommendations) => {
+          return currentRecommendations; // Ensure the callback returns the current state
+        });
+  
+        if (playlists.includes(playlistName.trim())) {
+          setSaveError('A playlist with this name already exists.');
+          setSaveStatus('error');
+          return;
+        }
+  
+        await savePlaylist(playlistName, recommendations);
+        setSaveStatus('success');
+        setPlaylistName('');
+        setPlaylists([...playlists, playlistName.trim()]); // Update playlists
+      } catch (error: any) {
+        setSaveStatus('error');
+        setSaveError(error.message || 'Failed to save playlist.');
+      }
+    };
+  
+    if (renderError) { // Log the error to an external monitoring service or console
+      console.error('Render error:', renderError);
+  
       return (
         <main className="p-6 max-w-4xl mx-auto text-red-600">
           <h1 className="text-2xl font-bold">Something went wrong</h1>
@@ -96,11 +113,16 @@ export default function RecommendationsPage() {
         </main>
       );
     }
-
+  
     return (
       <main className="p-6 max-w-4xl mx-auto min-h-screen bg-gray-50">
         <h1 className="text-3xl font-bold mb-4">Recommendations</h1> {/* // Form to get game recommendations */}
-
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          title="Save Your Playlist!"
+          message="Please sign in to save and access personalised playlists."
+          />
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block font-medium">
@@ -130,7 +152,7 @@ export default function RecommendationsPage() {
               </select>
             )}
           </div>
-
+  
           <div>
             <label htmlFor="platformID" className="block font-medium">Platform</label>
             <select
@@ -161,7 +183,7 @@ export default function RecommendationsPage() {
               className="w-full p-2 border rounded"
             />
           </div>
-
+  
           <button
             type="submit"
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -169,10 +191,10 @@ export default function RecommendationsPage() {
             Get Recommendations 
           </button> 
         </form>
-
+  
         {loading && <p className="mt-4">Loading...</p>}
         {error && <p className="mt-4 text-red-500">{error}</p>}
-
+  
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
             {recommendations.map((game) => (
             <div
@@ -188,13 +210,13 @@ export default function RecommendationsPage() {
               )}
               <h2 className="text-xl font-semibold">{game.title}</h2>
               <p className="text-sm">{game.summary}</p>
-
+  
               {Array.isArray(game.genres) && ( // Check if genres is an array
               <p className="text-sm text-gray-600">
                 Genres: {game.genres.join(', ')}
               </p>
               )}
-              {typeof game.platform === 'string' && ( // CHANGED: Handle string platform
+              {typeof game.platform === 'string' && ( // Handle platform as a string
               <p className="text-sm text-gray-600">
                 Platform: {game.platform}
               </p>
@@ -232,7 +254,7 @@ export default function RecommendationsPage() {
                 </a>
                 )}
               </div>
-              ) : ( // CHANGED: Show price_note if available
+              ) : ( // Display price_note if available
               <div className="mt-2 text-sm text-gray-400">
                 {game.price_note || 'No pricing information available.'}
               </div>
@@ -240,7 +262,7 @@ export default function RecommendationsPage() {
             </div>
             ))}
         </div>
-
+  
         {recommendations.length > 0 && ( // If there are recommendations, show the save playlist section
           <div className="mt-8 p-4 border rounded bg-white shadow">
             <h3 className="text-lg font-semibold mb-2">Save This Playlist</h3>
@@ -265,7 +287,6 @@ export default function RecommendationsPage() {
             )}
           </div>
         )}
-
       </main>
     );
   }

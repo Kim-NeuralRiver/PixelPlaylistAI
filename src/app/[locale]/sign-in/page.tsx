@@ -7,164 +7,206 @@ import { useTranslation } from 'react-i18next';
 import { signIn } from 'next-auth/react';
 import { useAuth } from '@/hooks/useAuth';
 
+
 const SignIn: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'credentials' | 'magic-link' | 'google'>('credentials');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { t } = useTranslation(['auth']);
   const { signIn: signInWithCredentials } = useAuth();
 
-const handleCredentialsSubmit = async (e: React.FormEvent) => { // Handle sign in w/ creds
-  e.preventDefault();
-  setMessage('');
-
-  try {
-    const result = await signInWithCredentials(email, password); // call sign in from useAuth hook
-    
-    if (result.success) {
-      router.push('/');
-    } else {
-      setMessage(result.error || t('auth:signInError'));
-    }
-  } catch (err: any) {
-    setMessage(t('auth:signInError'));
-    console.error('Login error:', err);
-  }
-};
-
-
-  const handleMagicLinkSubmit = async (e: React.FormEvent) => {
+  const handleCredentialsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMessage('');
+    setLoading(true);
 
-    const result = await signIn('email', {
-      redirect: false,
-      email,
-    });
+    try {
+      const result = await signInWithCredentials(email, password);
 
-    if (result?.error) {
-      setMessage(t('auth:checkEmailError'));
-    } else {
-      setMessage(t('auth:checkEmail'));
-    }
-  };
+      if (result.success) {
+        router.push('/');
+      } else {
+        setMessage(result.error || 'Sign in failed');
+      }
+      } catch (err: any) {
+        setMessage('An unexpected error occurred during sing in.');
+        console.error('Login error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleGoogleSignIn = () => {
-    signIn('google');
-  };
+    const handleMagicLinkSubmit = async (e: React.FormEvent) => {
+      e.preventDefault(); 
+      setLoading(true);
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center text-blue-600">{t('auth:signIn')}</h1>
-        <div className="flex justify-between border-b mb-4">
-          <button
-            className={`pb-2 w-1/3 text-center font-medium ${
-              activeTab === 'credentials' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500'
-            }`}
-            onClick={() => setActiveTab('credentials')}
-          >
-            {t('Credentials')}
-          </button>
-          <button
-            className={`pb-2 w-1/3 text-center font-medium ${
-              activeTab === 'magic-link' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500'
-            }`}
-            onClick={() => setActiveTab('magic-link')}
-          >
-            {t('Magic Link')}
-          </button>
-          <button
-            className={`pb-2 w-1/3 text-center font-medium ${
-              activeTab === 'google' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500'
-            }`}
-            onClick={() => setActiveTab('google')}
-          >
-            {t('Google')}
-          </button>
-        </div>
-        {activeTab === 'credentials' && (
-          <form onSubmit={handleCredentialsSubmit} className="space-y-4">
+      const result = await signIn('email', {
+        redirect: false,
+        email,
+      });
+
+      if (result?.error) {
+        setMessage('Failed to send magic link. :(');
+      } else {
+        setMessage('Magic link sent! Check your email to sign in! :)');
+      }
+      setLoading(false);
+      };
+
+      const handleGoogleSignIn = () => {
+        signIn('google');
+      };
+
+      return (
+        <div className="min-h-screen flex item-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-md w-full space-y-8">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                {t('auth:email')}
-              </label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
+              <h2 className="mt-6 text-center text-3x1 font-extrabold text-blue-900">
+                Sign in to your account
+              </h2>
+              <p className="mt-2 text-center text-sm text-gray-600">
+                Or{''}
+                <Link href="/sign-up" className="font-medium text-blue-600 hover:text-blue-500">
+                  create a new account
+                </Link>
+              </p>
             </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                {t('auth:password')}
-              </label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              {t('auth:signIn')}
-            </button>
-          </form>
-        )}
 
-        {activeTab === 'magic-link' && (
-          <form onSubmit={handleMagicLinkSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="magic-email" className="block text-sm font-medium text-gray-700">
-                {t('auth:email')}
-              </label>
-              <input
-                type="email"
-                id="magic-email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              {t('Send Magic Link')}
-            </button>
-            {message && <p className="text-center mt-2 text-green-500">{message}</p>}
-          </form>
-        )}
+            {message && (
+              <div className="rounded-md bg-red-50 border border-red-200 p-4">
+                <p className="text-sm text-red-950">{message}</p>
+              </div>
+            )}
 
-        {activeTab === 'google' && (
-          <div className="space-y-4">
-            <button
-              onClick={handleGoogleSignIn}
-              className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100"
-            >
-              {t('Sign In With Google')}
-            </button>
+
+            {/* Tab Navigation */}
+            <div className="flex border-b border-gray-200">
+              <button
+              className={`flex-1 py-2 text-center border-b-2 font-medium text-sm ${
+                activeTab === 'credentials'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-blue-500 hover:text-blue-200 hover:border-gray-300'
+              }`}
+              onClick={() => setActiveTab('credentials')}
+              >
+                Email & Password
+              </button>
+              <button
+                className={`flex-1 py-2 text-center border-b-2 font-medium text-sm ${
+                  activeTab === 'magic-link'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-blue-500 hover:text-blue-200 hover:border-gray-300'
+                }`}
+                onClick={() => setActiveTab('magic-link')}
+              >
+                Magic Link
+              </button>
+              <button
+                className={`flex-1 py-2 text-center border-b-2 font-medium text-sm ${
+                  activeTab === 'google'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-blue-500 hover:text-blue-200 hover:border-gray-300'
+                }`}
+                onClick={() => setActiveTab('google')}
+                >
+                  Google
+                </button>
+            </div>
+
+            {/* Tab Content*/}
+            <div className="mt-8">
+              {activeTab === 'credentials' && (
+                <form onSubmit={handleCredentialsSubmit} className="space-y-6">
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-blue-900">
+                      Email Address
+                      </label>
+                    <input
+                      id="email"
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-blue-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      placeholder="youremail@emails.com"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="password" className="block text-sm font-medium text-blue-900">
+                      Password
+                    </label>
+                    <input
+                    id="password"
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-blue-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    placeholder="Your personal password"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                    >
+                      {loading ? 'Signing in...' : 'Sign In'}
+                    </button>
+                </form>
+              )}
+
+              {activeTab === 'magic-link' && (
+                <form onSubmit={handleMagicLinkSubmit} className="space-y-6">
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-blue-900">
+                      Email Address
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-blue-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      placeholder="youremail@emails.com"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                    >
+                      {loading ? 'Sending...' : 'Sending magic link'}
+                    </button>
+                </form>
+              )}
+
+              {activeTab === 'google' && (
+                <div>
+                  <button 
+                    onClick={handleGoogleSignIn}
+                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                  >
+                    <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Sign in with Google
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        )}
-        <p className="text-gray-700 mt-4 text-center">
-          {t('auth:dontHaveAccount')}{' '}
-          <Link href="/sign-up" className="text-blue-500 hover:underline">
-            {t('auth:signUp')}
-          </Link>
-        </p>
-      </div>
-    </div>
-  );
-};
+        </div>
+      );
+    };
 
 export default SignIn;
+
+// Note to self: make sure to check next auth files for any additional configurations needed for Google sign-in and magic link functionality.
+// Might also need Google OAuth in env 
