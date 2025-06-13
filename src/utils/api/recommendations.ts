@@ -37,7 +37,7 @@ export interface GameRecommendation {
 
 export async function fetchGameRecommendations(query: RecommendationQuery): Promise<GameRecommendation[]> { // Fetch game recommendations from the API
   const headers: Record<string, string> = {
-    'Content-Type': 'applications/json'
+    'Content-Type': 'application/json'
   };
 
   // Add auth header if user = logged in
