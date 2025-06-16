@@ -29,7 +29,6 @@ declare module "next-auth" {
 }
 
 
-
 declare module "next-auth/jwt" {
   interface JWT {
     sub: string;
@@ -58,6 +57,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       allowDangerousEmailAccountLinking: true
     }),
+
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -120,7 +120,8 @@ export const authOptions: NextAuthOptions = {
     
     },
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/sign-in",
+    signOut: "/sign-out",
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

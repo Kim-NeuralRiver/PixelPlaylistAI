@@ -35,21 +35,22 @@ const SignIn: React.FC = () => {
   };
 
   const handleCredentialsSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     setMessage('');
     setLoading(true);
 
     if (!validateEmail(email)) {
+      setLoading(false);
       return;
     }
-  
     if (!password.trim()) {
       setMessage('Password is required');
+      setLoading(false);
       return;
     }
   
-    setLoading(true);
-
     try {
       const result = await signInWithCredentials(email, password);
 
@@ -58,13 +59,13 @@ const SignIn: React.FC = () => {
       } else {
         setMessage(result.error || 'Sign in failed');
       }
-      } catch (err: any) {
-        setMessage('An unexpected error occurred during sing in.');
-        console.error('Login error:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    } catch (err) {
+      setMessage('An unexpected error occurred during sign in.');
+      console.error('Login error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
     const handleMagicLinkSubmit = async (e: React.FormEvent) => {
       e.preventDefault(); 
@@ -91,7 +92,7 @@ const SignIn: React.FC = () => {
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-md w-full space-y-8">
             <div>
-              <h2 className="mt-6 text-center 3x1 font-extrabold text-blue-900">
+              <h2 className="mt-6 text-center 3xl font-extrabold text-blue-900">
                 Sign in to your account
               </h2>
               <p className="mt-2 text-center text-sm text-gray-600">
@@ -168,7 +169,7 @@ const SignIn: React.FC = () => {
                       value={email}
                       onChange={(e) => {
                         setEmail(e.target.value);
-                        if (emailError) validateEmail(e.target.value); // Clear error on valid input
+                        if (emailError) validateEmail(e.target.value); // Re-validate if there was an error; may clear error if input is valid
                       }}
                       onBlur={(e) => validateEmail(e.target.value)}
                       className={`mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
@@ -235,7 +236,7 @@ const SignIn: React.FC = () => {
                     disabled={loading}
                     className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
                     >
-                      {loading ? 'Sending...' : 'Sending magic link'}
+                      {loading ? 'Sending...' : 'Send magic link'}
                     </button>
                 </form>
               )}
@@ -259,9 +260,8 @@ const SignIn: React.FC = () => {
             </div>
           </div>
         </div>
-      );
-    };
-
+          );
+};
 export default SignIn;
 
 // Note to self: make sure to check next auth files for any additional configurations needed for Google sign-in and magic link functionality.
