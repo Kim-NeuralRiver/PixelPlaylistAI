@@ -11,37 +11,71 @@ export const useAuth = () => {
 
   // Sync Redux state with actual token on load
   useEffect(() => {
-    const hasToken = tokenManager.isAuthenticated();
+  // Check for valid token on app startup
+    const initializeAuth = async () => {
+      try {
+        const token = await tokenManager.ensureValidToken();
+        if (token && !isAuthenticated) {
+          // Could fetch user profile here if needed
+          dispatch(login('user')); // Or get actual username from token
+        }
+      } catch (error) {
+        console.log('Token initialization failed:', error);
+        tokenManager.clearTokens();
+        dispatch(logout());
+      }
+    };
 
-    if (hasToken && !isAuthenticated) {
-      dispatch(login('user'));
-    } else if (!hasToken && isAuthenticated) {
-      dispatch(logout());
-    }
-  }, [dispatch, isAuthenticated]); // Sync auth state with token manager, 
+    initializeAuth();
+  }, [isAuthenticated, dispatch]); // Run on mount and when isAuthenticated or dispatch changes
   // Runs on mount to check if user is auth based on token presence or lack thereof
 
   const signIn = async (username: string, password: string) => {
-    try { 
+    try {
+      // Input validation
+      if (!username.trim() || !password.trim()) {
+        return { success: false, error: 'Please enter both email and password' };
+      }
+
+      const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      
       const response = await fetch(`${BASE_URL}/api/token/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username: username.trim(), password }),
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          return { success: false, error: 'Invalid email or password' };
+        }
+        if (response.status >= 500) {
+          return { success: false, error: 'Server error. Please try again later.' };
+        }
+        
         const errorData = await response.json().catch(() => null);
-        throw new Error(errorData.detail || 'Login failed, invalid credentials.');
+        return { 
+          success: false, 
+          error: errorData?.detail || errorData?.message || 'Sign in failed' 
+        };
       }
 
       const data = await response.json();
-
-      tokenManager.setTokens(data.access, data.refresh); // Store tokens in token manager
+      
+      if (!data.access || !data.refresh) {
+        return { success: false, error: 'Invalid response from server' };
+      }
+      
+      tokenManager.setTokens(data.access, data.refresh);
       dispatch(login(username));
-
+      
       return { success: true };
     } catch (error: any) {
-      return { success: false, error: error.message };
+      console.error('Sign in error:', error);
+      return { 
+        success: false, 
+        error: 'Network error. Please check your connection.' 
+      };
     }
   };
 
