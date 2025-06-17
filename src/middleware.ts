@@ -1,38 +1,48 @@
 import { i18nRouter } from 'next-i18n-router';
 import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
-
 import i18nConfig from '../i18nConfig';
 
+// Helper function to check if JWT token exists and is not expired
+function isValidJWTToken(token: string): boolean {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const currentTime = Date.now() / 1000;
+    return payload.exp > currentTime;
+  } catch {
+    return false;
+  }
+}
+
 export const middleware = async (request: NextRequest) => {
-  const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
   const url = request.nextUrl.clone();
-
-  // Define private and public routes
+  
+  // Get JWT token from cookies or localStorage (check cookies first!)
+  const accessToken = request.cookies.get('access_token')?.value;
+  
+  // Define route categories
   const publicRoutes = ['/recommendations', '/sign-in', '/sign-up', '/about', '/faq', '/contact-us', '/privacy-policy'];
-  const privateRoutes = ['/admin-page','/settings'];
-
-  const isPublicRoute = publicRoutes.some((route) => url.pathname.startsWith(route));
-  const isPrivateRoute = privateRoutes.some((route) => url.pathname.startsWith(route));
+  const privateRoutes = ['/admin-page', '/settings'];
+  
+  const isPublicRoute = publicRoutes.some((route) => url.pathname.includes(route));
+  const isPrivateRoute = privateRoutes.some((route) => url.pathname.includes(route));
+  const isAuthenticated = accessToken && isValidJWTToken(accessToken);
 
   // Handle private routes
-  if (isPrivateRoute && !token) {
-    // Redirect to login if not authenticated
+  if (isPrivateRoute && !isAuthenticated) {
     url.pathname = '/sign-in';
     return NextResponse.redirect(url);
   }
 
-  // Handle redirect from login/signup for authenticated users
-  if (isPublicRoute && token && url.pathname === '/sign-in') {
-    url.pathname = '/';
+  // Redirect auth users away from sign-in
+  if (isAuthenticated && url.pathname.includes('/sign-in')) {
+    url.pathname = '/recommendations'; 
     return NextResponse.redirect(url);
   }
 
-  // Apply i18n routing
+  // i18n routing
   return i18nRouter(request, i18nConfig);
 };
 
-// Applies this middleware only to files in the app directory
 export const config = {
   matcher: '/((?!api|static|.*\\..*|_next).*)',
 };

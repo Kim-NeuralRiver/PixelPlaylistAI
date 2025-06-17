@@ -1,13 +1,54 @@
 import { NextAuthOptions, DefaultSession } from "next-auth";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
+// import { PrismaAdapter } from "@next-auth/prisma-adapter";
+// import { PrismaClient } from "@prisma/client";
+// import CredentialsProvider from "next-auth/providers/credentials";
+// import bcrypt from "bcrypt";
 import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
 
-const prisma = new PrismaClient();
+// Simplified NextAuth - only for Google/Email, NOT credentials
+export const authOptions: NextAuthOptions = {
+  providers: [
+    ...(process.env.GOOGLE_CLIENT_ID ? [
+      GoogleProvider({
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        allowDangerousEmailAccountLinking: true
+      })
+    ] : []),
 
+    ...(process.env.MAILGUN_USERNAME ? [
+      EmailProvider({
+        server: {
+          host: "smtp.mailgun.org",
+          port: 587,
+          auth: {
+            user: process.env.MAILGUN_USERNAME,
+            pass: process.env.MAILGUN_PASSWORD,
+          },
+        },
+        from: process.env.MAILGUN_FROM,
+      })
+    ] : []),
+  ],
+  pages: {
+    signIn: "/sign-in", 
+  },
+  callbacks: {
+    async session({ session, token }) {
+      return session;
+    },
+    async jwt({ token, user }) {
+      return token;
+    },
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+};
+
+// Note: The below has been commented out while I test some changes here.
+
+
+/* const prisma = new PrismaClient(); 
 
 declare module "next-auth" {
   interface User {
@@ -125,3 +166,4 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
+ */

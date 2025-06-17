@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npx prisma generate && npm run build",
+  "buildCommand": "npm run build",
   "ignoreCommand": "exit 1",
   "outputDirectory": ".next",
   "devCommand": "npm run dev"

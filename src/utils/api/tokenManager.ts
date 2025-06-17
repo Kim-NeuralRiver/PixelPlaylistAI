@@ -31,6 +31,7 @@ class TokenManager { // Singleton class to manage access and refresh tokens
     if (typeof window !== 'undefined') {
       localStorage.setItem('token', accessToken);
       localStorage.setItem('refresh', refreshToken);
+      this.setCookieTokens(accessToken, refreshToken); // Set cookies for tokens to use for server side request
     }
   }
 
@@ -45,6 +46,24 @@ class TokenManager { // Singleton class to manage access and refresh tokens
     if (typeof window !== 'undefined') {
       localStorage.removeItem('token');
       localStorage.removeItem('refresh');
+      this.clearCookieTokens(); // Clear cookies 
+    }
+  }
+
+  private setCookieTokens(accessToken: string, refreshToken: string): void {
+    if (typeof document !== 'undefined') {
+      const expires = new Date();
+      expires.setDate(expires.getDate() + 7); // set cookies exp to 7 days 
+
+      document.cookie = `access_token=${accessToken}; expires=${expires.toUTCString()}; path=/; secure; SameSite=Strict`; // Set access token cookie
+      document.cookie = `refresh_token=${refreshToken}; expires=${expires.toUTCString()}; path=/; secure; SameSite=Strict`; // Set refresh token cookie
+    }
+  }
+
+  private clearCookieTokens(): void {
+    if (typeof document !== 'undefined') {
+      document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; // Clear access token cookie by setting an expired date
+      document.cookie = 'refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; // Clear refresh token cookie by setting an expired date
     }
   }
 

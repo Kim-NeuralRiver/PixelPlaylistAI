@@ -111,7 +111,7 @@ export const useAuth = () => {
 
   // Return auth state and actions
   return { 
-    isAuthenticated: tokenManager.isAuthenticated(),
+    isAuthenticated: tokenManager.isAuthenticated() && isAuthenticated,
     user, 
     signIn, 
     signOut,

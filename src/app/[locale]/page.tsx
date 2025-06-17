@@ -1,17 +1,25 @@
 'use client';
 
 import LanguageChanger from '@/components/LanguageChanger';
-import { useSession, signOut } from 'next-auth/react';
+import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const Home: React.FC = () => {
-  const { t } = useTranslation(['common', 'home', 'auth']);
-  const { data: session, status } = useSession();
+const Home: React.FC = () => { // create home page component, landing page for the app
+  const { t } = useTranslation(['common', 'home', 'auth']); // init translation hook
+  const { isAuthenticated, user, signOut } = useAuth();
   const router = useRouter();
 
-  if (status === 'loading') {
+  useEffect(() => {
+    // Redirect unauthenticated users to sign-in
+    if (!isAuthenticated) {
+      router.push('/sign-in');
+    }
+  }, [isAuthenticated, router]);
+
+  // Show loading state while checking authentication
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p>{t('auth:loading')}</p>
@@ -19,19 +27,13 @@ const Home: React.FC = () => {
     );
   }
 
-  if (status === 'unauthenticated') {
-    router.push('/sign-in');
-    return null;
-  }
-
-  const user = session?.user?.name || session?.user?.email;
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
       <main className="flex flex-col items-center justify-center">
         <h1 className="text-4xl font-bold mb-4">{t('home:title')}</h1>
         <p className="text-xl mb-8">{t('home:description')}</p>
-        <p className="text-lg mb-4">{t('home:welcome', { username: user })}</p>
+        <p className="text-lg mb-4">{t('home:welcome', { username: user || 'User' })}</p>
+        
         <div className="mb-8 w-full">
           <h2 className="text-2xl font-semibold mb-2">{t('home:features.title')}</h2>
           <ul className="list-disc list-inside">
@@ -40,12 +42,23 @@ const Home: React.FC = () => {
             ))}
           </ul>
         </div>
-        <button
-          onClick={() => signOut()}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mb-4"
-        >
-          {t('auth:signOut')}
-        </button>
+
+        <div className="flex gap-4 mb-4">
+          <button
+            onClick={() => router.push('/recommendations')}
+            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+          >
+            Get Recommendations
+          </button>
+          
+          <button
+            onClick={signOut}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          >
+            {t('auth:signOut')}
+          </button>
+        </div>
+        
         <LanguageChanger />
       </main>
       <footer className="mt-8 text-gray-600">{t('common:footer')}</footer>
@@ -53,4 +66,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Home; // Export home page component, main entry page for app
