@@ -5,8 +5,8 @@ export const config: Config = {
         mailgen: {
             theme: 'default',
             product: {
-                name: 'Neural Stream',
-                link: 'https://www.neuralriver.ai',
+                name: 'PixelPlaylistAI',
+                link: process.env.NEXTAUTH_URL || 'http://localhost:3000',
             },
         },
     }
