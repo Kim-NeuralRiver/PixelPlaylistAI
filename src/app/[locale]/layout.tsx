@@ -26,7 +26,15 @@ interface IRootLayout {
 
 const RootLayout: React.FC<IRootLayout> = async ({ children, params }) => {
   const { locale } = await params;
-  const { resources } = await initTranslations(locale, ['common', 'home', 'auth']);
+
+  // Try loading translations but continue if fails
+  let resources = {};
+  try {
+    const translationResult = await initTranslations(locale, ['common', 'home', 'auth']);
+    resources = translationResult.resources || {};
+  } catch (error) {
+    console.warn('Translation loading failed, continuing without translations:', error);
+  }
 
   return (
     <html lang={locale} dir={dir(locale)}>
