@@ -1,21 +1,26 @@
 'use client';
-
+// altered NavBar to reflect Django auth backend
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { useSession, signOut } from 'next-auth/react';
 import Image from "next/image";
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { data: session } = useSession();
+  const { isAuthenticated, user, signOut } = useAuth();
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
   const pathname = usePathname();
+
+  const handleSignOut = () => {
+    signOut();
+    setIsDropdownOpen(false);
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 px-4 py-3">
@@ -63,15 +68,19 @@ export default function NavBar() {
             className={`text-gray-600 hover:text-blue-900 ${pathname === "/faq" ? "font-bold text-blue-700" : ""}`}>
             FAQ
           </Link>
-                    <Link href="/playlists"
-            className={`text-gray-600 hover:text-blue-900 ${pathname === "/faq" ? "font-bold text-blue-700" : ""}`}>
-            Playlists
-          </Link>
-
+          {/* Only show Playlists if authenticated */}
+          {isAuthenticated && (
+            <Link href="/playlists"
+              className={`text-gray-600 hover:text-blue-900 ${pathname === "/playlists" ? "font-bold text-blue-700" : ""}`}>
+              Playlists
+            </Link>
+          )}
         </div>
-        <div>
+
+        {/* User Avatar/Profile Dropdown */}
+        <div className="relative">
           <div
-            className="rounded-full overflow-hidden border-2 border-gray-300 cursor-pointer"
+            className="rounded-full overflow-hidden border-2 border-gray-300 cursor-pointer hover:border-blue-500 transition-colors"
             onClick={toggleDropdown}
           >
             <Image
@@ -84,66 +93,67 @@ export default function NavBar() {
           </div>
 
           {isDropdownOpen && (
-            <div
-              className="absolute right-4 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg"
-            >
-              <ul className="py-1 text-gray-700">
-                {session ? (
-                  <>
+            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+              {isAuthenticated ? (
+                <>
+                  {/* Show username if available */}
+                  {user && (
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-900">{user}</p>
+                      <p className="text-xs text-gray-500">Signed in</p>
+                    </div>
+                  )}
+                  
+                  <ul className="py-1 text-gray-700">
+                    <li>
+                      <Link
+                        href="/settings"
+                        className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        Settings
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/playlists"
+                        className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        My Playlists
+                      </Link>
+                    </li>
                     <li
-                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => signOut()}
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-600"
+                      onClick={handleSignOut}
                     >
                       Sign Out
                     </li>
-                  </>
-                ) : (
-                  <li
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => {
-                      window.location.href = "/sign-in";
-                    }
-                    }
-                  >
-                    Sign In
-                  </li>
-                )}
-              </ul>
-              {session ? (
-                <ul className="py-1 text-gray-700">
-                  <>
-                    <li
-                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                      onClick={
-                        () => {
-                          window.location.href = "/settings";
-                        }
-                      }
-                    >
-                      Settings
-                    </li>
-                  </>
-                </ul>
+                  </ul>
+                </>
               ) : (
-                <></>
-              )}
-              {!session ? (
-                <ul className="py-1 text-gray-700">
-                  <>
-                    <li
-                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                      onClick={
-                        () => {
-                          window.location.href = "/sign-up";
-                        }
-                      }
-                    >
-                      Sign Up
+                <>
+                  <ul className="py-1 text-gray-700">
+                    <li>
+                      <Link
+                        href="/sign-in"
+                        className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        Sign In
+                      </Link>
                     </li>
-                  </>
-                </ul>
-              ) : (
-                <></>
+                    <li>
+                      <Link
+                        href="/sign-up"
+                        className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        Sign Up
+                      </Link>
+                    </li>
+                  </ul>
+                </>
               )}
             </div>
           )}
@@ -155,28 +165,82 @@ export default function NavBar() {
         <div className="mt-3 md:hidden">
           <Link
             href="/"
-            className="block px-3 py-2 rounded hover:bg-gray-50 text-gray-600"
+            className={`block px-3 py-2 rounded hover:bg-gray-50 text-gray-600 ${pathname === "/" ? "font-bold text-blue-700" : ""}`}
             onClick={() => setIsOpen(false)}
           >
             Home
           </Link>
           <Link
+            href="/recommendations"
+            className={`block px-3 py-2 rounded hover:bg-gray-50 text-gray-600 ${pathname === "/recommendations" ? "font-bold text-blue-700" : ""}`}
+            onClick={() => setIsOpen(false)}
+          >
+            Recommendations
+          </Link>
+          <Link
             href="/faq"
-            className="block px-3 py-2 rounded hover:bg-gray-50 text-gray-600"
+            className={`block px-3 py-2 rounded hover:bg-gray-50 text-gray-600 ${pathname === "/faq" ? "font-bold text-blue-700" : ""}`}
             onClick={() => setIsOpen(false)}
           >
             FAQ
           </Link>
           <Link
             href="/contact-us"
-            className="block px-3 py-2 rounded hover:bg-gray-50 text-gray-600"
+            className={`block px-3 py-2 rounded hover:bg-gray-50 text-gray-600 ${pathname === "/contact-us" ? "font-bold text-blue-700" : ""}`}
             onClick={() => setIsOpen(false)}
           >
             Contact Us
           </Link>
+          
+          {/* Authenticated user mobile menu items */}
+          {isAuthenticated ? (
+            <>
+              <Link
+                href="/playlists"
+                className={`block px-3 py-2 rounded hover:bg-gray-50 text-gray-600 ${pathname === "/playlists" ? "font-bold text-blue-700" : ""}`}
+                onClick={() => setIsOpen(false)}
+              >
+                My Playlists
+              </Link>
+              <Link
+                href="/settings"
+                className={`block px-3 py-2 rounded hover:bg-gray-50 text-gray-600 ${pathname === "/settings" ? "font-bold text-blue-700" : ""}`}
+                onClick={() => setIsOpen(false)}
+              >
+                Settings
+              </Link>
+              <button
+                onClick={() => {
+                  handleSignOut();
+                  setIsOpen(false);
+                }}
+                className="block w-full text-left px-3 py-2 rounded hover:bg-gray-50 text-red-600"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/sign-in"
+                className="block px-3 py-2 rounded hover:bg-gray-50 text-gray-600"
+                onClick={() => setIsOpen(false)}
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/sign-up"
+                className="block px-3 py-2 rounded hover:bg-gray-50 text-gray-600"
+                onClick={() => setIsOpen(false)}
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
+          
           <Link
             href="/privacy-policy"
-            className="block px-3 py-2 rounded hover:bg-gray-50 text-gray-600"
+            className={`block px-3 py-2 rounded hover:bg-gray-50 text-gray-600 ${pathname === "/privacy-policy" ? "font-bold text-blue-700" : ""}`}
             onClick={() => setIsOpen(false)}
           >
             Privacy Policy
