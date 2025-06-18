@@ -1,7 +1,8 @@
 import formData from 'form-data';
 import Mailgun from 'mailgun.js';
 import Mailgen from 'mailgen';
-import { config } from "@/config/config";
+import { config } from '@/config/config';
+import { Config } from '@/config/types';
 
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({

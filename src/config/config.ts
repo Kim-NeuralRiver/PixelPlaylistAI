@@ -6,7 +6,7 @@ export const config: Config = {
             theme: 'default',
             product: {
                 name: 'PixelPlaylistAI',
-                link: process.env.NEXTAUTH_URL || 'http://localhost:3000',
+                link: process.env.NEXTAUTH_URL || process.env.VERCEL_URL || 'http://localhost:3000',
             },
         },
     }
