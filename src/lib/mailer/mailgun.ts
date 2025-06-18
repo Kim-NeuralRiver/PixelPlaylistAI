@@ -11,12 +11,12 @@ const mg = mailgun.client({
 });
 
 const mailGenerator = new Mailgen({
-  theme: 'default',
+  theme: 'default', // Hardcoding to test
   product: {
-    name: config.app.mailgen.product.name,
-    link: config.app.mailgen.product.link,
+    name: 'PixelPlaylistAI', // Harding to test
+    link: process.env.NEXTAUTH_URL || process.env.VERCEL_URL || 'https://pixelplaylistai.vercel.app', // ✅ Fallbacks
   },
-})
+});
 
 // Generate email content using Mailgen
 export const generateEmail = (subject: string, template: Mailgen.Content) => {
