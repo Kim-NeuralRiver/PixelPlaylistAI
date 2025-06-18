@@ -11,7 +11,7 @@ const mg = mailgun.client({
 });
 
 const mailGenerator = new Mailgen({
-  theme: config.app.mailgen.theme,
+  theme: 'default',
   product: {
     name: config.app.mailgen.product.name,
     link: config.app.mailgen.product.link,
