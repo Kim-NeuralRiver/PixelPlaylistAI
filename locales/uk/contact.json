@@ -1,0 +1,10 @@
+{
+    "submissionSuccess": "Ваше повідомлення надіслано!",
+    "title": "Зв'яжіться з нами",
+    "description": "Звертайтесь до нас, якщо у вас є запитання або турботи. Ми завжди раді допомогти! Заповніть форму нижче, і ми відповімо якнайшвидше.",
+    "nameLabel": "Ім’я",
+    "emailLabel": "Електронна пошта",
+    "messageLabel": "Повідомлення",
+    "sendButton": "Надіслати",
+    "lorem": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce euismod nisi eget nibh porttitor, nec fermentum sapien sollicitudin."
+}

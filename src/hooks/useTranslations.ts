@@ -14,7 +14,8 @@ export const useTranslations = (namespaces: string[] = ['common']) => {
     try {
       const translation = t(key, { defaultValue: fallback, ...options });
       return translation || fallback;
-    } catch {
+    } catch (error) {
+      console.error('Translation error:', error);
       return fallback;
     }
   };
