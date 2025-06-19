@@ -28,7 +28,7 @@ const TranslationsProvider: React.FC<ITranslationsProvider> = ({
   };
 
   initI18n();
-}, [locale, namespaces, resources]);
+}, [locale, namespaces, resources]); // Initialize i18n instance when locale or namespaces change
 
   if (!i18n) {
     return (

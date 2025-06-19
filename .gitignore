@@ -48,6 +48,3 @@ next-env.d.ts
 
 # yarn lock
 yarn.lock
-
-# locales
-locales

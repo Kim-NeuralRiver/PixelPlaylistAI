@@ -1,8 +1,11 @@
-"use client";
+'use client';
+
+import { useTranslation } from 'react-i18next';
 
 const AdminPage = () => {
+  const { t } = useTranslation(['admin', 'common']);
 
-  return <div>Welcome, Admin!</div>;
+  return <div>{t('admin:welcomeMessage')}</div>;
 };
 
 export default AdminPage;

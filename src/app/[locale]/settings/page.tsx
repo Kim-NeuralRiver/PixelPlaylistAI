@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { tokenManager } from '@/utils/api/tokenManager';
+import { useTranslation } from 'react-i18next';
 
 interface UserData {
   id: number;
@@ -14,10 +15,10 @@ interface UserData {
 }
 
 const UserSettings: React.FC = () => {
+  const { t } = useTranslation(['settings', 'common', 'auth']);
   const { isAuthenticated, user, signOut } = useAuth();
   const router = useRouter();
 
-  // State for user data and personal info
   const [userData, setUserData] = useState<UserData | null>(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -25,13 +26,11 @@ const UserSettings: React.FC = () => {
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // State for pass change
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [passwordLoading, setPasswordLoading] = useState(false);
 
-  // Redirect if no auth
   useEffect(() => {
     if (!isAuthenticated) {
       router.push('/sign-in');
@@ -39,11 +38,10 @@ const UserSettings: React.FC = () => {
     }
   }, [isAuthenticated, router]);
 
-  // Fetch user data from backend
   useEffect(() => {
     const fetchUserData = async () => {
       if (!isAuthenticated) return;
-      
+
       try {
         setLoading(true);
         const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -52,7 +50,7 @@ const UserSettings: React.FC = () => {
         const response = await fetch(`${BASE_URL}/api/user/profile/`, {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
@@ -62,32 +60,29 @@ const UserSettings: React.FC = () => {
             signOut();
             return;
           }
-          throw new Error('Failed to fetch user data');
+          throw new Error(t('settings:fetchUserError'));
         }
 
         const data = await response.json();
         setUserData(data);
-        
-        // Pre-fill form fields
         setFirstName(data.first_name || '');
         setLastName(data.last_name || '');
         setEmail(data.email || '');
         setUsername(data.username || '');
       } catch (error) {
-        console.error('Error fetching user data:', error);
-        alert('Failed to load user information');
+        console.error(t('settings:fetchUserError'), error);
+        alert(t('settings:loadError'));
       } finally {
         setLoading(false);
       }
     };
 
     fetchUserData();
-  }, [isAuthenticated, signOut]);
+  }, [isAuthenticated, signOut, t]);
 
-  // Personal info update method
   const handlePersonalInfoSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
       const token = await tokenManager.ensureValidToken();
@@ -95,41 +90,39 @@ const UserSettings: React.FC = () => {
       const response = await fetch(`${BASE_URL}/api/user/profile/`, {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           first_name: firstName,
           last_name: lastName,
           username: username,
-          // Note: Check this in backend later!
         }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        alert(errorData.detail || errorData.message || 'Failed to update profile');
+        alert(errorData.detail || errorData.message || t('settings:updateFail'));
         return;
       }
 
-      alert('Profile updated successfully');
+      alert(t('settings:updateSuccess'));
     } catch (error) {
       console.error('Error updating profile:', error);
-      alert('An error occurred while updating profile');
+      alert(t('settings:updateError'));
     }
   };
 
-  // Password change method
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (newPassword !== confirmNewPassword) {
-      alert('New passwords do not match');
+      alert(t('settings:passwordMismatch'));
       return;
     }
 
     if (newPassword.length < 8) {
-      alert('New password must be at least 8 characters long');
+      alert(t('settings:passwordTooShort'));
       return;
     }
 
@@ -141,7 +134,7 @@ const UserSettings: React.FC = () => {
       const response = await fetch(`${BASE_URL}/api/user/change-password/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -152,28 +145,26 @@ const UserSettings: React.FC = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        alert(errorData.detail || errorData.message || 'Failed to change password');
+        alert(errorData.detail || errorData.message || t('settings:passwordChangeFail'));
         return;
       }
 
-      alert('Password changed successfully');
-      // Clear password fields
+      alert(t('settings:passwordChangeSuccess'));
       setCurrentPassword('');
       setNewPassword('');
       setConfirmNewPassword('');
     } catch (error) {
       console.error('Error changing password:', error);
-      alert('An error occurred while changing password');
+      alert(t('settings:passwordChangeError'));
     } finally {
       setPasswordLoading(false);
     }
   };
 
-  // Show loading state
   if (!isAuthenticated || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg">Loading user settings...</p>
+        <p className="text-lg">{t('common:loading')}</p>
       </div>
     );
   }
@@ -182,63 +173,62 @@ const UserSettings: React.FC = () => {
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto space-y-8">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-extrabold text-gray-900">User Settings</h1>
+          <h1 className="text-3xl font-extrabold text-gray-900">{t('settings:title')}</h1>
           <button
             onClick={signOut}
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
           >
-            Sign Out
+            {t('auth:signOut')}
           </button>
         </div>
-        
-        {/* Personal Info Section */}
+
         <div className="bg-white shadow sm:rounded-lg">
           <div className="px-4 py-5 sm:p-6">
             <h2 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-              Personal Information
+              {t('settings:personalInfo')}
             </h2>
             <form onSubmit={handlePersonalInfoSubmit} className="space-y-4">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                    First Name
+                    {t('settings:firstName')}
                   </label>
                   <input
                     type="text"
                     id="firstName"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
                   />
                 </div>
                 <div>
                   <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                    Last Name
+                    {t('settings:lastName')}
                   </label>
                   <input
                     type="text"
                     id="lastName"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
                   />
                 </div>
               </div>
               <div>
                 <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                  Username
+                  {t('settings:username')}
                 </label>
                 <input
                   type="text"
                   id="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
                 />
               </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email
+                  {t('settings:email')}
                 </label>
                 <input
                   type="email"
@@ -248,29 +238,28 @@ const UserSettings: React.FC = () => {
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-gray-50 text-gray-500"
                 />
                 <p className="mt-1 text-sm text-gray-500">
-                  Email changes require admin approval. Contact support to change your email.
+                  {t('settings:emailNote')}
                 </p>
               </div>
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
               >
-                Update Profile
+                {t('settings:updateProfile')}
               </button>
             </form>
           </div>
         </div>
 
-        {/* Change Pass Section */}
         <div className="bg-white shadow sm:rounded-lg">
           <div className="px-4 py-5 sm:p-6">
             <h2 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-              Change Password
+              {t('settings:changePassword')}
             </h2>
             <form onSubmit={handlePasswordChange} className="space-y-4">
               <div>
                 <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700">
-                  Current Password
+                  {t('settings:currentPassword')}
                 </label>
                 <input
                   type="password"
@@ -278,12 +267,12 @@ const UserSettings: React.FC = () => {
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
                 />
               </div>
               <div>
                 <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
-                  New Password
+                  {t('settings:newPassword')}
                 </label>
                 <input
                   type="password"
@@ -292,15 +281,15 @@ const UserSettings: React.FC = () => {
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
                   minLength={8}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
                 />
                 <p className="mt-1 text-sm text-gray-500">
-                  Must be at least 8 characters long
+                  {t('settings:passwordRequirements')}
                 </p>
               </div>
               <div>
                 <label htmlFor="confirmNewPassword" className="block text-sm font-medium text-gray-700">
-                  Confirm New Password
+                  {t('settings:confirmNewPassword')}
                 </label>
                 <input
                   type="password"
@@ -308,15 +297,17 @@ const UserSettings: React.FC = () => {
                   value={confirmNewPassword}
                   onChange={(e) => setConfirmNewPassword(e.target.value)}
                   required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
                 />
               </div>
               <button
                 type="submit"
                 disabled={passwordLoading}
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50"
               >
-                {passwordLoading ? 'Changing Password...' : 'Change Password'}
+                {passwordLoading
+                  ? t('settings:changingPassword')
+                  : t('settings:changePasswordButton')}
               </button>
             </form>
           </div>

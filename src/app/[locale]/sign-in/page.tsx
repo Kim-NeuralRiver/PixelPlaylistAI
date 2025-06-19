@@ -20,11 +20,11 @@ const SignIn: React.FC = () => {
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim()) {
-      setEmailError(t('auth:emailRequired', 'Email is required'));
+      setEmailError(t('auth:emailRequired'));
       return false;
     }
     if (!emailRegex.test(email)) {
-      setEmailError(t('auth:emailInvalid', 'Please enter a valid email address'));
+      setEmailError(t('auth:emailInvalid'));
       return false;
     }
     setEmailError('');
@@ -47,7 +47,7 @@ const SignIn: React.FC = () => {
       return;
     }
     if (!password.trim()) {
-      setMessage(t('auth:passwordRequired', 'Password is required'));
+      setMessage(t('auth:passwordRequired'));
       setLoading(false);
       return;
     }
@@ -65,7 +65,7 @@ const SignIn: React.FC = () => {
       }
     } catch (err: any) {
       console.error('Login error:', err);
-      setMessage(t('auth:unexpectedError', 'An unexpected error occurred during sign in.'));
+      setMessage(t('auth:unexpectedError'));
     } finally {
       setLoading(false);
     }
@@ -76,12 +76,12 @@ const SignIn: React.FC = () => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            {t('auth:signInTitle', 'Sign in to your account')}
+            {t('auth:signInTitle')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            {t('auth:or', 'Or')}{' '}
+            {t('auth:or')}{' '}
             <Link href="/sign-up" className="font-medium text-blue-600 hover:text-blue-500">
-              {t('auth:createAccount', 'create a new account')}
+              {t('auth:createAccount')}
             </Link>
           </p>
         </div>
@@ -106,7 +106,7 @@ const SignIn: React.FC = () => {
         <form onSubmit={handleCredentialsSubmit} className="mt-8 space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              {t('auth:emailAddress', 'Email address')}
+              {t('auth:emailAddress')}
             </label>
             <input
               id="email"
@@ -121,7 +121,7 @@ const SignIn: React.FC = () => {
               className={`mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
                 emailError ? 'border-red-300' : 'border-gray-300'
               }`}
-              placeholder={t('auth:emailPlaceholder', 'your@email.com')}
+              placeholder={t('auth:emailPlaceholder')}
             />
             {emailError && (
               <p className="mt-1 text-sm text-red-600">{emailError}</p>
@@ -130,7 +130,7 @@ const SignIn: React.FC = () => {
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              {t('auth:password', 'Password')}
+              {t('auth:password')}
             </label>
             <input
               id="password"
@@ -139,7 +139,7 @@ const SignIn: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder={t('auth:passwordPlaceholder', 'Your password')}
+              placeholder={t('auth:passwordPlaceholder')}
             />
           </div>
 
@@ -155,10 +155,10 @@ const SignIn: React.FC = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  {t('auth:signingIn', 'Signing in...')}
+                  {t('auth:signingIn')}
                 </span>
               ) : (
-                t('auth:signIn', 'Sign in')
+                t('auth:signIn')
               )}
             </button>
           </div>
@@ -167,7 +167,7 @@ const SignIn: React.FC = () => {
         {/* Note indicating intent to improve the page */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-500">
-            {t('auth:moreOptionsComingSoon', 'More sign-in options coming soon')}
+            {t('auth:moreOptionsComingSoon')}
           </p>
         </div>
 

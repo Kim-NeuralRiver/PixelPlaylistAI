@@ -61,7 +61,7 @@ export default function RecommendationsPage() {
       console.log('Fetched recommendations:', result); // Debug, remove later
       setRecommendations(result);
     } catch (err: any) {
-      setError(err.message || t('recommendations:unknownError', 'An unknown error occurred.'));
+      setError(err.message || t('recommendations:unknownError'));
       } finally {
         setLoading(false);
       }
@@ -74,7 +74,7 @@ export default function RecommendationsPage() {
       }
   
       if (!playlistName.trim()) {
-        setSaveError(t('recommendations:enterPlaylistName', 'Please enter a playlist name.'));
+        setSaveError(t('recommendations:enterPlaylistName'));
         setSaveStatus('error');
         return;
       }
@@ -88,7 +88,7 @@ export default function RecommendationsPage() {
         });
   
         if (playlists.includes(playlistName.trim())) {
-          setSaveError(t('recommendations:playlistExists', 'A playlist with this name already exists.'));
+          setSaveError(t('recommendations:playlistExists'));
           setSaveStatus('error');
           return;
         }
@@ -99,7 +99,7 @@ export default function RecommendationsPage() {
         setPlaylists([...playlists, playlistName.trim()]); // Update playlists
       } catch (error: any) {
         setSaveStatus('error');
-        setSaveError(error.message || t('recommendations:savePlaylistFailed', 'Failed to save playlist.'));
+        setSaveError(error.message || t('recommendations:savePlaylistFailed'));
       }
     };
   
@@ -108,7 +108,7 @@ export default function RecommendationsPage() {
   
       return (
         <main className="p-6 max-w-4xl mx-auto text-red-600">
-          <h1 className="text-2xl font-bold">{t('recommendations:errorMessage', 'Something went wrong')} </h1>
+          <h1 className="text-2xl font-bold">{t('recommendations:errorMessage')} </h1>
           <p>{renderError.message}</p>
         </main>
       );
@@ -116,17 +116,17 @@ export default function RecommendationsPage() {
   
     return (
       <main className="p-6 max-w-4xl mx-auto min-h-screen bg-gray-50">
-        <h1 className="text-3xl font-bold mb-4">{t('recommendations:title', 'Recommendations')}</h1> {/* // Form to get game recommendations */}
+        <h1 className="text-3xl font-bold mb-4">{t('recommendations:title')}</h1> {/* // Form to get game recommendations */}
         <AuthModal
           isOpen={showAuthModal}
           onClose={() => setShowAuthModal(false)}
-          title={t('auth:savePlaylistTitle', 'Save Your Playlist!')}
-          message={t('auth:signInToSave', 'Please sign in to save and access personalised playlists.')}
+          title={t('auth:savePlaylistTitle')}
+          message={t('auth:signInToSave')}
           />
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block font-medium">
-              {t('recommendations:genresLabel', 'Genres (select one or more)')}
+              {t('recommendations:genresLabel')}
             </label>
             {genresLoading ? (
               <p>{t('common:loading', 'Loading...')}</p>
@@ -154,7 +154,7 @@ export default function RecommendationsPage() {
           </div>
   
           <div>
-            <label htmlFor="platformID" className="block font-medium">{t('recommendations:platformLabel', 'Platform')}</label>
+            <label htmlFor="platformID" className="block font-medium">{t('recommendations:platformLabel')}</label>
             <select
               id="platformID"
               name="platformID"
@@ -171,7 +171,7 @@ export default function RecommendationsPage() {
           </div>
           <div>
             <label htmlFor="budget" className="block font-medium">
-              {t('recommendations:budgetLabel', 'Budget (£)')}
+              {t('recommendations:budgetLabel')}
             </label>
             <input
               id="budget"
@@ -188,11 +188,11 @@ export default function RecommendationsPage() {
             type="submit"
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
-            {t('recommendations:getRecommendations', 'Get Recommendations')} 
+            {t('recommendations:getRecommendations')} 
           </button> 
         </form>
   
-        {loading && <p className="mt-4">{t('common:loading', 'Loading...')}</p>}
+        {loading && <p className="mt-4">{t('common:loading')}</p>}
         {error && <p className="mt-4 text-red-500">{error}</p>}
   
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -213,17 +213,17 @@ export default function RecommendationsPage() {
   
               {Array.isArray(game.genres) && ( // Check if genres is an array
               <p className="text-sm text-gray-600">
-                {t('recommendations:genres', 'Genres')}: {game.genres.join(', ')}
+                {t('recommendations:genres')}: {game.genres.join(', ')}
               </p>
               )}
               {typeof game.platform === 'string' && ( // Handle platform as a string
               <p className="text-sm text-gray-600">
-                {t('recommendations:platform', 'Platform')}: {Array.isArray(game.platform) ? game.platform.join(', ') : game.platform}
+                {t('recommendations:platform1')}: {Array.isArray(game.platform) ? game.platform.join(', ') : game.platform}
               </p>
               )}
               {Array.isArray(game.platform) && ( // Handle array of platform names
               <p className="text-sm text-gray-600">
-                Platform: {game.platform.join(', ')}
+                {t('recommendations:platform2')} {game.platform.join(', ')}
               </p>
               )}
               {game.blurb ? (
@@ -231,17 +231,17 @@ export default function RecommendationsPage() {
                 {game.blurb}
               </p>
               ) : (
-              <p className="mt-2 text-sm italic text-gray-400">{t('recommendations:noBlurb', 'No blurb available.')}</p>
+              <p className="mt-2 text-sm italic text-gray-400">{t('recommendations:noBlurb')}</p>
               )}
               {game.price && typeof game.price.price === 'number' ? ( // Check if price is available and is a number
               <div className="mt-2 text-sm bg-green-50 border border-green-200 p-2 rounded">
                 <p>
-                <strong>{t('recommendations:store', 'Store')}:</strong> {game.price.store || t('recommendations:unknown', 'Unknown')}
+                <strong>{t('recommendations:store')}:</strong> {game.price.store || t('recommendations:unknown')}
                 </p>
                 <p>
-                <strong>{t('recommendations:price', 'Price')}:</strong> {game.price.currency || 'GBP'} {game.price.price.toFixed(2)}
+                <strong>{t('recommendations:price')}:</strong> {game.price.currency || t('recommendations:gbp')} {game.price.price.toFixed(2)}
                 </p>
-                <p>{game.price.discount || t('recommendations:noDiscountInfo', 'No discount info available')}</p> 
+                <p>{game.price.discount || t('recommendations:noDiscountInfo')}</p> 
                 {game.price.url && (
                 <a
                   href={game.price.url}
@@ -249,13 +249,13 @@ export default function RecommendationsPage() {
                   rel="noopener noreferrer"
                   className="text-blue-600 underline"
                 >
-                  {t('recommendations:viewDeal', 'View Deal')}
+                  {t('recommendations:viewDeal')}
                 </a>
                 )}
               </div>
               ) : ( // Display price_note if available
               <div className="mt-2 text-sm text-gray-400">
-                {game.price_note || t('recommendations:noPricing', 'No pricing information available.')}
+                {game.price_note || t('recommendations:noPricing')}
               </div>
               )}
             </div>
@@ -264,10 +264,10 @@ export default function RecommendationsPage() {
   
         {recommendations.length > 0 && ( // If there are recommendations, show the save playlist section
           <div className="mt-8 p-4 border rounded bg-white shadow">
-            <h3 className="text-lg font-semibold mb-2">{t('recommendations:savePlaylistTitle', 'Save This Playlist')}</h3>
+            <h3 className="text-lg font-semibold mb-2">{t('recommendations:savePlaylistTitle')}</h3>
             <input
               type="text" // Input for playlist name
-              placeholder={t('recommendations:playlistNamePlaceholder', 'Playlist name')}
+              placeholder={t('recommendations:playlistNamePlaceholder')}
               value={playlistName}
               onChange={(e) => setPlaylistName(e.target.value)}
               className="w-full border p-2 rounded mb-2"
@@ -276,13 +276,13 @@ export default function RecommendationsPage() {
               onClick={handleSavePlaylist} // Save playlist button
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
             >
-              {t('recommendations:savePlaylist', 'Save Playlist')}
+              {t('recommendations:savePlaylist')}
             </button>
             {saveStatus === 'success' && (
-              <p className="mt-2 text-sm text-green-700">{t('recommendations:playlistSavedSuccess', 'Playlist saved successfully!')}</p>
+              <p className="mt-2 text-sm text-green-700">{t('recommendations:playlistSavedSuccess')}</p>
             )}
             {saveStatus === 'error' && (
-              <p className="mt-2 text-sm text-red-700">{saveError || t('recommendations:savePlaylistFailed', 'Failed to save playlist.')}</p>
+              <p className="mt-2 text-sm text-red-700">{saveError || t('recommendations:savePlaylistFailed')}</p>
             )}
           </div>
         )}

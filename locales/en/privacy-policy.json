@@ -1,0 +1,19 @@
+{
+    "title": "Privacy Policy",
+    "intro": "This Privacy Policy describes how we handle your personal information for our services on our platform. By using our services, you agree to the collection, use, disclosure, and storage of your personal information as described in this policy.",
+    "infoCollectionTitle": "Information Collection and Use",
+    "infoCollectionIntro": "We collect the following types of information to provide and improve our services to you:",
+    "infoItem1": "Information you provide directly, such as when you sign up or contact us.",
+    "infoItem2": "Usage data about how you interact with our site.",
+    "infoItem3": "Cookies and similar technologies that help us understand user behaviour.",
+    "sharingTitle": "Data Sharing and Disclosure",
+    "sharingText": "We do not share personal information with third parties except as necessary to provide our services or when legally required. We may share aggregated or anonymised data that cannot reasonably be used to identify you.",
+    "securityTitle": "Data Security",
+    "securityText": "We use industry-standard measures to protect your data from unauthorised access, alteration, or destruction. However, no transmission over the Internet can be guaranteed to be completely secure.",
+    "rightsTitle": "Your Rights",
+    "rightsText": "You have the right to access, correct, or delete your personal information, and the right to object to or restrict certain processing of your information.",
+    "changesTitle": "Changes to This Policy",
+    "changesText": "We may update this Privacy Policy from time to time. When we do, we will revise the “last updated” date at the top of this page. We encourage you to review this page periodically.",
+    "lorem1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus commodo urna purus, in venenatis ligula luctus eget. Sed efficitur, dolor eget convallis sollicitudin, est elit vehicula dui, in vulputate eros urna a libero. Nunc vel aliquam arcu.",
+    "lorem2": "Phasellus efficitur nisl vel congue finibus. Donec gravida viverra ex, elementum fermentum magna laoreet ac. Vivamus posuere diam non libero feugiat, eu iaculis nunc ornare."
+}

@@ -6,23 +6,21 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const Home: React.FC = () => { // create home page component, landing page for the app
-  const { t } = useTranslation(['common', 'home', 'auth']); // init translation hook
+const Home: React.FC = () => {
+  const { t } = useTranslation(['common', 'home', 'auth']);
   const { isAuthenticated, user, signOut } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect unauthenticated users to sign-in
     if (!isAuthenticated) {
       router.push('/sign-in');
     }
   }, [isAuthenticated, router]);
 
-  // Show loading state while checking authentication
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>{t('auth:loading')}</p>
+        <p>{t('common:loading')}</p>
       </div>
     );
   }
@@ -32,8 +30,10 @@ const Home: React.FC = () => { // create home page component, landing page for t
       <main className="flex flex-col items-center justify-center">
         <h1 className="text-4xl font-bold mb-4">{t('home:title')}</h1>
         <p className="text-xl mb-8">{t('home:description')}</p>
-        <p className="text-lg mb-4">{t('home:welcome', { username: user || 'User' })}</p>
-        
+        <p className="text-lg mb-4">
+          {t('home:welcome', { username: user || t('auth:usernamePlaceholder') })}
+        </p>
+
         <div className="mb-8 w-full">
           <h2 className="text-2xl font-semibold mb-2">{t('home:features.title')}</h2>
           <ul className="list-disc list-inside">
@@ -48,9 +48,9 @@ const Home: React.FC = () => { // create home page component, landing page for t
             onClick={() => router.push('/recommendations')}
             className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
           >
-            Get Recommendations
+            {t('home:getRecommendations')}
           </button>
-          
+
           <button
             onClick={signOut}
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
@@ -58,7 +58,7 @@ const Home: React.FC = () => { // create home page component, landing page for t
             {t('auth:signOut')}
           </button>
         </div>
-        
+
         <LanguageChanger />
       </main>
       <footer className="mt-8 text-gray-600">{t('common:footer')}</footer>
@@ -66,4 +66,4 @@ const Home: React.FC = () => { // create home page component, landing page for t
   );
 };
 
-export default Home; // Export home page component, main entry page for app
+export default Home;

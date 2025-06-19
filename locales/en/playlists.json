@@ -1,0 +1,8 @@
+{
+    "fetchError": "Failed to fetch playlists",
+    "unknownError": "An unknown error occurred",
+    "title": "Your Saved Playlists",
+    "noPlaylists": "No playlists saved yet.",
+    "savedOn": "Saved on",
+    "untitledGame": "Untitled game"
+}

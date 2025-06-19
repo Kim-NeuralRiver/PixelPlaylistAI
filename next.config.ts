@@ -1,5 +1,6 @@
 import path from 'path';
 import type { NextConfig } from 'next';
+import i18nConfig from './i18nConfig'; // Adjust the path as necessary
 
 const nextConfig: NextConfig = {
   eslint: {
@@ -12,6 +13,10 @@ const nextConfig: NextConfig = {
     };
     return config;
   },
+  i18nConfig: { // testing i18nConfig import
+    locales: ['en', 'uk'],
+    defaultLocale: 'en',
+  }
 };
 
 export default nextConfig;

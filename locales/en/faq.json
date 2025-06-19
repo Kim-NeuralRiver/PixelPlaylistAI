@@ -1,0 +1,11 @@
+{
+    "title": "Frequently Asked Questions",
+    "q1.question": "Q: What is Lorem Ipsum?",
+    "q1.answer": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    "q2.question": "Q: Why do we use it?",
+    "q2.answer": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+    "q3.question": "Q: Where can I get some?",
+    "q3.answer1": "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration.",
+    "q3.answer2": "You can also use generators like",
+    "q3.answer3": "lorem ipsum.com"
+}

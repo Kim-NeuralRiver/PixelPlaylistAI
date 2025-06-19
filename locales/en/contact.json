@@ -1,0 +1,10 @@
+{
+    "submissionSuccess": "Your message has been submitted!",
+    "title": "Contact Us",
+    "description": "Feel free to reach out if you have any questions or concerns. We are here to help! Please fill out the form below and we will get back to you as soon as possible.",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "messageLabel": "Message",
+    "sendButton": "Send",
+    "lorem": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce euismod nisi eget nibh porttitor, nec fermentum sapien sollicitudin."
+}

@@ -1,0 +1,12 @@
+{
+  "title": "Welcome to PixelPlaylistAI",
+  "description": "Get AI-powered game recommendations tailored just for you",
+  "welcome": "Welcome back, {{username}}!",
+  "features": {
+    "title": "Features",
+    "feature1": "AI-powered game recommendations",
+    "feature2": "Personalized playlists",
+    "feature3": "Multi-platform support",
+  "getRecommendations": "Get Recommendations"
+  }
+}
