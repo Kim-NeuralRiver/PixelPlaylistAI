@@ -2,7 +2,7 @@
 
 import { useTranslation } from 'react-i18next';
 
-export const useTranslations = (namespaces: string[] = ['common']) => {
+export const useTranslations = (namespaces: string[] = ['common']) => { 
   const { t, ready, i18n } = useTranslation(namespaces, {
     useSuspense: false
   });

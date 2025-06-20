@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function ContactUsPage() {
-  const { t } = useTranslation(['contact', 'common']);
+  const { t } = useTranslation(['contact']);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
