@@ -19,7 +19,7 @@ const UserSettings: React.FC = () => {
   const { isAuthenticated, user, signOut } = useAuth();
   const router = useRouter();
 
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [UserData, setUserData] = useState<UserData | null>(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');

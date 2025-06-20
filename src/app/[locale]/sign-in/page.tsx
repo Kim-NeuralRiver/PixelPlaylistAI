@@ -15,7 +15,7 @@ const SignIn: React.FC = () => {
   const [emailError, setEmailError] = useState('');
   const router = useRouter();
   const { t } = useTranslation(['auth']);
-  const { signIn: signInWithCredentials } = useAuth();
+  const { signIn } = useAuth();
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -53,8 +53,8 @@ const SignIn: React.FC = () => {
     }
   
     try {
-      console.log('Calling signInWithCredentials...'); // Debug log
-      const result = await signInWithCredentials(email, password);
+      console.log('Calling signIn...'); // Debug log
+      const result = await signIn(email, password);
       console.log('Sign in result:', result); // Debug log
 
       if (result.success) {

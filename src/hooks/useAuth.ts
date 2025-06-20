@@ -30,10 +30,10 @@ export const useAuth = () => {
   }, [isAuthenticated, dispatch]); // Run on mount and when isAuthenticated or dispatch changes
   // Runs on mount to check if user is auth based on token presence or lack thereof
 
-  const signIn = async (username: string, password: string) => {
+  const signIn = async (email: string, password: string) => {
     try {
       // Input validation
-      if (!username.trim() || !password.trim()) {
+      if (!email.trim() || !password.trim()) {
         return { success: false, error: 'Please enter both email and password' };
       }
 
@@ -42,7 +42,7 @@ export const useAuth = () => {
       const response = await fetch(`${BASE_URL}/api/token/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: username.trim(), password }),
+        body: JSON.stringify({ email: email.trim(), password }),
       });
 
       if (!response.ok) {
@@ -67,7 +67,7 @@ export const useAuth = () => {
       }
       
       tokenManager.setTokens(data.access, data.refresh);
-      dispatch(login(username));
+      dispatch(login(email));
       
       return { success: true };
     } catch (error: any) {

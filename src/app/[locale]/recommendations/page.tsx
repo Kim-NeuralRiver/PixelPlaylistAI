@@ -10,6 +10,7 @@ import React from 'react';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth'; 
 import { useTranslation } from 'react-i18next';
+
 export default function RecommendationsPage() {
   const [genreIds, setGenreIds] = useState<number[]>([12]);
   const [platformId, setPlatformId] = useState<number>(6);
