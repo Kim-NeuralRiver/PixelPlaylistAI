@@ -1,12 +1,15 @@
 {
-  "title": "Welcome to PixelPlaylistAI",
-  "description": "Get AI-powered game recommendations tailored just for you",
-  "welcome": "Welcome back, {{username}}!",
-  "features": {
-    "title": "Features",
-    "feature1": "AI-powered game recommendations",
-    "feature2": "Personalized playlists",
-    "feature3": "Multi-platform support",
-  "getRecommendations": "Get Recommendations"
+  "loading": "Loading...",
+  "error": "Something went wrong",
+  "footer": "© 2025 PixelPlaylistAI. All rights reserved.",
+  "navigation": {
+    "home": "Home",
+    "recommendations": "Recommendations",
+    "contactUs": "Contact Us",
+    "faq": "FAQ",
+    "playlists": "Playlists",
+    "settings": "Settings",
+    "myPlaylists": "My Playlists",
+    "privacyPolicy": "Privacy Policy"
   }
 }

@@ -1,5 +1,17 @@
 {
   "loading": "Loading...",
   "error": "Something went wrong",
-  "footer": "© 2025 PixelPlaylistAI. All rights reserved."
+  "footer": "© 2025 PixelPlaylistAI. All rights reserved.",
+  "navigation": {
+    "home": "Home",
+    "recommendations": "Recommendations",
+    "contactUs": "Contact Us",
+    "faq": "FAQ",
+    "playlists": "Playlists",
+    "settings": "Settings",
+    "myPlaylists": "My Playlists",
+    "privacyPolicy": "Privacy Policy",
+    "userAvatar": "User Avatar",
+    "toggleMenu": "Toggle navigation menu"
+  }
 }

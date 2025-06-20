@@ -32,7 +32,20 @@ const RootLayout: React.FC<IRootLayout> = async ({ children, params }) => {
   // Try loading translations but continue if fails
   let resources = {};
   try {
-    const translationResult = await initTranslations(locale, ['common', 'home', 'auth', 'recommendations', 'settings', 'admin', 'common', 'playlists', 'privacy-policy', 'contact', 'faq']);
+    const translationResult = await initTranslations(locale, [
+      'common', 
+      'home', 
+      'auth', 
+      'recommendations', 
+      'settings', 
+      'admin', 
+      'common', 
+      'playlists', 
+      'privacy-policy', 
+      'contact', 
+      'faq',
+      'error'
+    ]);
     resources = translationResult.resources || {};
   } catch (error) {
     console.warn('Translation loading failed, continuing without translations:', error);
@@ -43,7 +56,19 @@ const RootLayout: React.FC<IRootLayout> = async ({ children, params }) => {
       <body className={robotoFlex.className}>
         <ErrorBoundary> {/* Wrap with ErrorBoundary to catch errors */}
           <TranslationsProvider 
-            namespaces={['common', 'home', 'auth', 'recommendations', 'settings', 'admin', 'playlists', 'privacy-policy', 'contact', 'faq']} // Provide namespaces for translations
+            namespaces={[
+              'common', 
+              'home', 
+              'auth', 
+              'recommendations', 
+              'settings', 
+              'admin', 
+              'playlists', 
+              'privacy-policy', 
+              'contact', 
+              'faq',
+              'error'
+            ]} // Provide namespaces for translations
             locale={locale} 
             resources={resources}
           >

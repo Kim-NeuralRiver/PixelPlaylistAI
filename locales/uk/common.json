@@ -1,5 +1,17 @@
 {
   "loading": "Завантаження...",
   "error": "Щось пішло не так",
-  "footer": "© 2025 PixelPlaylistAI. Усі права захищено."
+  "footer": "© 2025 PixelPlaylistAI. Усі права захищено.",
+  "navigation": {
+    "home": "Головна",
+    "recommendations": "Рекомендації",
+    "contactUs": "Зв'яжіться з нами",
+    "faq": "Поширені запитання",
+    "playlists": "Плейлисти",
+    "settings": "Налаштування",
+    "myPlaylists": "Мої плейлисти",
+    "privacyPolicy": "Політика конфіденційності",
+    "userAvatar": "Аватар користувача",
+    "toggleMenu": "Переключити меню навігації"
+  }
 }
