@@ -1,14 +1,12 @@
 // layout.tsx for locale-based routing in Next.js with i18n support
 
 import initTranslations from '@/app/i18n';
-import ClientProvider from '@/components/ClientProvider';
 import NavBar from '@/components/NavBar';
 import TranslationsProvider from '@/components/TranslationsProvider';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { dir } from 'i18next';
 import { Roboto_Flex } from 'next/font/google';
 import React from 'react';
-
 import i18nConfig from '../../../i18nConfig';
 
 const robotoFlex = Roboto_Flex({
@@ -39,7 +37,6 @@ const RootLayout: React.FC<IRootLayout> = async ({ children, params }) => {
       'recommendations', 
       'settings', 
       'admin', 
-      'common', 
       'playlists', 
       'privacy-policy', 
       'contact', 
@@ -48,7 +45,33 @@ const RootLayout: React.FC<IRootLayout> = async ({ children, params }) => {
     ]);
     resources = translationResult.resources || {};
   } catch (error) {
-    console.warn('Translation loading failed, continuing without translations:', error);
+    console.error('Translation loading failed:', error);
+    // Fallback resources
+    resources = {
+      [locale]: {
+        common: {
+          loading: 'Loading...',
+          error: 'Something went wrong',
+          navigation: {
+            home: 'Home',
+            recommendations: 'Recommendations',
+            contactUs: 'Contact Us',
+            faq: 'FAQ',
+            playlists: 'Playlists',
+            settings: 'Settings',
+            myPlaylists: 'My Playlists',
+            privacyPolicy: 'Privacy Policy',
+            userAvatar: 'User Avatar',
+            toggleMenu: 'Toggle Menu'
+          }
+        },
+        auth: {
+          signIn: 'Sign In',
+          signUp: 'Sign Up',
+          signOut: 'Sign Out'
+        }
+      }
+    };
   }
 
   return (
@@ -72,10 +95,10 @@ const RootLayout: React.FC<IRootLayout> = async ({ children, params }) => {
             locale={locale} 
             resources={resources}
           >
+           <ErrorBoundary>
             <NavBar />
-            <ClientProvider lang={locale}>
               {children}
-            </ClientProvider>
+            </ErrorBoundary>
           </TranslationsProvider>
         </ErrorBoundary>
       </body>

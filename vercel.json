@@ -2,5 +2,10 @@
   "buildCommand": "npm run build",
   "ignoreCommand": "exit 1",
   "outputDirectory": ".next",
-  "devCommand": "npm run dev"
+  "devCommand": "npm run dev",
+  "functions": {
+    "app/**/*.js": {
+      "includeFiles": "locales/**"
+    }
+  }
 }

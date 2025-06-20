@@ -1,6 +1,5 @@
 'use client';
 
-import initTranslations from '@/app/i18n';
 import { Resource, createInstance } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import { useEffect, useState } from 'react';
@@ -25,18 +24,46 @@ const TranslationsProvider: React.FC<ITranslationsProvider> = ({
     const initI18n = async () => {
       try {
         const i18nInstance = createInstance();
-        await initTranslations(locale, namespaces, i18nInstance, resources);
+        await i18nInstance.init({
+          lng: locale,
+          resources,
+          fallbackLng: 'en',
+          supportedLngs: ['en', 'uk'],
+          defaultNS: 'common',
+          fallbackNS: 'common',
+          ns: namespaces,
+          interpolation: {
+            escapeValue: false,
+          },
+          react: {
+            useSuspense: false, // Disable suspense to avoid issues with loading translations
+          },
+          returnNull: false,
+          returnEmptyString: false,
+          returnObjects: false,
+        });
         setI18n(i18nInstance);
       } catch (err) {
-        console.error('Failed to initialize translations:', err);
+        console.error('Error initialising i18n:', err);
         setError('Failed to load translations');
-        // fallback instance
+
+        // fallback instance w/ minimal resources
         const fallbackInstance = createInstance();
         await fallbackInstance.init({
           lng: 'en',
           fallbackLng: 'en',
-          resources: {},
-          interpolation: { escapeValue: false }
+          resources: {
+            en: {
+              common: {
+                loading: 'Loading...',
+                error: 'Something went wrong'
+              }
+            }
+          },
+          interpolation: { escapeValue: false },
+          react: { useSuspense: false },
+          returnNull: false,
+          returnEmptyString: false,
         });
         setI18n(fallbackInstance);
       }
@@ -48,13 +75,13 @@ const TranslationsProvider: React.FC<ITranslationsProvider> = ({
   if (!i18n) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p>Loading translations...</p>
+        <div className="text-lg">Loading translations...</div>
       </div>
     );
   }
 
   if (error) {
-    console.warn('Translation loading error:', error);
+    console.warn('Translation loading error, using fallback:', error);
   }
 
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
