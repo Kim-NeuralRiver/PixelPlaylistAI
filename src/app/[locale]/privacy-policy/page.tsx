@@ -4,78 +4,78 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function PrivacyPolicyPage() {
-  const { t } = useTranslation(['privacy', 'common']);
+  const { t } = useTranslation(['privacy-policy']);
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center py-8 px-4 bg-gray-50">
       <div className="bg-white w-full max-w-3xl p-8 rounded-md shadow-md">
         <h1 className="text-2xl font-bold mb-6 text-center text-blue-600">
-          {t('privacy:title')}
+          {t('privacy-policy:title')}
         </h1>
 
         <p className="text-gray-700 mb-4">
           {t(
-            'privacy:intro'
+            'privacy-policy:intro'
           )}
         </p>
 
         <h2 className="text-xl font-semibold mb-2 text-blue-600">
-          {t('privacy:infoCollectionTitle')}
+          {t('privacy-policy:infoCollectionTitle')}
         </h2>
         <p className="text-gray-700 mb-4">
-          {t('privacy:infoCollectionIntro')}
+          {t('privacy-policy:infoCollectionIntro')}
         </p>
         <ul className="list-disc list-inside mb-4 text-gray-700">
-          <li>{t('privacy:infoItem1')}</li>
-          <li>{t('privacy:infoItem2')}</li>
-          <li>{t('privacy:infoItem3')}</li>
+          <li>{t('privacy-policy:infoItem1')}</li>
+          <li>{t('privacy-policy:infoItem2')}</li>
+          <li>{t('privacy-policy:infoItem3')}</li>
         </ul>
 
         <h2 className="text-xl font-semibold mb-2 text-blue-600">
-          {t('privacy:sharingTitle')}
+          {t('privacy-policy:sharingTitle')}
         </h2>
         <p className="text-gray-700 mb-4">
           {t(
-            'privacy:sharingText'
+            'privacy-policy:sharingText'
           )}
         </p>
 
         <h2 className="text-xl font-semibold mb-2 text-blue-600">
-          {t('privacy:securityTitle')}
+          {t('privacy-policy:securityTitle')}
         </h2>
         <p className="text-gray-700 mb-4">
           {t(
-            'privacy:securityText'
+            'privacy-policy:securityText'
           )}
         </p>
 
         <h2 className="text-xl font-semibold mb-2 text-blue-600">
-          {t('privacy:rightsTitle')}
+          {t('privacy-policy:rightsTitle')}
         </h2>
         <p className="text-gray-700 mb-4">
           {t(
-            'privacy:rightsText'
+            'privacy-policy:rightsText'
           )}
         </p>
 
         <h2 className="text-xl font-semibold mb-2 text-blue-600">
-          {t('privacy:changesTitle')}
+          {t('privacy-policy:changesTitle')}
         </h2>
         <p className="text-gray-700 mb-4">
           {t(
-            'privacy:changesText'
+            'privacy-policy:changesText'
           )}
         </p>
 
         <div className="mt-6 text-gray-500">
           <p>
             {t(
-              'privacy:lorem1'
+              'privacy-policy:lorem1'
             )}
           </p>
           <p className="mt-4">
             {t(
-              'privacy:lorem2'
+              'privacy-policy:lorem2'
             )}
           </p>
         </div>

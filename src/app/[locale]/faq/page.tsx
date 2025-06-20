@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function FAQPage() {
-  const { t } = useTranslation(['faq', 'common']);
+  const { t } = useTranslation(['faq']);
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center py-8 px-4 bg-gray-50">

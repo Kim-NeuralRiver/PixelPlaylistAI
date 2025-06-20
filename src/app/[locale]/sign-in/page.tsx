@@ -14,7 +14,7 @@ const SignIn: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
   const router = useRouter();
-  const { t } = useTranslation(['auth', 'common']);
+  const { t } = useTranslation(['auth']);
   const { signIn: signInWithCredentials } = useAuth();
 
   const validateEmail = (email: string) => {

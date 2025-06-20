@@ -1,6 +1,6 @@
 'use client';
 
-import '@/app/i18n';
+// import '@/app/i18n';
 import { store } from '@/store/store';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';

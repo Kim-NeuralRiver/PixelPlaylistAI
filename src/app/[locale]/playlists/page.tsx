@@ -13,7 +13,7 @@ type Playlist = {
 };
 
 export default function PlaylistsPage() {
-  const { t } = useTranslation(['playlists', 'common']);
+  const { t } = useTranslation(['playlists']);
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [error, setError] = useState<string | null>(null);
 
