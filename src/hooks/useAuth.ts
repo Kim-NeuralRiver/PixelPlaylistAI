@@ -42,7 +42,11 @@ export const useAuth = () => {
       const response = await fetch(`${BASE_URL}/api/token/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), password }),
+        body: JSON.stringify({ 
+          email: email.trim(), 
+          username: email.trim(), 
+          password 
+        }),
       });
 
       if (!response.ok) {
@@ -71,7 +75,7 @@ export const useAuth = () => {
       
       return { success: true };
     } catch (error: any) {
-      console.error('Sign in error:', error);
+      console.error('Sign in error:', error); 
       return { 
         success: false, 
         error: 'Network error. Please check your connection.' 
