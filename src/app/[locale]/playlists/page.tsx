@@ -10,7 +10,18 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 type Playlist = {
   id: number;
   name: string;
-  games: any[];
+  games: {
+    title: string;
+    price: {
+      url: string;
+      price: number;
+      store: string;
+      currency: string;
+      discount: string;
+    };
+    cover_url: string | null;
+    platform: string | string[];
+  }[];
   created_at: string;
 };
 
@@ -41,23 +52,36 @@ export default function PlaylistsPage() {
     fetchPlaylists();
   }, [t]);
 
-  return (
+  return ( // Render the playlists page
     <main className="p-6 max-w-4xl mx-auto min-h-screen bg-gray-50">
-      <h1 className="text-2xl font-bold mb-6">{t('playlists:title')}</h1>
+      <h1 className="text-2xl font-bold mb-6">{t('playlists:title')}</h1> 
       {error && <p className="text-red-600 mb-4">{error}</p>}
-      {playlists.length === 0 ? (
+      {playlists.length === 0 ? ( 
         <p>{t('playlists:noPlaylists')}</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {playlists.map((playlist) => (
-            <div key={playlist.id} className="bg-white border rounded shadow p-4">
-              <h2 className="text-lg font-semibold">{playlist.name}</h2>
-              <p className="text-sm text-gray-600 mb-2">
-                {t('playlists:savedOn')}: {new Date(playlist.created_at).toLocaleDateString()}
+            <div key={playlist.id} className="bg-white border rounded shadow p-4"> {/* Playlist card */}
+              <h2 className="text-lg font-semibold">{playlist.name}</h2> { /* Playlist name */}
+              <p className="text-sm text-gray-600 mb-2"> 
+                {t('playlists:savedOn')}: {new Date(playlist.created_at).toLocaleDateString()} {/* Display creation date */}
               </p>
               <ul className="list-disc list-inside text-sm text-gray-800">
-                {playlist.games.slice(0, 3).map((game, i) => (
-                  <li key={i}>{game.title || t('playlists:untitledGame')}</li>
+                {playlist.games.slice(0, 7).map((game, i) => ( // Display up to 7 games in the playlist
+                  <li key={i} className="truncate">
+                    {game.price?.url ? (
+                      <a
+                       href={game.price.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        {game.title || t('playlists:untitledGame')} {/* Game title */}
+                      </a>
+                    ) : (
+                      game.title || t('playlists:untitledGame') // Fallback for game title
+                    )}
+                    </li>
                 ))}
               </ul>
             </div>
