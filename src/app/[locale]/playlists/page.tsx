@@ -4,6 +4,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Image from 'next/image';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -60,14 +61,19 @@ export default function PlaylistsPage() {
         <p>{t('playlists:noPlaylists')}</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {playlists.map((playlist) => (
+          {playlists.map((playlist, index) => (
             <div key={playlist.id} className="bg-white border rounded shadow p-4"> {/* Playlist card */}
               {playlist.games.length > 0 && playlist.games[0].cover_url && ( // Display cover image if available
-                <img
+               <div className="relative w-full h-48 mb-4 rounded overflow-hidden">
+                <Image
                   src={playlist.games[0].cover_url}
-                  alt={playlist.name}
-                  className="w-full h-48 object-cover mb-4 rounded"
+                  alt={playlist.games[0].title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
+                  priority={index < 4}
                 />
+              </div>
               )}
               <h2 className="text-lg font-semibold">{playlist.name}</h2> { /* Playlist name */}
               <p className="text-sm text-gray-600 mb-2"> 
