@@ -12,6 +12,14 @@ const nextConfig: NextConfig = {
     };
     return config;
   },
+  images: {
+    domains: [
+      'localhost',
+      'images.igdb.com',
+      'cdn.cloudflare.steamstatic.com',
+      'isthereanydeal.com',
+    ]
+  }
 };
 
 export default nextConfig;
