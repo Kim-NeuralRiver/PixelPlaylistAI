@@ -88,7 +88,7 @@ export default function RecommendationsPage() {
           return currentRecommendations; // Ensure the callback returns the current state
         });
   
-        if (playlists.includes(playlistName.trim())) {
+        if (playlists.includes(playlistName.trim())) { // Check if playlist already exists
           setSaveError(t('recommendations:playlistExists'));
           setSaveStatus('error');
           return;

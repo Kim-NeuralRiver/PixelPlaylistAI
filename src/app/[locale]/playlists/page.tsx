@@ -5,6 +5,8 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 type Playlist = {
   id: number;
   name: string;
@@ -21,7 +23,7 @@ export default function PlaylistsPage() {
     const fetchPlaylists = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:8000/api/playlists/', {
+        const res = await fetch(`${BASE_URL}/api/playlists/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
