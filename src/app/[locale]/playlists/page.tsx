@@ -62,6 +62,13 @@ export default function PlaylistsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {playlists.map((playlist) => (
             <div key={playlist.id} className="bg-white border rounded shadow p-4"> {/* Playlist card */}
+              {playlist.games.length > 0 && playlist.games[0].cover_url && ( // Display cover image if available
+                <img
+                  src={playlist.games[0].cover_url}
+                  alt={playlist.name}
+                  className="w-full h-48 object-cover mb-4 rounded"
+                />
+              )}
               <h2 className="text-lg font-semibold">{playlist.name}</h2> { /* Playlist name */}
               <p className="text-sm text-gray-600 mb-2"> 
                 {t('playlists:savedOn')}: {new Date(playlist.created_at).toLocaleDateString()} {/* Display creation date */}
