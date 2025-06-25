@@ -204,13 +204,13 @@ export default function RecommendationsPage() {
               className="bg-white border rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg"
             >
             {typeof game.cover_url === 'string' && ( 
-              <div className="relative h-auto mb-2 object-cover rounded">
+              <div className="relative h-64 w-full mb-2 rounded overflow-hidden">
               <Image
                 src={game.cover_url}
                 alt={game.title}
                 fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover rounded"
                 priority={index < 5} // Load first 5 images with priority
               />
               </div>

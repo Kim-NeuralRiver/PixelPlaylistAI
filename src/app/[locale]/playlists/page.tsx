@@ -64,13 +64,13 @@ export default function PlaylistsPage() {
           {playlists.map((playlist, index) => (
             <div key={playlist.id} className="bg-white border rounded shadow p-4"> {/* Playlist card */}
               {playlist.games.length > 0 && playlist.games[0].cover_url && ( // Display cover image if available
-               <div className="relative w-full h-48 mb-4 rounded overflow-hidden">
+               <div className="relative h-64 w-full mb-2 rounded overflow-hidden">
                 <Image
                   src={playlist.games[0].cover_url}
                   alt={playlist.games[0].title}
                   fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover rounded"
                   priority={index < 4}
                 />
               </div>
