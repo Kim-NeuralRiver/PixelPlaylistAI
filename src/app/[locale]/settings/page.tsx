@@ -50,7 +50,7 @@ const UserSettings: React.FC = () => {
         const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
         const token = await tokenManager.ensureValidToken();
 
-        const response = await fetch(`${BASE_URL}/api/users/`, {
+        const response = await fetch(`${BASE_URL}/api/users/profile/`, { 
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -66,14 +66,14 @@ const UserSettings: React.FC = () => {
           throw new Error(t('settings:fetchUserError'));
         }
 
-        const data = await response.json();
+        const data = await response.json(); // Fetch user data from API
         setUserData(data);
         setFirstName(data.first_name || '');
         setEmail(data.email || '');
         setUsername(data.username || '');
       } catch (error) {
         console.error(t('settings:fetchUserError'), error);
-        alert(t('settings:loadError'));
+        setErrorMessage(t('settings:fetchUserError'));
       } finally {
         setLoading(false);
       }
