@@ -11,11 +11,11 @@ const Home: React.FC = () => {
   const { isAuthenticated, user, signOut } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/sign-in');
-    }
-  }, [isAuthenticated, router]);
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     router.push('/sign-in'); 
+  //   }
+  // }, [isAuthenticated, router]);
 
   if (!isAuthenticated) {
     return (
