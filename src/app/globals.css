@@ -5,7 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-roboto-flex: 'Roboto Flex', 'Roboto', 'Arial', sans-serif;
+  --font-pixelify-sans: 'PixelifySans-Medium', 'Arial', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,5 +18,5 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-roboto-flex);
+  font-family: var(--font-pixelify-sans);
 }

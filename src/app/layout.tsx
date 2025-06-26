@@ -1,14 +1,14 @@
-import { Roboto_Flex } from 'next/font/google';
+import localFont from 'next/font/local';
 import React from 'react';
 import './globals.css';
 import { t } from 'i18next';
 import { Providers } from '../providers';
 
-const robotoFlex = Roboto_Flex({
-   subsets: ['latin', 'cyrillic'],
-   variable: '--font-roboto-flex',
-   display: 'swap',
- });
+const pixelifySans = localFont({
+  src: './fonts/PixelifySans-Medium.ttf',
+  variable: '--font-pixelify-sans',
+  display: 'swap',
+});
 
 interface IRootLayout {
   children: React.ReactNode;
@@ -16,7 +16,7 @@ interface IRootLayout {
 
 const RootLayout: React.FC<IRootLayout> = ({ children }) => (
   <html lang="en">
-    <body className={`${robotoFlex.variable} antialiased`}> {/* // ${geistSans.variable} ${geistMono.variable} */}
+    <body className={`${pixelifySans.variable} antialiased`}> {/* Using PixelifySans font */}
       <Providers>{children}</Providers>
     </body>
   </html>

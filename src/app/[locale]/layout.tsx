@@ -5,13 +5,13 @@ import NavBar from '@/components/NavBar';
 import TranslationsProvider from '@/components/TranslationsProvider';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { dir } from 'i18next';
-import { Roboto_Flex } from 'next/font/google';
+import localFont from 'next/font/local';
 import React from 'react';
 import i18nConfig from '../../../i18nConfig';
 
-const robotoFlex = Roboto_Flex({
-  subsets: ['latin', 'cyrillic'],
-  variable: '--font-roboto-flex',
+const pixelifySans = localFont({
+  src: '../fonts/PixelifySans-Medium.ttf',
+  variable: '--font-pixelify-sans',
   display: 'swap',
 });
 
@@ -76,7 +76,7 @@ const RootLayout: React.FC<IRootLayout> = async ({ children, params }) => {
 
   return (
     <html lang={locale} dir={dir(locale)}>
-      <body className={robotoFlex.className}>
+      <body className={pixelifySans.className}>
         <ErrorBoundary> {/* Wrap with ErrorBoundary to catch errors */}
           <TranslationsProvider 
             namespaces={[
