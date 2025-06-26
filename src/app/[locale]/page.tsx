@@ -46,14 +46,28 @@ const Home: React.FC = () => {
         <div className="flex gap-4 mb-4">
           <button
             onClick={() => router.push('/recommendations')}
-            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+            className="bg-blue-600 text-white px-8 py-2 rounded hover:bg-blue-700"
           >
-            {t('home:getRecommendations')}
+            {t('home:recommendations')}
+          </button>
+
+          <button
+            onClick={() => router.push('/sign-up')}
+            className="bg-green-400 text-white px-6 py-2 rounded hover:bg-green-700"
+          >
+            {t('auth:signUp')}
+          </button>
+
+          <button
+            onClick={() => router.push('/sign-in')}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            {t('auth:signIn')}
           </button>
 
           <button
             onClick={signOut}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className="bg-red-500 text-white px-2 py-2 rounded hover:bg-red-600"
           >
             {t('auth:signOut')}
           </button>

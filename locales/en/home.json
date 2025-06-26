@@ -5,9 +5,10 @@
   "title": "PixelPlaylistAI - AI-Powered Game Recommendation Playlists",
   "description": "Get personalised game recommendations based on your platform, genre, and budget, of choice. Instantly get AI-powered, spoiler-free, summaries of each game and links to the best deals going. If you like our service, sign up and save your playlist today!",
   "welcome": "Welcome to PixelPlaylistAI!",
+  "recommendations": "Get Recommendations",
   "navigation": {
     "home": "Home",
-    "getRecommendations": "Get Recommendations",
+    "getRecommendations": "Recommendations",
     "contactUs": "Contact Us",
     "faq": "FAQ",
     "playlists": "Playlists",
