@@ -1,7 +1,7 @@
 import { Roboto_Flex } from 'next/font/google';
 import React from 'react';
 import './globals.css';
-
+import { t } from 'i18next';
 import { Providers } from '../providers';
 
 const robotoFlex = Roboto_Flex({
@@ -25,7 +25,7 @@ const RootLayout: React.FC<IRootLayout> = ({ children }) => (
 export default RootLayout;
 
 export const metadata = {
-  title: "PixelPlaylistAI",
-  description: "Get AI-powered game recommendations",
+  title: (t('home:title')),
+  description: (t('home:description')),
 };
 export const dynamic = 'force-dynamic'; // Test

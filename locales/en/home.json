@@ -2,14 +2,23 @@
   "loading": "Loading...",
   "error": "Something went wrong",
   "footer": "© 2025 PixelPlaylistAI. All rights reserved.",
+  "title": "PixelPlaylistAI - AI-Powered Game Recommendation Playlists",
+  "description": "Get personalised game recommendations based on your platform, genre, and budget, of choice. Instantly get AI-powered, spoiler-free, summaries of each game and links to the best deals going. If you like our service, sign up and save your playlist today!",
+  "welcome": "Welcome to PixelPlaylistAI!",
   "navigation": {
     "home": "Home",
-    "recommendations": "Recommendations",
+    "getRecommendations": "Get Recommendations",
     "contactUs": "Contact Us",
     "faq": "FAQ",
     "playlists": "Playlists",
     "settings": "Settings",
     "myPlaylists": "My Playlists",
     "privacyPolicy": "Privacy Policy"
+  },
+  "features": {
+    "title": "Features",
+    "feature1": "Personalised game recommendations based on your preferences",
+    "feature2": "AI-generated summaries without spoilers",
+    "feature3": "Save your playlists and access them anything time!"
   }
 }

@@ -28,10 +28,10 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
       <main className="flex flex-col items-center justify-center">
-        <h1 className="text-4xl font-bold mb-4">{t('home:title')}</h1>
+        <h1 className="text-4xl font-bold mb-4">{t('home:title')}</h1> 
         <p className="text-xl mb-8">{t('home:description')}</p>
         <p className="text-lg mb-4">
-          {t('home:welcome', { username: user || t('auth:usernamePlaceholder') })}
+          {t('home:welcome', { username: user || t('auth:usernamePlaceholder') })} 
         </p>
 
         <div className="mb-8 w-full">
