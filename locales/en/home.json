@@ -17,9 +17,9 @@
     "privacyPolicy": "Privacy Policy"
   },
   "features": {
-    "title": "Features",
-    "feature1": "Personalised game recommendations based on your preferences",
-    "feature2": "AI-generated summaries without spoilers",
+    "title": "Features:",
+    "feature1": "Personalised game recommendations based on your preferences.",
+    "feature2": "AI-generated summaries without spoilers.",
     "feature3": "Save your playlists and access them anything time!"
   }
 }

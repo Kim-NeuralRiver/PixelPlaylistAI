@@ -40,7 +40,7 @@ const Home: React.FC = () => {
 
         </p>
 
-        <div className="mb-8 w-full">
+        <div className="mb-8 w-full text-center">
           <h2 className="text-2xl font-semibold mb-2">{t('home:features.title')}</h2>
           <ul className="list-disc list-inside">
             {['feature1', 'feature2', 'feature3'].map((feature) => (
