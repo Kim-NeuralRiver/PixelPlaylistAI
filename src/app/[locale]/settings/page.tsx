@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { tokenManager } from '@/utils/api/tokenManager';
@@ -21,10 +21,11 @@ const UserSettings: React.FC = () => {
 
   const [userData, setUserData] = useState<UserData | null>(null);
   const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [lastName, setLastName] = useState(''); // Unused currently
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(true);
+  const [hasFetched, setHasFetched] = useState(false);
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -34,6 +35,18 @@ const UserSettings: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
+  // Handle fetch error with useCallback to prevent unnecessary re-renders
+  const handleFetchError = useCallback((error: any) => {
+    console.error('Error fetching user data:', error);
+    setErrorMessage(t('settings:fetchUserError'));
+  }, []);
+
+
+  // Handle sign out with useCallback to avoid unnecessary re-renders and dependencies
+  const handleSignOut = useCallback(() => {
+    signOut();
+  }, [signOut]);
+
   useEffect(() => {
     if (!isAuthenticated) {
       router.push('/sign-in');
@@ -42,15 +55,15 @@ const UserSettings: React.FC = () => {
   }, [isAuthenticated, router]);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      if (!isAuthenticated) return;
+    if (!isAuthenticated || hasFetched) return; // Return early if already fetched or not authenticated
 
+    const fetchUserData = async () => {
       try {
         setLoading(true);
         const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
         const token = await tokenManager.ensureValidToken();
 
-        const response = await fetch(`${BASE_URL}/api/users/profile/`, { 
+        const response = await fetch(`${BASE_URL}/api/user/profile/`, { 
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -60,7 +73,7 @@ const UserSettings: React.FC = () => {
 
         if (!response.ok) {
           if (response.status === 401) {
-            signOut();
+            handleSignOut();
             return;
           }
           throw new Error(t('settings:fetchUserError'));
@@ -71,16 +84,16 @@ const UserSettings: React.FC = () => {
         setFirstName(data.first_name || '');
         setEmail(data.email || '');
         setUsername(data.username || '');
+        setHasFetched(true); // Mark as fetched to prev re-fetching / too many requests
       } catch (error) {
-        console.error(t('settings:fetchUserError'), error);
-        setErrorMessage(t('settings:fetchUserError'));
+        handleFetchError(error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchUserData();
-  }, [isAuthenticated, signOut, t]);
+  }, [isAuthenticated, hasFetched, handleFetchError, handleSignOut, t]);
 
   const handlePersonalInfoSubmit = async (e: React.FormEvent) => { // Handle personal info update
     e.preventDefault();
