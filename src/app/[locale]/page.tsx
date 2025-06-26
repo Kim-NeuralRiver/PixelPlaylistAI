@@ -17,13 +17,13 @@ const Home: React.FC = () => {
   //   }
   // }, [isAuthenticated, router]);
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>{t('common:loading')}</p>
-      </div>
-    );
-  }
+  // if (!isAuthenticated) { 
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <p>{t('common:loading')}</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
