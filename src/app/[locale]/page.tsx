@@ -38,48 +38,48 @@ const Home: React.FC = () => {
               priority
             />
         </div>
-      <main className="flex flex-col items-center justify-center relative z-10">
-        <h1 className="text-4xl font-bold mb-4">{t('home:title')}</h1> 
-        <p className="text-xl mb-8 mx-2">{t('home:description')}</p>
-        <p className="text-lg mb-4">
-          <button
-            onClick={() => router.push('/recommendations')}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            {t('home:recommendations')}
-          </button>
+    <main className="flex flex-col items-center justify-center relative z-10">
+      <h1 className="text-4xl font-bold mb-4">{t('home:title')}</h1> 
+      <p className="text-xl mb-8 mx-2">{t('home:description')}</p>
+      <p className="text-lg mb-4">
+        <button
+          onClick={() => router.push('/recommendations')}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          {t('home:recommendations')}
+        </button>
 
-        </p>
+      </p>
 
-        <div className="mb-8 w-full text-center">
-          <h2 className="text-2xl font-semibold mb-2">{t('home:features.title')}</h2>
-          <ul className="list-disc list-inside text-align-left display-inline-block">
-            {['feature1', 'feature2', 'feature3'].map((feature) => (
-              <li key={feature}>{t(`home:features.${feature}`)}</li>
-            ))}
-          </ul>
-        </div>
+      <div className="mb-8 w-full text-center">
+        <h2 className="text-2xl font-semibold mb-2">{t('home:features.title')}</h2>
+        <ul className="list-disc list-inside text-align-left display-inline-block">
+          {['feature1', 'feature2', 'feature3'].map((feature) => (
+            <li key={feature}>{t(`home:features.${feature}`)}</li>
+          ))}
+        </ul>
+      </div>
 
-        <div className="flex gap-4 mb-4">
-          <button
-            onClick={() => router.push('/sign-up')}
-            className="bg-green-400 text-white px-2 py-2 rounded hover:bg-green-700"
-          >
-            {t('auth:signUp')}
-          </button>
+      <div className="flex gap-4 mb-4">
+        <button
+          onClick={() => router.push('/sign-up')}
+          className="bg-green-400 text-white px-2 py-2 rounded hover:bg-green-700"
+        >
+          {t('auth:signUp')}
+        </button>
 
-          <button
-            onClick={() => router.push('/sign-in')}
-            className="bg-blue-600 text-white px-2 py-2 rounded hover:bg-blue-700"
-          >
-            {t('auth:signIn')}
-          </button>
+        <button
+          onClick={() => router.push('/sign-in')}
+          className="bg-blue-600 text-white px-2 py-2 rounded hover:bg-blue-700"
+        >
+          {t('auth:signIn')}
+        </button>
 
-        </div>
+      </div>
 
-        <LanguageChanger />
-      </main>
-      <footer className="mt-8 text-gray-600">{t('common:footer')}</footer>
+      <LanguageChanger />
+    </main>
+    <footer className="mt-8 text-gray-600">{t('common:footer')}</footer>
     </div>
   );
 };
