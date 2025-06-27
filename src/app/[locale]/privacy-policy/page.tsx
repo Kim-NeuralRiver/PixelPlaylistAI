@@ -74,11 +74,13 @@ export default function PrivacyPolicyPage() {
               'privacy-policy:contactUs1'
             )}
           </p>
-          <Link href="/contact-us" className="mt-4  text-green-400 rounded-full hover:bg-green-700 hover:text-white px-2 py-2">
+          <div className="mt-2">
+          <Link href="/contact-us" className="mt-4  bg-green-400 text-white px-2 py-2 rounded hover:bg-green-700">
             {t(
               'privacy-policy:contactUs2'
             )}
           </Link>
+          </div>
         </div>
       </div>
     </main>

@@ -185,7 +185,7 @@ export default function RecommendationsPage() {
               className="w-full p-2 border rounded"
             />
           </div>
-  
+          {/* Submit button to get recs */}
           <button
             type="submit"
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -194,14 +194,16 @@ export default function RecommendationsPage() {
           </button> 
         </form>
   
-        {loading && <p className="mt-4">{t('common:loading')}</p>}
+        {/* Show loading state */}
+        {loading && <p className="mt-4">{t('common:loading')}</p>} 
         {error && <p className="mt-4 text-red-500">{error}</p>}
-  
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        {/* Display recommendations */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4"> 
             {recommendations.map((game, index) => (
             <div
               key={game.title}
-              className="bg-white border rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg"
+              className="bg-white border-green-200 rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg animate-pulse"
             >
             {typeof game.cover_url === 'string' && ( 
               <div className="relative h-64 w-full mb-2 rounded overflow-hidden">
