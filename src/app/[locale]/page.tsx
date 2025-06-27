@@ -27,18 +27,8 @@ const Home: React.FC = () => {
   // }
 
   return (
-    /* Background Image Container */
-    <div className="min-h-screen flex flex-col items-center justify-center relative">
-        <div className="fixed inset-0 z-0">
-            <Image 
-              src="/BackgroundImg2.svg" 
-              alt="PixelPlaylistBackground" 
-              fill
-              className="object-cover opacity-20"
-              priority
-            />
-        </div>
-    <main className="flex flex-col items-center justify-center relative z-10">
+  <div className="min-h-screen flex flex-col items-center justify-center">
+    <main className="flex flex-col items-center justify-center">
       <h1 className="text-4xl font-bold mb-4">{t('home:title')}</h1> 
       <p className="text-xl mb-8 mx-2">{t('home:description')}</p>
       <p className="text-lg mb-4">
@@ -48,7 +38,6 @@ const Home: React.FC = () => {
         >
           {t('home:recommendations')}
         </button>
-
       </p>
 
       <div className="mb-8 w-full text-center">
@@ -80,7 +69,7 @@ const Home: React.FC = () => {
       <LanguageChanger />
     </main>
     <footer className="mt-8 text-gray-600">{t('common:footer')}</footer>
-    </div>
+  </div>
   );
 };
 
