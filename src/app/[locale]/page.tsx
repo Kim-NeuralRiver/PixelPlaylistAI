@@ -31,7 +31,7 @@ const Home: React.FC = () => {
       <main className="flex flex-col items-center justify-center">
           <div className="absolute inset-0 z-0">
             <Image 
-              src="public\BackgroundImg2.svg" 
+              src="/BackgroundImg2.svg" 
               alt="PixelPlaylistBackground" 
               fill
               className="object-cover opacity-20"
