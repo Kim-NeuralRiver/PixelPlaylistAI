@@ -8,6 +8,8 @@ import { dir } from 'i18next';
 import localFont from 'next/font/local';
 import React from 'react';
 import i18nConfig from '../../../i18nConfig';
+import BackgroundLayout from '@/components/BackgroundLayout';
+
 
 const pixelifySans = localFont({
   src: '../fonts/PixelifySans-Medium.ttf',
@@ -95,10 +97,12 @@ const RootLayout: React.FC<IRootLayout> = async ({ children, params }) => {
             locale={locale} 
             resources={resources}
           >
+            <BackgroundLayout> {/* Background layout for global background image */}
            <ErrorBoundary>
             <NavBar />
               {children}
             </ErrorBoundary>
+            </BackgroundLayout>
           </TranslationsProvider>
         </ErrorBoundary>
       </body>
