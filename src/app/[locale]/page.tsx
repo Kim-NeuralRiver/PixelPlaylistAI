@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import Image from 'next/image';
 
 const Home: React.FC = () => {
   const { t } = useTranslation(['common', 'home', 'auth']);
@@ -28,6 +29,15 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
       <main className="flex flex-col items-center justify-center">
+          <div className="absolute inset-0 z-0">
+            <Image 
+              src="public\BackgroundImg2.svg" 
+              alt="PixelPlaylistBackground" 
+              fill
+              className="object-cover opacity-20"
+              priority
+            />
+          </div>
         <h1 className="text-4xl font-bold mb-4">{t('home:title')}</h1> 
         <p className="text-xl mb-8 mx-2">{t('home:description')}</p>
         <p className="text-lg mb-4">
