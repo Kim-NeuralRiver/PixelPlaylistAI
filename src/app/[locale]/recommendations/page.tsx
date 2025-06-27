@@ -32,19 +32,15 @@ export default function RecommendationsPage() {
   const { t } = useTranslation(['recommendations', 'common', 'auth']); // Initialize translation hook
 
   useEffect(() => { // Fetch genres on component mount
-    try {
-      fetchGenres()
-        .then((genres) => {
-          setGenreOptions(genres);
-          setGenresLoading(false);
-        })
-        .catch((err) => {
-          setGenresError(err.message);
-          setGenresLoading(false);
-        });
-    } catch (e: any) {
-      setRenderError(e);
-    }
+    fetchGenres()
+      .then((genres) => {
+        setGenreOptions(genres);
+        setGenresLoading(false);
+      })
+      .catch((err) => {
+        setGenresError(err.message);
+        setGenresLoading(false);
+      });
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => { // Handle form submission
@@ -131,7 +127,7 @@ export default function RecommendationsPage() {
               {t('recommendations:genresLabel')}
             </label>
             {genresLoading ? (
-              <p>{t('common:loading', 'Loading...')}</p>
+              <p className="animate-pulse">{t('common:loading', 'Loading...')}</p>
             ) : genresError ? (
               <p className="text-red-500">{genresError}</p>
             ) : (
@@ -195,15 +191,16 @@ export default function RecommendationsPage() {
         </form>
   
         {/* Show loading state */}
-        {loading && <p className="mt-4">{t('common:loading')}</p>} 
+        {loading && <p className="mt-4 animate-bounce">{t('common:loading')}</p>} 
         {error && <p className="mt-4 text-red-500">{error}</p>}
+
 
         {/* Display recommendations */}
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4"> 
             {recommendations.map((game, index) => (
             <div
               key={game.title}
-              className="bg-white border-green-200 rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg animate-pulse"
+              className="bg-white border-green-200 border-2 rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg"
             >
             {typeof game.cover_url === 'string' && ( 
               <div className="relative h-64 w-full mb-2 rounded overflow-hidden">
@@ -219,51 +216,53 @@ export default function RecommendationsPage() {
               )}
               <h2 className="text-xl font-semibold">{game.title}</h2>
               {game.blurb ? (
-              <p className="text-sm text-gray-700 mt-1">{game.blurb}</p>
+              <p className="mt-2 text-sm text-blue-900 bg-blue-50 border border-blue-200 p-2 rounded">{game.blurb}</p>
               ) : (
               <p className="text-sm text-gray-400 mt-1">{t('recommendations:noBlurb')}</p>
               )}
 
-              {Array.isArray(game.genres) && ( // Check if genres is an array
-              <p className="text-sm text-gray-600">
-                {t('recommendations:genres')}: {game.genres.join(', ')}
-              </p>
-              )}
-              {typeof game.platform === 'string' && ( // Handle platform as a string
-              <p className="text-sm text-gray-600">
-                {t('recommendations:platform1')}: {Array.isArray(game.platform) ? game.platform.join(', ') : game.platform}
-              </p>
-              )}
-              {Array.isArray(game.platform) && ( // Handle array of platform names
-              <p className="text-sm text-gray-600">
-                {t('recommendations:platform2')} {game.platform.join(', ')}
-              </p>
-              )}
-              {game.price && typeof game.price.price === 'number' ? ( // Check if price is available and is a number
               <div className="mt-2 text-sm bg-green-50 border border-green-200 p-2 rounded">
-                <p>
-                <strong>{t('recommendations:store')}:</strong> {game.price.store || t('recommendations:unknown')}
+                {Array.isArray(game.genres) && ( // Check if genres is an array
+                <p className="text-sm text-gray-600">
+                  {t('recommendations:genres')}: {game.genres.join(', ')}
                 </p>
-                <p>
-                <strong>{t('recommendations:price')}:</strong> {game.price.currency || t('recommendations:gbp')} {game.price.price.toFixed(2)}
+                )}
+                {typeof game.platform === 'string' && ( // Handle platform as a string
+                <p className="text-sm text-gray-600">
+                  {t('recommendations:platform1')}: {game.platform}
                 </p>
-                <p>{game.price.discount || t('recommendations:noDiscountInfo')}</p> 
-                {game.price.url && (
-                <a
-                  href={game.price.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 underline"
-                >
-                  {t('recommendations:viewDeal')}
-                </a>
+                )}
+                {Array.isArray(game.platform) && ( // Handle array of platform names
+                <p className="text-sm text-gray-600">
+                  {t('recommendations:platform2')} {game.platform.join(', ')}
+                </p>
+                )}
+                {game.price && typeof game.price.price === 'number' ? ( // Check if price is available and is a number
+                <div>
+                  <p>
+                    <strong>{t('recommendations:store')}:</strong> {game.price.store || t('recommendations:unknown')}
+                  </p>
+                  <p>
+                    <strong>{t('recommendations:price')}:</strong> {game.price.currency || t('recommendations:gbp')} {game.price.price.toFixed(2)}
+                  </p>
+                  <p>{game.price.discount || t('recommendations:noDiscountInfo')}</p>
+                  {game.price.url && (
+                    <a
+                      href={game.price.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      {t('recommendations:viewDeal')}
+                    </a>
+                  )}
+                </div>
+                ) : ( // Display price_note if available
+                <div className="text-gray-400">
+                  {game.price_note || t('recommendations:noPricing')}
+                </div>
                 )}
               </div>
-              ) : ( // Display price_note if available
-              <div className="mt-2 text-sm text-gray-400">
-                {game.price_note || t('recommendations:noPricing')}
-              </div>
-              )}
             </div>
             ))}
         </div>

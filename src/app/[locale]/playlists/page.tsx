@@ -65,7 +65,7 @@ export default function PlaylistsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {playlists.map((playlist, index) => (
-            <div key={playlist.id} className="bg-white border-green-200 rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg animate-pulse"> {/* Playlist card */}
+            <div key={playlist.id} className="bg-white border-green-200 border-2 rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg"> {/* Playlist card */}
               {playlist.games.length > 0 && playlist.games[0].cover_url && ( // Display cover image if available
                <div className="relative h-64 w-full mb-2 rounded overflow-hidden">
                 <Image
