@@ -16,7 +16,7 @@ export default function BackgroundLayout({ children }: BackgroundLayoutProps) {
                     src="/BackgroundImg2.svg" 
                     alt="PixelPlaylistBackground" 
                     fill
-                    className="object-cover opacity-20"
+                    className="object-cover opacity-70"
                     priority
                 />
             </div>
