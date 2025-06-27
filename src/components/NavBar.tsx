@@ -70,6 +70,10 @@ export default function NavBar() {
             className={`text-gray-600 hover:text-blue-900 ${pathname === "/faq" ? "font-bold text-blue-700" : ""}`}>
             {t('common:navigation.faq')}
           </Link>
+          <Link href="/privacy-policy"
+            className={`text-gray-600 hover:text-blue-900 ${pathname === "/privacy-policy" ? "font-bold text-blue-700" : ""}`}>
+            {t('common:navigation.privacyPolicy')}
+          </Link>
           {/* Only show Playlists if authenticated */}
           {isAuthenticated && (
             <Link href="/playlists"
