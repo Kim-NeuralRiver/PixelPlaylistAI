@@ -25,10 +25,10 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-200 px-4 py-3 relative z-20">
+    <nav className="bg-green-50 border-b border-blue-200 px-4 py-3 relative z-20">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo or App Name */}
-        <Link href="/" className="text-xl font-bold text-blue-600">
+        {/* App Name */}
+        <Link href="/" className="text-xl font-bold text-blue-600 hover:text-blue-200">
           PixelPlaylistAI
         </Link>
 

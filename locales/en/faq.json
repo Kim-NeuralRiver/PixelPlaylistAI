@@ -7,5 +7,7 @@
     "q3.question": "Q: What makes PixelPlaylistAI different?",
     "q3.answer1": "PixelPlaylistAI not only provides genre and and platform-specific recommendations, as well as the best live deals on the internet based on your budget - but it also generates tailored summaries of the games - just to pique your interest!",
     "q3.answer2": "You can also save your playlists and access them anytime, making it easy to keep track of games you want to play in the future. Just",
-    "q3.answer3": "sign up here."
+    "q3.answer3": "sign up here",
+    "q4.question": "Are you affiliated with, or do you have any control over, the games featured in the playlists?",
+    "q4.answer": "In short? No, we are not affiliated with any game developers or publishers. We do have some control over the game type that is recommended (e.g., we have excluded DLC, expansions, and packs, etc.), but the specific titles that are generated are down to your preferences and their popularity at the time."
 }

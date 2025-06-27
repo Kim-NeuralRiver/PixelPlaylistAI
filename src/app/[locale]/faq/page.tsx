@@ -59,6 +59,18 @@ export default function FAQPage() {
             .
           </p>
         </div>
+
+        {/* Question 4 */}
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold mb-2 text-blue-600">
+            {t('faq:q4.question')}
+          </h2>
+          <p className="text-gray-700">
+            {t(
+              'faq:q4.answer'
+            )}
+          </p>
+        </div>
       </div>
     </main>
   );
