@@ -37,7 +37,7 @@ export default function RootLayout({
 }
 
 export const metadata = {
-  title: (t('home:title')),
-  description: (t('home:description')),
+  title: 'PixelPlaylistAI - AI-Power Game Recommendations',
+  description: 'Get personalised game recommendations based on your platform, genre, and budget, of choice. Instantly get AI-powered, spoiler-free, summaries of each game and links to the best deals going. If you like our service, sign up and save your playlist today!',
 };
 export const dynamic = 'force-dynamic'; // Test
