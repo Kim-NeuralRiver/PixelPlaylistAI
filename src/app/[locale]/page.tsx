@@ -27,9 +27,9 @@ const Home: React.FC = () => {
   // }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
-      <main className="flex flex-col items-center justify-center">
-          <div className="absolute inset-0 z-0">
+    /* Background Image Container */
+    <div className="min-h-screen flex flex-col items-center justify-center relative">
+        <div className="fixed inset-0 z-0">
             <Image 
               src="/BackgroundImg2.svg" 
               alt="PixelPlaylistBackground" 
@@ -37,7 +37,8 @@ const Home: React.FC = () => {
               className="object-cover opacity-20"
               priority
             />
-          </div>
+        </div>
+      <main className="flex flex-col items-center justify-center relative z-10">
         <h1 className="text-4xl font-bold mb-4">{t('home:title')}</h1> 
         <p className="text-xl mb-8 mx-2">{t('home:description')}</p>
         <p className="text-lg mb-4">
