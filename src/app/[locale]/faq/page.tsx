@@ -49,7 +49,7 @@ export default function FAQPage() {
             &nbsp;
             {t('faq:q3.answer2')}
             <a
-              href="https://www.lipsum.com/"
+              href="/sign-up"
               className="text-blue-600 underline ml-1"
               target="_blank"
               rel="noopener noreferrer"

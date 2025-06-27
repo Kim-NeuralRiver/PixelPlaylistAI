@@ -1,11 +1,11 @@
 {
     "title": "Frequently Asked Questions",
-    "q1.question": "Q: What is Lorem Ipsum?",
-    "q1.answer": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    "q2.question": "Q: Why do we use it?",
-    "q2.answer": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-    "q3.question": "Q: Where can I get some?",
-    "q3.answer1": "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration.",
-    "q3.answer2": "You can also use generators like",
-    "q3.answer3": "lorem ipsum.com"
+    "q1.question": "Q: What is a video game recommendation playlist?",
+    "q1.answer": "A video game recommendation playlist is a curated list of games tailored to your preferences, such as platform, genre, and budget. It helps you discover new games that match your interests!",
+    "q2.question": "Q: What is the purpose of this service?",
+    "q2.answer": "PixelPlaylistAI is for those indecisive gamers, like me, who spend far too long deciding what to play next, and not long enough actually playing!",
+    "q3.question": "Q: What makes PixelPlaylistAI different?",
+    "q3.answer1": "PixelPlaylistAI not only provides genre and and platform-specific recommendations, as well as the best live deals on the internet based on your budget - but it also generates tailored summaries of the games - just to pique your interest!",
+    "q3.answer2": "You can also save your playlists and access them anytime, making it easy to keep track of games you want to play in the future. Just",
+    "q3.answer3": "sign up here."
 }
