@@ -90,7 +90,7 @@ export default function NavBar() {
             onClick={toggleDropdown}
           >
             <Image
-              src="/Missing_avatar.svg"
+              src="/NoAvatar.svg"
               alt={t('common:navigation.userAvatar')}
               width={48}
               height={48}
