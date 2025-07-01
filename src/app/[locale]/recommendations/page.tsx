@@ -15,7 +15,8 @@ import Image from 'next/image';
 export default function RecommendationsPage() {
   const [genreIds, setGenreIds] = useState<number[]>([12]);
   const [platformId, setPlatformId] = useState<number>(6);
-  const [budget, setBudget] = useState<number>(30);
+  const [budget, setBudget] = useState<number>(30); // Default budget set to 30 initially 
+  const [budgetTouched, setBudgetTouched] = useState(false); // track if user has interacted with budget input
   const [recommendations, setRecommendations] = useState<GameRecommendation[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -177,7 +178,16 @@ export default function RecommendationsPage() {
               type="number"
               autoComplete="off"
               value={budget}
-              onChange={(e) => setBudget(Number(e.target.value))} // Update budget
+              onFocus={() => {
+                if (!budgetTouched) {
+                  setBudget(0); // Clear input with 0 
+                  setBudgetTouched(true); // mark input as touched
+                }
+              }}
+              onChange={(e) => {
+                setBudgetTouched(true);
+                setBudget(e.target.value === '' ? 0 : Number(e.target.value)); // Update budget with 0 when empty
+              }} 
               className="w-full p-2 border rounded"
             />
           </div>
@@ -185,6 +195,7 @@ export default function RecommendationsPage() {
           <button
             type="submit"
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            disabled={loading} // Disable button while loading
           >
             {t('recommendations:getRecommendations')} 
           </button> 
