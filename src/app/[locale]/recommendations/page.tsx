@@ -15,7 +15,7 @@ import Image from 'next/image';
 export default function RecommendationsPage() {
   const [genreIds, setGenreIds] = useState<number[]>([12]);
   const [platformId, setPlatformId] = useState<number>(6);
-  const [budget, setBudget] = useState<number>(30); // Default budget set to 30 initially 
+  const [budget, setBudget] = useState<number | string>(30); // Default budget set to 30 initially, allow string for empty state
   const [budgetTouched, setBudgetTouched] = useState(false); // track if user has interacted with budget input
   const [recommendations, setRecommendations] = useState<GameRecommendation[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -52,7 +52,7 @@ export default function RecommendationsPage() {
     const query: RecommendationQuery = {
       genres: genreIds,
       platform: [platformId],
-      budget,
+      budget: budget === '' ? 0 : Number(budget),
     };
 
     try {
@@ -177,16 +177,16 @@ export default function RecommendationsPage() {
               name="budget"
               type="number"
               autoComplete="off"
-              value={budget}
+              value={budgetTouched ? budget : (budget === 30 ? '' : budget)}
               onFocus={() => {
                 if (!budgetTouched) {
-                  setBudget(0); // Clear input with 0 
+                  setBudget(''); // Clear input with 0 
                   setBudgetTouched(true); // mark input as touched
                 }
               }}
               onChange={(e) => {
                 setBudgetTouched(true);
-                setBudget(e.target.value === '' ? 0 : Number(e.target.value)); // Update budget with 0 when empty
+                setBudget(e.target.value === '' ? '' : Number(e.target.value)); // Update budget with 0 when empty
               }} 
               className="w-full p-2 border rounded"
             />
