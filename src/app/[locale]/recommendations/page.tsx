@@ -66,7 +66,7 @@ export default function RecommendationsPage() {
       }
     };
   
-    const handleSavePlaylist = async () => {
+    const handleSavePlaylist = async () => { // Handle saving the playlist
       if (!isAuthenticated) {
         setShowAuthModal(true);
         return;
@@ -101,6 +101,13 @@ export default function RecommendationsPage() {
         setSaveError(error.message || t('recommendations:savePlaylistFailed'));
       }
     };
+
+    const handleAuthSuccess = async () => {
+      // Auto save playlist after sign
+      if (playlistName.trim()) {
+        await handleSavePlaylist();
+      }
+    };
   
     if (renderError) { // Log the error to an external monitoring service or console
       console.error('Render error:', renderError);
@@ -119,6 +126,7 @@ export default function RecommendationsPage() {
         <AuthModal
           isOpen={showAuthModal}
           onClose={() => setShowAuthModal(false)}
+          onSuccess={handleAuthSuccess} // Callback for successful auth
           title={t('auth:savePlaylistTitle')}
           message={t('auth:signInToSave')}
           />
