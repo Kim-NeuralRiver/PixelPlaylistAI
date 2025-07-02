@@ -5,6 +5,20 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --card-background: #ffffff;
+  --card-foreground: #171717;
+  --input-background: #ffffff;
+  --input-foreground: #171717;
+  --input-border: #bbf7d0;
+  --button-primary: #2563eb;
+  --button-primary-hover: #1d4ed8;
+  --success-background: #f0fdf4;
+  --success-foreground: #15803d;
+  --success-border: #bbf7d0;
+  --error-background: #fef2f2;
+  --error-foreground: #dc2626;
+  --error-border: #fecaca;
+  --secondary-text: #6b7280;
   --font-pixelify-sans: 'PixelifySans-Medium', 'Arial', sans-serif;
 }
 
@@ -12,6 +26,20 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --card-background: #1f2937;
+    --card-foreground: #f9fafb;
+    --input-background: #374151;
+    --input-foreground: #f9fafb;
+    --input-border: #6b7280;
+    --button-primary: #3b82f6;
+    --button-primary-hover: #2563eb;
+    --success-background: #064e3b;
+    --success-foreground: #10b981;
+    --success-border: #047857;
+    --error-background: #7f1d1d;
+    --error-foreground: #ef4444;
+    --error-border: #dc2626;
+    --secondary-text: #9ca3af;
   }
 }
 
@@ -19,4 +47,30 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-pixelify-sans);
+}
+
+/* Utility classes for darkmode */
+
+.bg-card {
+  background-color: var(--card-background);
+}
+
+.text-card {
+  color: var(--card-foreground);
+}
+
+.bg-input {
+  background-color: var(--input-background);
+}
+
+.text-input {
+  color: var(--input-foreground);
+}
+
+.border-input {
+  border-color: var(--input-border);
+}
+
+.text-secondary {
+  color: var(--secondary-text);
 }

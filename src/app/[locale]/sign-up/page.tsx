@@ -61,14 +61,14 @@ const SignUp: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="bg-white max-w-md w-full p-8 rounded-lg shadow-md">
+      <div className="bg-card max-w-md w-full p-8 rounded-lg shadow-md">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-blue-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-card">
             {t('auth:createAccount')}
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-secondary">
             {t('auth:alreadyHaveAccount')}{' '}
-            <Link href="/sign-in" className="font-medium text-blue-600 hover:text-blue-500">
+            <Link href="/sign-in" className="font-medium text-blue-400 hover:text-blue-300">
               {t('auth:signIn')}
             </Link>
           </p>
@@ -78,11 +78,11 @@ const SignUp: React.FC = () => {
           <div
             className={`rounded-md p-4 ${
               messageType === 'success'
-                ? 'bg-green-50 border border-green-200'
-                : 'bg-red-50 border border-red-200'
+                ? 'bg-green-900/20 border border-green-500'
+                : 'bg-red-900/20 border border-red-500'
             }`}
           >
-            <p className={`text-sm ${messageType === 'success' ? 'text-green-700' : 'text-red-700'}`}>
+            <p className={`text-sm ${messageType === 'success' ? 'text-green-400' : 'text-red-400'}`}>
               {message}
             </p>
           </div>
@@ -91,7 +91,7 @@ const SignUp: React.FC = () => {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-blue-900">
+              <label htmlFor="username" className="block text-sm font-medium text-card">
                 {t('auth:username')}
               </label>
               <input
@@ -101,13 +101,13 @@ const SignUp: React.FC = () => {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 text-blue-900"
+                className="mt-1 block w-full border border-input rounded-md py-2 px-3 text-input bg-input focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder={t('auth:usernamePlaceholder')}
               />
             </div>
 
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-blue-900">
+             <div>
+              <label htmlFor="name" className="block text-sm font-medium text-card">
                 {t('auth:name')}
               </label>
               <input
@@ -116,13 +116,13 @@ const SignUp: React.FC = () => {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 text-blue-900"
+                className="mt-1 block w-full border border-input rounded-md py-2 px-3 text-input bg-input focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder={t('auth:namePlaceholder')}
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-blue-900">
+              <label htmlFor="email" className="block text-sm font-medium text-card">
                 {t('auth:email')}
               </label>
               <input
@@ -132,13 +132,13 @@ const SignUp: React.FC = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 text-blue-900"
+                className="mt-1 block w-full border border-input rounded-md py-2 px-3 text-input bg-input focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder={t('auth:emailPlaceholder')}
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-blue-900">
+              <label htmlFor="password" className="block text-sm font-medium text-card">
                 {t('auth:password')}
               </label>
               <input
@@ -148,16 +148,16 @@ const SignUp: React.FC = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 text-blue-900"
+                className="mt-1 block w-full border border-input rounded-md py-2 px-3 text-input bg-input focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder={t('auth:passwordPlaceholder')}
               />
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-secondary">
                 {t('auth:passwordNote')}
               </p>
             </div>
 
             <div>
-              <label htmlFor="confirm-password" className="block text-sm font-medium text-blue-900">
+              <label htmlFor="confirm-password" className="block text-sm font-medium text-card">
                 {t('auth:confirmPassword')}
               </label>
               <input
@@ -167,7 +167,7 @@ const SignUp: React.FC = () => {
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 text-blue-900"
+                className="mt-1 block w-full border border-input rounded-md py-2 px-3 text-input bg-input focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder={t('auth:confirmPasswordPlaceholder')}
               />
             </div>

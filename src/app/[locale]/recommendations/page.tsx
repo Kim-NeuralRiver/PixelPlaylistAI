@@ -121,24 +121,26 @@ export default function RecommendationsPage() {
     }
   
     return (
-      <main className="p-6 max-w-4xl mx-auto min-h-screen bg-gray-50">
-        <h1 className="text-3xl font-bold mb-4">{t('recommendations:title')}</h1> {/* // Form to get game recommendations */}
+      <main className="p-6 max-w-4xl mx-auto min-h-screen">
+        <h1 className="text-3xl font-bold mb-4 text-card">{t('recommendations:title')}</h1> {/* // Form to get game recommendations */}
         <AuthModal
-          isOpen={showAuthModal}
-          onClose={() => setShowAuthModal(false)}
-          onSuccess={handleAuthSuccess} // Callback for successful auth
-          title={t('auth:savePlaylistTitle')}
-          message={t('auth:signInToSave')}
-          />
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={handleAuthSuccess}
+        title={t('auth:savePlaylistTitle')}
+        message={t('auth:signInToSave')}
+        />
+
+        <div className="bg-card p-6 rounded-lg shadow-md mb-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block font-medium">
+            <label className="block font-medium text-card">
               {t('recommendations:genresLabel')}
             </label>
             {genresLoading ? (
-              <p className="animate-pulse">{t('common:loading', 'Loading...')}</p>
+              <p className="animate-pulse text-secondary">{t('common:loading', 'Loading...')}</p>
             ) : genresError ? (
-              <p className="text-red-500">{genresError}</p>
+              <p className="text-red-400">{genresError}</p>
             ) : (
               <select
                 multiple
@@ -149,7 +151,7 @@ export default function RecommendationsPage() {
                 onChange={(e) =>
                   setGenreIds(Array.from(e.target.selectedOptions, (option) => Number(option.value)))
                 }
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border border-input bg-input text-input rounded focus:ring-2 focus:ring-blue-500"
               >
                 {genreOptions.map((genre) => (
                   <option key={genre.id} value={genre.id}>
@@ -161,23 +163,26 @@ export default function RecommendationsPage() {
           </div>
   
           <div>
-            <label htmlFor="platformID" className="block font-medium">{t('recommendations:platformLabel')}</label>
+            <label htmlFor="platformID" className="block font-medium text-card">
+              {t('recommendations:platformLabel')}
+            </label>
             <select
               id="platformID"
               name="platformID"
               value={platformId}
-              onChange={(e) => setPlatformId(Number(e.target.value))} // Update platform ID
-              className="w-full p-2 border rounded"
+              onChange={(e) => setPlatformId(Number(e.target.value))}
+              className="w-full p-2 border border-input bg-input text-input rounded focus:ring-2 focus:ring-blue-500"
             >
-              {Object.entries(PLATFORM_MAP).map(([id, name]) => ( // Map platform IDs to names
+              {Object.entries(PLATFORM_MAP).map(([id, name]) => (
                 <option key={id} value={id}>
                   {name}
                 </option>
               ))}
             </select>
           </div>
+
           <div>
-            <label htmlFor="budget" className="block font-medium">
+            <label htmlFor="budget" className="block font-medium text-card">
               {t('recommendations:budgetLabel')}
             </label>
             <input
@@ -188,39 +193,41 @@ export default function RecommendationsPage() {
               value={budgetTouched ? budget : (budget === 30 ? '' : budget)}
               onFocus={() => {
                 if (!budgetTouched) {
-                  setBudget(''); // Clear input with 0 
-                  setBudgetTouched(true); // mark input as touched
+                  setBudget('');
+                  setBudgetTouched(true);
                 }
               }}
               onChange={(e) => {
                 setBudgetTouched(true);
-                setBudget(e.target.value === '' ? '' : Number(e.target.value)); // Update budget with 0 when empty
-              }} 
-              className="w-full p-2 border rounded"
+                setBudget(e.target.value === '' ? '' : Number(e.target.value));
+              }}
+              className="w-full p-2 border border-input bg-input text-input rounded focus:ring-2 focus:ring-blue-500"
             />
           </div>
+
           {/* Submit button to get recs */}
           <button
             type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            disabled={loading} // Disable button while loading
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"
+            disabled={loading}
           >
-            {t('recommendations:getRecommendations')} 
-          </button> 
+            {t('recommendations:getRecommendations')}
+          </button>
         </form>
+      </div>
   
         {/* Show loading state */}
-        {loading && <p className="mt-4 animate-bounce">{t('common:loading')}</p>} 
-        {error && <p className="mt-4 text-red-500">{error}</p>}
+      {loading && <p className="mt-4 animate-bounce text-secondary">{t('common:loading')}</p>}
+      {error && <p className="mt-4 text-red-400">{error}</p>}
 
 
         {/* Display recommendations */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4"> 
-            {recommendations.map((game, index) => (
-            <div
-              key={game.title}
-              className="bg-white border-green-200 border-2 rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg"
-            >
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+         {recommendations.map((game, index) => (
+          <div
+            key={game.title}
+            className="bg-card border-green-500 border-2 rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg"
+          >
             {typeof game.cover_url === 'string' && ( 
               <div className="relative h-64 w-full mb-2 rounded overflow-hidden">
               <Image
@@ -233,19 +240,22 @@ export default function RecommendationsPage() {
               />
               </div>
               )}
-              <h2 className="text-xl font-semibold">{game.title}</h2>
-              {game.blurb ? (
-              <p className="mt-2 text-sm text-blue-900 bg-blue-50 border border-blue-200 p-2 rounded">{game.blurb}</p>
-              ) : (
-              <p className="text-sm text-gray-400 mt-1">{t('recommendations:noBlurb')}</p>
-              )}
+              <h2 className="text-xl font-semibold text-card">{game.title}</h2>
+            {game.blurb ? (
+              <p className="mt-2 text-sm text-blue-300 bg-blue-900/20 border border-blue-500 p-2 rounded">
+                {game.blurb}
+              </p>
+            ) : (
+              <p className="text-sm text-secondary mt-1">{t('recommendations:noBlurb')}</p>
+            )}
 
-              <div className="mt-2 text-sm bg-green-50 border border-green-200 p-2 rounded">
-                {Array.isArray(game.genres) && ( // Check if genres is an array
-                <p className="text-sm text-gray-600">
+             <div className="mt-2 text-sm bg-green-900/20 border border-green-500 p-2 rounded">
+              {/* Update all text elements to use theme-aware colors */}
+              {Array.isArray(game.genres) && (
+                <p className="text-sm text-secondary">
                   {t('recommendations:genres')}: {game.genres.join(', ')}
                 </p>
-                )}
+              )}
                 {typeof game.platform === 'string' && ( // Handle platform as a string
                 <p className="text-sm text-gray-600">
                   {t('recommendations:platform1')}: {game.platform}
@@ -286,28 +296,32 @@ export default function RecommendationsPage() {
             ))}
         </div>
   
-        {recommendations.length > 0 && ( // If there are recommendations, show the save playlist section
-          <div className="mt-8 p-4 border rounded bg-white shadow">
-            <h3 className="text-lg font-semibold mb-2">{t('recommendations:savePlaylistTitle')}</h3>
-            <input
-              type="text" // Input for playlist name
-              placeholder={t('recommendations:playlistNamePlaceholder')}
-              value={playlistName}
-              onChange={(e) => setPlaylistName(e.target.value)}
-              className="w-full border p-2 rounded mb-2"
-            />
-            <button
-              onClick={handleSavePlaylist} // Save playlist button
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-              {t('recommendations:savePlaylist')}
-            </button>
-            {saveStatus === 'success' && (
-              <p className="mt-2 text-sm text-green-700">{t('recommendations:playlistSavedSuccess')}</p>
-            )}
-            {saveStatus === 'error' && (
-              <p className="mt-2 text-sm text-red-700">{saveError || t('recommendations:savePlaylistFailed')}</p>
-            )}
+        {recommendations.length > 0 && (
+        <div className="mt-8 p-4 border border-input rounded bg-card shadow">
+          <h3 className="text-lg font-semibold mb-2 text-card">
+            {t('recommendations:savePlaylistTitle')}
+          </h3>
+          <input
+            type="text"
+            placeholder={t('recommendations:playlistNamePlaceholder')}
+            value={playlistName}
+            onChange={(e) => setPlaylistName(e.target.value)}
+            className="w-full border border-input bg-input text-input p-2 rounded mb-2 focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            onClick={handleSavePlaylist}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"
+          >
+            {t('recommendations:savePlaylist')}
+          </button>
+          {saveStatus === 'success' && (
+            <p className="mt-2 text-sm text-green-400">{t('recommendations:playlistSavedSuccess')}</p>
+          )}
+          {saveStatus === 'error' && (
+            <p className="mt-2 text-sm text-red-400">
+              {saveError || t('recommendations:savePlaylistFailed')}
+            </p>
+          )}
           </div>
         )}
       </main>
