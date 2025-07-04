@@ -1,5 +1,9 @@
 // This module manages access and refresh tokens for API authentication.
 // It provides methods to set, get, clear tokens, check authentication status, and refresh tokens when necessary.
+// Recent update: improve to work with centralised API client.
+
+import { api } from '@/lib/apiClient'; // Import the centralised API client for making requests
+
 
 class TokenManager { // Singleton class to manage access and refresh tokens
   private static instance: TokenManager;
@@ -97,30 +101,26 @@ class TokenManager { // Singleton class to manage access and refresh tokens
     if (!this.refreshToken) {
       throw new Error('No refresh token available');
     }
-
-    const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'; // Base URL for API requests
     
-    const response = await fetch(`${BASE_URL}/api/token/refresh/`, { // Refresh access token using the refresh token
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refresh: this.refreshToken }),
-    });
-
-    if (!response.ok) {
-      this.clearTokens();
-      throw new Error('Failed to refresh token');
-    }
-
-    const data = await response.json();
-    
-    if (data.access) {
-      this.accessToken = data.access;
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('token', data.access); // Store new access token
+    try {
+      const data = await api.post<{access: string}>(
+        'token/refresh', 
+        { refresh: this.refreshToken },
+        { requiresAuth: false } 
+      );
+      
+      if (data.access) {
+        this.accessToken = data.access;
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('token', data.access);
+        }
+      } else {
+        this.clearTokens();
+        throw new Error('Invalid refresh response');
       }
-    } else {
+    } catch (error) {
       this.clearTokens();
-      throw new Error('Invalid refresh response');
+      throw error;
     }
   }
 }

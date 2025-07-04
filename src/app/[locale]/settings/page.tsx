@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { tokenManager } from '@/utils/api/tokenManager';
 import { useTranslation } from 'react-i18next';
 import { updateUserProfile, changePassword } from '@/utils/api/users'; 
+import { api } from '@/lib/apiClient'; // Import API client
 
 interface UserData {
   id: number;
@@ -60,31 +61,13 @@ const UserSettings: React.FC = () => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-        const token = await tokenManager.ensureValidToken();
-
-        const response = await fetch(`${BASE_URL}/api/user/profile/`, { 
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          if (response.status === 401) {
-            handleSignOut();
-            return;
-          }
-          throw new Error(t('settings:fetchUserError'));
-        }
-
-        const data = await response.json(); // Fetch user data from API
+        const data = await api.get<UserData>('api/user/profile/', { requiresAuth: true });
+        
         setUserData(data);
         setFirstName(data.first_name || '');
         setEmail(data.email || '');
         setUsername(data.username || '');
-        setHasFetched(true); // Mark as fetched to prev re-fetching / too many requests
+        setHasFetched(true);
       } catch (error) {
         handleFetchError(error);
       } finally {

@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout } from '@/store/authSlice';
 import { RootState } from '@/store/store';
-import { tokenManager } from '@/utils/api/tokenManager';
+import { api } from '@/lib/apiClient';
+import { tokenManager } from '@/utils/api/tokenManager'; // Import token manager utility
 
 export const useAuth = () => {
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -33,38 +34,16 @@ export const useAuth = () => {
   const signIn = async (email: string, password: string) => {
     try {
       // Input validation
-      if (!email.trim() || !password.trim()) {
-        return { success: false, error: 'Please enter both email and password' };
-      }
+    if (!email.trim() || !password.trim()) {
+      return { success: false, error: 'Please enter both email and password' };
+    }
 
-      const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      
-      const response = await fetch(`${BASE_URL}/api/token/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          email: email.trim(), 
-          username: email.trim(), 
-          password 
-        }),
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          return { success: false, error: 'Invalid email or password' };
-        }
-        if (response.status >= 500) {
-          return { success: false, error: 'Server error. Please try again later.' };
-        }
-        
-        const errorData = await response.json().catch(() => null);
-        return { 
-          success: false, 
-          error: errorData?.detail || errorData?.message || 'Sign in failed' 
-        };
-      }
-
-      const data = await response.json();
+    try {
+      const data = await api.post<{access: string, refresh: string}>(
+        'api/token/', 
+        { email: email.trim(), username: email.trim(), password },
+        { requiresAuth: false }
+      );
       
       if (!data.access || !data.refresh) {
         return { success: false, error: 'Invalid response from server' };
@@ -75,37 +54,34 @@ export const useAuth = () => {
       
       return { success: true };
     } catch (error: any) {
-      console.error('Sign in error:', error); 
+      console.error('Sign in error:', error);
       return { 
         success: false, 
-        error: 'Network error. Please check your connection.' 
+        error: error.message || 'Network error. Please check your connection.' 
+      };
+    }
+  } catch (error: any) {
+    console.error('Sign in error:', error);
+    return { 
+      success: false, 
+      error: 'Network error. Please check your connection.' 
       };
     }
   };
 
+  // Sign up
   const signUp = async (
-    username: string,
-    email: string,
-    password: string,
-    name?: string ) => {
-      try {
-        const response = await fetch(`${BASE_URL}/api/users/`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, email, password, name }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.detail || data.message || 'Sign up failed :(');
-        }
-
-        return { success: true, message: 'Account created successfully! You may now sign in. :)' };
-      } catch (error: any) {
-        return { success: false, error: error.message || 'An unexpected error occurred' };
-      }
-    };
+  username: string,
+  email: string,
+  password: string,
+  name?: string ) => {
+    try {
+      await api.post('api/users/', { username, email, password, name }, { requiresAuth: false });
+      return { success: true, message: 'Account created successfully! You may now sign in. :)' };
+    } catch (error: any) {
+      return { success: false, error: error.message || 'An unexpected error occurred' };
+    }
+  };
 
   // Sign out user by clearing tokens and updating Redux state
   const signOut = () => {

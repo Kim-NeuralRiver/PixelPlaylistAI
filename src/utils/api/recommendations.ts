@@ -1,8 +1,5 @@
 // Request payload interface for game recommendations, frontend logic for making POST requests to the /api/recommendations/ endpoint
-import { tokenManager } from './tokenManager'; // Import token manager utility
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'; // Base URL for API requests
-
+import { api } from '@/lib/apiClient';
 export interface RecommendationQuery {
     genres: number[]; // IGDB Genre IDs
     platform: number[]; // IGDB Platform IDs
@@ -36,32 +33,8 @@ export interface GameRecommendation {
  */
 
 export async function fetchGameRecommendations(query: RecommendationQuery): Promise<GameRecommendation[]> { // Fetch game recommendations from the API
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json'
-  };
-
-  // Add auth header if user = logged in
-  const token = await tokenManager.ensureValidToken();
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-
-  // Make req (works for both auth and anon users)
-  const response = await fetch(`${BASE_URL}/api/recommendations/`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(query),
-  })
-
-  if (!response.ok) {
-    if (response.status === 401 && tokenManager.isAuthenticated()) {
-      tokenManager.clearTokens(); // Clear unauth tokens if 401
-    }
-
-    const errorText = await response.text();
-    throw new Error(`API Error ${response.status}: ${errorText}`);
-  }
-
-  return response.json();
+  return api.post<GameRecommendation[]>('api/recommendations/', query, {
+    requiresAuth: false // Allow anonymous recommendations
+  });
 }
 

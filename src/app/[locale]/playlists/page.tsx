@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
+import { api } from '@/lib/apiClient'; // Import API client
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -35,26 +36,17 @@ export default function PlaylistsPage() {
 
 // Fetch playlists when the component mounts
   useEffect(() => {
-    const fetchPlaylists = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const res = await fetch(`${BASE_URL}/api/playlists/`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  const fetchPlaylists = async () => {
+    try {
+      const data = await api.get<Playlist[]>('api/playlists/', { requiresAuth: true });
+      setPlaylists(data);
+    } catch (err: any) {
+      setError(err.message || t('playlists:unknownError'));
+    }
+  };
 
-        if (!res.ok) throw new Error(t('playlists:fetchError'));
-
-        const data = await res.json();
-        setPlaylists(data);
-      } catch (err: any) {
-        setError(err.message || t('playlists:unknownError'));
-      }
-    };
-
-    fetchPlaylists();
-  }, [t]);
+  fetchPlaylists();
+}, [t]);
 
   return ( // Render the playlists page
     <main className="p-6 max-w-4xl mx-auto min-h-screen bg-gray-50">

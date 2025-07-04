@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { api } from '@/lib/apiClient';
 
 export default function ContactUsPage() {
   const { t } = useTranslation(['contact']);
@@ -9,14 +10,18 @@ export default function ContactUsPage() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log({ name, email, message });
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  try {
+    await api.post('api/contact/', { name, email, message }, { requiresAuth: false });
     alert(t('contact:submissionSuccess'));
     setName('');
     setEmail('');
     setMessage('');
-  };
+  } catch (error) {
+    alert(t('contact:submissionError'));
+  }
+};
 
   return (
     <main className="min-h-screen flex items-center justify-center py-10 px-4">
