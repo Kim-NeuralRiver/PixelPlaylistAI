@@ -19,7 +19,17 @@ const nextConfig: NextConfig = {
       'cdn.cloudflare.steamstatic.com',
       'isthereanydeal.com',
     ]
-  }
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://localhost:8000/api/:path*',
+      },
+    ];
+  },
 };
+
+
 
 export default nextConfig;

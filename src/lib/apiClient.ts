@@ -23,19 +23,22 @@ async function apiRequest<T>(
         method = 'GET',
         body,
         headers = {},
-        requiresAuth = false,
+        requiresAuth = true, // Default to requiring auth
     } = options;
 
-    // Ensure endpoint is formatted properly 
+    // Format endpoint
     const normalizedEndpoint = endpoint.startsWith('/')
     ? endpoint.substring(1)
     : endpoint;
 
-    const url = `${API_BASE_URL}/${normalizedEndpoint}`;
+    const url = normalizedEndpoint.startsWith('http') 
+        ? normalizedEndpoint 
+        : `${API_BASE_URL}/${normalizedEndpoint}`;
 
     // Set up default headers
     const requestHeaders: Record<string, string> = {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
         ...headers
     };
 
@@ -54,6 +57,7 @@ async function apiRequest<T>(
         method, 
         headers: requestHeaders,
         credentials: 'include', // Include cookies for session management
+        mode: 'cors', // Handle CORS requests
     };
 
     // Add json body if provided
