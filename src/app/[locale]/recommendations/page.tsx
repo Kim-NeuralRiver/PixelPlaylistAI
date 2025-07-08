@@ -262,7 +262,7 @@ export default function RecommendationsPage() {
                 </p>
                 )}
                 {Array.isArray(game.platform) && ( // Handle array of platform names
-                <p className="text-sm text-secondary">
+                <p className="text-sm">
                   {t('recommendations:platform2')} {game.platform.join(', ')}
                 </p>
                 )}
