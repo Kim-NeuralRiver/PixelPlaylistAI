@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage() {
             )}
           </p>
           <div className="mt-2">
-          <Link href="/contact-us" className="mt-4  bg-success-foreground text-white px-2 py-2 rounded hover:bg-success-foreground">
+          <Link href="/contact-us" className="mt-4  bg-button-secondary hover:to-button-secondaryHover text-white px-2 py-2 rounded">
             {t(
               'privacy-policy:contactUs2'
             )}
