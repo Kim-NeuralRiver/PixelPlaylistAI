@@ -252,13 +252,13 @@ export default function RecommendationsPage() {
              <div className="mt-2 text-sm text-info bg-info-background border border-info-border p-2 rounded">
               {/* Update all text elements to use theme-aware colors */}
               {Array.isArray(game.genres) && (
-                <p className="text-sm text-secondary">
-                  {t('recommendations:genres')}: {game.genres.join(', ')}
+                <p className="text-sm">
+                  <strong>{t('recommendations:genres')}:</strong> {game.genres.join(', ')}
                 </p>
               )}
                 {typeof game.platform === 'string' && ( // Handle platform as a string
-                <p className="text-sm text-secondary">
-                  {t('recommendations:platform1')}: {game.platform}
+                <p className="text-sm">
+                  <strong>{t('recommendations:platform1')}:</strong> {game.platform}
                 </p>
                 )}
                 {Array.isArray(game.platform) && ( // Handle array of platform names
