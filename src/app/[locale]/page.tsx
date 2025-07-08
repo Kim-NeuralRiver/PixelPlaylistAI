@@ -52,14 +52,14 @@ const Home: React.FC = () => {
       <div className="flex gap-4 mb-4">
         <button
           onClick={() => router.push('/sign-up')}
-          className="bg-success-foreground text-white px-2 py-2 rounded hover:bg-success-foreground"
+          className="bg-button-secondary hover:bg-button-secondary-hover text-white px-2 py-2 rounded hover:bg-success-foreground"
         >
           {t('auth:signUp')}
         </button>
 
         <button
           onClick={() => router.push('/sign-in')}
-          className="bg-button-primary text-white px-2 py-2 rounded hover:bg-button-primaryHover"
+          className="bg-button-primary text-white px-2 py-2 rounded hover:bg-button-primary-hover"
         >
           {t('auth:signIn')}
         </button>
