@@ -12,6 +12,8 @@
   --input-border: #bbf7d0;
   --button-primary: #2563eb;
   --button-primary-hover: #1d4ed8;
+  --button-secondary: #10b981;
+  --button-secondary-hover: #059669;
   --success-background: #f0fdf4;
   --success-foreground: #15803d;
   --success-border: #bbf7d0;
@@ -33,6 +35,8 @@
     --input-border: #6b7280;
     --button-primary: #3b82f6;
     --button-primary-hover: #2563eb;
+    --button-secondary: #10b981;
+    --button-secondary-hover: #059669;
     --success-background: #064e3b;
     --success-foreground: #10b981;
     --success-border: #047857;
@@ -73,4 +77,22 @@ body {
 
 .text-secondary {
   color: var(--secondary-text);
+}
+
+.button-primary {
+  background-color: var(--button-primary);
+  color: var(--foreground);
+}
+
+.button-primary:hover {
+  background-color: var(--button-primary-hover);
+}
+
+.button-secondary {
+  background-color: var(--button-secondary);
+  color: var(--foreground);
+}
+
+.button-secondary:hover {
+  background-color: var(--button-secondary-hover);
 }
