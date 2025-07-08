@@ -192,7 +192,7 @@ const UserSettings: React.FC = () => {
             <div className="flex">
               <div className="flex-shrink-0">
                 {errorMessage ? (
-                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                  <svg className="h-5 w-5 text-error" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-9v4a1 1 0 102 0V9a1 1 0 10-2 0z" clipRule="evenodd" />
                   </svg>
                 ) : (
@@ -214,7 +214,7 @@ const UserSettings: React.FC = () => {
                     className="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2"
                   >
                     <span className="sr-only">Dismiss</span>
-                    <svg className={`h-5 w-5 ${errorMessage ? 'text-red-400' : 'text-green-400'}`} viewBox="0 0 20 20" fill="currentColor">
+                    <svg className={`h-5 w-5 ${errorMessage ? 'text-error' : 'text-green-400'}`} viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
                   </button>
@@ -285,7 +285,7 @@ const UserSettings: React.FC = () => {
               </div>
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+                className="w-full bg-button-primary text-white py-2 px-4 rounded-md hover:bg-button-primaryHover"
               >
                 {t('settings:updateProfile')}
               </button>
@@ -346,7 +346,7 @@ const UserSettings: React.FC = () => {
               <button
                 type="submit"
                 disabled={passwordLoading} 
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-button-primary hover:bg-button-primaryHover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
               >
                 {passwordLoading ? (
                   <span className="flex items-center">

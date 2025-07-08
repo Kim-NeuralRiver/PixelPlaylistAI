@@ -10,7 +10,7 @@ export default function PrivacyPolicyPage() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center py-8 px-4 bg-gray-50">
       <div className="bg-white w-full max-w-3xl p-8 rounded-md shadow-md">
-        <h1 className="text-2xl font-bold mb-6 text-center text-blue-600">
+        <h1 className="text-2xl font-bold mb-6 text-center text-button-primary">
           {t('privacy-policy:title')}
         </h1>
 
@@ -20,7 +20,7 @@ export default function PrivacyPolicyPage() {
           )}
         </p>
 
-        <h2 className="text-xl font-semibold mb-2 text-blue-600">
+        <h2 className="text-xl font-semibold mb-2 text-button-primary">
           {t('privacy-policy:infoCollectionTitle')}
         </h2>
         <p className="text-gray-700 mb-4">
@@ -32,7 +32,7 @@ export default function PrivacyPolicyPage() {
           <li>{t('privacy-policy:infoItem3')}</li>
         </ul>
 
-        <h2 className="text-xl font-semibold mb-2 text-blue-600">
+        <h2 className="text-xl font-semibold mb-2 text-button-primary">
           {t('privacy-policy:sharingTitle')}
         </h2>
         <p className="text-gray-700 mb-4">
@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
           )}
         </p>
 
-        <h2 className="text-xl font-semibold mb-2 text-blue-600">
+        <h2 className="text-xl font-semibold mb-2 text-button-primary">
           {t('privacy-policy:securityTitle')}
         </h2>
         <p className="text-gray-700 mb-4">
@@ -50,7 +50,7 @@ export default function PrivacyPolicyPage() {
           )}
         </p>
 
-        <h2 className="text-xl font-semibold mb-2 text-blue-600">
+        <h2 className="text-xl font-semibold mb-2 text-button-primary">
           {t('privacy-policy:rightsTitle')}
         </h2>
         <p className="text-gray-700 mb-4">
@@ -59,7 +59,7 @@ export default function PrivacyPolicyPage() {
           )}
         </p>
 
-        <h2 className="text-xl font-semibold mb-2 text-blue-600">
+        <h2 className="text-xl font-semibold mb-2 text-button-primary">
           {t('privacy-policy:changesTitle')}
         </h2>
         <p className="text-gray-700 mb-4">

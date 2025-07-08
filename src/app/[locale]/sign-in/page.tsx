@@ -80,7 +80,7 @@ const SignIn: React.FC = () => {
           </h2>
           <p className="mt-2 text-center text-sm text-secondary">
             {t('auth:or')}{' '}
-            <Link href="/sign-up" className="font-medium text-blue-400 hover:text-blue-300">
+            <Link href="/sign-up" className="font-medium text-blue-400 hover:text-card">
               {t('auth:createAccount')}
             </Link>
           </p>
@@ -95,7 +95,7 @@ const SignIn: React.FC = () => {
             <p className={`text-sm ${
               message.includes('success') || message.includes(':)')
                 ? 'text-green-400'
-                : 'text-red-400'
+                : 'text-error'
             }`}>
               {message}
             </p>
@@ -118,13 +118,13 @@ const SignIn: React.FC = () => {
                 if (emailError) validateEmail(e.target.value);
               }}
               onBlur={(e) => validateEmail(e.target.value)}
-              className={`mt-1 block w-full px-3 py-2 border rounded-md bg-input text-input focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
+              className={`mt-1 block w-full px-3 py-2 border rounded-md bg-input text-input focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm ${
                 emailError ? 'border-red-500' : 'border-input'
               }`}
               placeholder={t('auth:emailPlaceholder')}
             />
             {emailError && (
-              <p className="mt-1 text-sm text-red-400">{emailError}</p>
+              <p className="mt-1 text-sm text-error">{emailError}</p>
             )}
           </div>
 
@@ -138,7 +138,7 @@ const SignIn: React.FC = () => {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-input bg-input text-input rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-input bg-input text-input rounded-md focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm"
               placeholder={t('auth:passwordPlaceholder')}
             />
           </div>
@@ -147,7 +147,7 @@ const SignIn: React.FC = () => {
             <button
               type="submit"
               disabled={loading} 
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-button-primary hover:bg-button-primaryHover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center">

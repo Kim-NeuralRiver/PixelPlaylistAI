@@ -99,7 +99,7 @@ export default function AuthModal({
                 {mode === 'prompt' && (
                     <>
                     <div className="mx-auto flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full border-green-100 border-2 mb-4">
-                        <svg className="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-8 h-8 text-button-primary" fill="currentColor" viewBox="0 0 20 20">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V7h2v2z" />
                         </svg>
                     </div>
@@ -108,21 +108,21 @@ export default function AuthModal({
                         {title || t('auth:savePlaylistTitle')}
                     </h3>
 
-                    <p className="text-sm text-gray-600 mb-6">
+                    <p className="text-sm text-secondary mb-6">
                         {message || t('auth:signInToSave')}
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-3">
                         <button
                             onClick={() => setMode('signup')}
-                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent bg-button-primary text-white text-sm font-medium rounded-md hover:bg-button-primaryHover focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         >
                             {t('auth:createAccount')}
                         </button>
 
                         <button
                             onClick={() => setMode('signin')}
-                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent bg-white text-blue-600 text-sm font-medium rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent bg-white text-button-primary text-sm font-medium rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         >
                             {t('auth:signIn')}
                         </button>
@@ -156,7 +156,7 @@ export default function AuthModal({
                             placeholder={t('auth:usernamePlaceholder')}
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm"
                             required
                             />
                         )}
@@ -167,7 +167,7 @@ export default function AuthModal({
                                 placeholder={t('auth:usernamePlaceholder')}
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-success-border"
                                 required
                             />
                         )}
@@ -178,7 +178,7 @@ export default function AuthModal({
                                 placeholder={t('auth:namePlaceholder')}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-success-border"
                             />
                         )}
                             
@@ -188,7 +188,7 @@ export default function AuthModal({
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm"
                             placeholder={t('auth:emailPlaceholder')}
                         />
 
@@ -197,7 +197,7 @@ export default function AuthModal({
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm"
                             placeholder={t('auth:passwordPlaceholder')}
                         />
 
@@ -207,7 +207,7 @@ export default function AuthModal({
                                 placeholder={t('auth:confirmPasswordPlaceholder')}
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-success-border"
                                 required
                             />
                         )}
@@ -216,7 +216,7 @@ export default function AuthModal({
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className={`w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-green-200 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                className={`w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-green-200 text-sm font-medium rounded-md text-white bg-button-primary hover:bg-button-primaryHover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                             >
                                 {loading ? t('common:loading') : (mode === 'signin' ? t('auth:signIn') : t('auth:createAccount'))}
                             </button>

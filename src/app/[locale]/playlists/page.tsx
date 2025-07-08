@@ -71,7 +71,7 @@ export default function PlaylistsPage() {
               </div>
               )}
               <h2 className="text-lg font-semibold">{playlist.name}</h2> { /* Playlist name */}
-              <p className="text-sm text-gray-600 mb-2"> 
+              <p className="text-sm text-secondary mb-2"> 
                 {t('playlists:savedOn')}: {new Date(playlist.created_at).toLocaleDateString()} {/* Display creation date */}
               </p>
               <ul className="list-disc list-inside text-sm text-gray-800">
@@ -82,7 +82,7 @@ export default function PlaylistsPage() {
                        href={game.price.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
+                        className="text-button-primary hover:underline"
                       >
                         {game.title || t('playlists:untitledGame')} {/* Game title */}
                       </a>

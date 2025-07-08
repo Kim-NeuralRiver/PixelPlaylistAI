@@ -34,7 +34,7 @@ const Home: React.FC = () => {
       <p className="text-lg mb-4">
         <button
           onClick={() => router.push('/recommendations')}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-button-primary text-white px-4 py-2 rounded hover:bg-button-primaryHover"
         >
           {t('home:recommendations')}
         </button>
@@ -59,7 +59,7 @@ const Home: React.FC = () => {
 
         <button
           onClick={() => router.push('/sign-in')}
-          className="bg-blue-600 text-white px-2 py-2 rounded hover:bg-blue-700"
+          className="bg-button-primary text-white px-2 py-2 rounded hover:bg-button-primaryHover"
         >
           {t('auth:signIn')}
         </button>
@@ -68,7 +68,7 @@ const Home: React.FC = () => {
 
       <LanguageChanger />
     </main>
-    <footer className="mt-8 text-gray-600">{t('common:footer')}</footer>
+    <footer className="mt-8 text-secondary">{t('common:footer')}</footer>
   </div>
   );
 };

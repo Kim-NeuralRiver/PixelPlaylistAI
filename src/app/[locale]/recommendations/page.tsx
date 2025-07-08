@@ -113,7 +113,7 @@ export default function RecommendationsPage() {
       console.error('Render error:', renderError);
   
       return (
-        <main className="p-6 max-w-4xl mx-auto text-red-600">
+        <main className="p-6 max-w-4xl mx-auto text-error">
           <h1 className="text-2xl font-bold">{t('recommendations:errorMessage')} </h1>
           <p>{renderError.message}</p>
         </main>
@@ -140,7 +140,7 @@ export default function RecommendationsPage() {
             {genresLoading ? (
               <p className="animate-pulse text-secondary">{t('common:loading', 'Loading...')}</p>
             ) : genresError ? (
-              <p className="text-red-400">{genresError}</p>
+              <p className="text-error">{genresError}</p>
             ) : (
               <select
                 multiple
@@ -208,7 +208,7 @@ export default function RecommendationsPage() {
           {/* Submit button to get recs */}
           <button
             type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"
+            className="bg-button-primary text-white px-4 py-2 rounded hover:bg-button-primaryHover focus:ring-2 focus:ring-blue-500"
             disabled={loading}
           >
             {t('recommendations:getRecommendations')}
@@ -218,7 +218,7 @@ export default function RecommendationsPage() {
   
         {/* Show loading state */}
       {loading && <p className="mt-4 animate-bounce text-secondary">{t('common:loading')}</p>}
-      {error && <p className="mt-4 text-red-400">{error}</p>}
+      {error && <p className="mt-4 text-error">{error}</p>}
 
 
         {/* Display recommendations */}
@@ -242,14 +242,14 @@ export default function RecommendationsPage() {
               )}
               <h2 className="text-xl font-semibold text-card">{game.title}</h2>
             {game.blurb ? (
-              <p className="mt-2 text-sm text-blue-300 bg-blue-900/20 border border-blue-500 p-2 rounded">
+              <p className="mt-2 text-sm text-card bg-success-background border border-success-border p-2 rounded">
                 {game.blurb}
               </p>
             ) : (
               <p className="text-sm text-secondary mt-1">{t('recommendations:noBlurb')}</p>
             )}
 
-             <div className="mt-2 text-sm bg-green-900/20 border border-green-500 p-2 rounded">
+             <div className="mt-2 text-sm bg-success-background border border-success-border p-2 rounded">
               {/* Update all text elements to use theme-aware colors */}
               {Array.isArray(game.genres) && (
                 <p className="text-sm text-secondary">
@@ -257,12 +257,12 @@ export default function RecommendationsPage() {
                 </p>
               )}
                 {typeof game.platform === 'string' && ( // Handle platform as a string
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-secondary">
                   {t('recommendations:platform1')}: {game.platform}
                 </p>
                 )}
                 {Array.isArray(game.platform) && ( // Handle array of platform names
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-secondary">
                   {t('recommendations:platform2')} {game.platform.join(', ')}
                 </p>
                 )}
@@ -280,14 +280,14 @@ export default function RecommendationsPage() {
                       href={game.price.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 underline"
+                      className="text-button-primary underline"
                     >
                       {t('recommendations:viewDeal')}
                     </a>
                   )}
                 </div>
                 ) : ( // Display price_note if available
-                <div className="text-gray-400">
+                <div className="text-secondary">
                   {game.price_note || t('recommendations:noPricing')}
                 </div>
                 )}
@@ -310,7 +310,7 @@ export default function RecommendationsPage() {
           />
           <button
             onClick={handleSavePlaylist}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"
+            className="bg-button-primary text-white px-4 py-2 rounded hover:bg-button-primaryHover focus:ring-2 focus:ring-blue-500"
           >
             {t('recommendations:savePlaylist')}
           </button>
@@ -318,7 +318,7 @@ export default function RecommendationsPage() {
             <p className="mt-2 text-sm text-green-400">{t('recommendations:playlistSavedSuccess')}</p>
           )}
           {saveStatus === 'error' && (
-            <p className="mt-2 text-sm text-red-400">
+            <p className="mt-2 text-sm text-error">
               {saveError || t('recommendations:savePlaylistFailed')}
             </p>
           )}
