@@ -35,7 +35,7 @@ export default function NavBar() {
         {/* Hamburger Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="inline-flex items-center p-2 text-secondary hover:text-gray-900 focus:outline-none md:hidden"
+          className="inline-flex items-center p-2 text-secondary hover:text-secondary900 focus:outline-none md:hidden"
           aria-expanded={isOpen}
           aria-label={t('common:navigation.toggleMenu')}
         >
@@ -99,18 +99,18 @@ export default function NavBar() {
           </div>
 
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+            <div className="absolute right-0 mt-2 w-48 bg-card border border-gray-200 rounded-lg shadow-lg z-50">
               {isAuthenticated ? (
                 <>
                   {/* Show username if available */}
                   {user && (
                     <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-sm font-medium text-gray-900">{user}</p>
-                      <p className="text-xs text-gray-500">{t('auth:signedIn')}</p>
+                      <p className="text-sm font-medium text-secondary900">{user}</p>
+                      <p className="text-xs text-secondary500">{t('auth:signedIn')}</p>
                     </div>
                   )}
                   
-                  <ul className="py-1 text-gray-700">
+                  <ul className="py-1 text-secondary">
                     <li>
                       <Link
                         href="/settings"
@@ -139,7 +139,7 @@ export default function NavBar() {
                 </>
               ) : (
                 <>
-                  <ul className="py-1 text-gray-700">
+                  <ul className="py-1 text-secondary">
                     <li>
                       <Link
                         href="/sign-in"
@@ -171,28 +171,28 @@ export default function NavBar() {
         <div className="mt-3 md:hidden">
           <Link
             href="/"
-            className={`block px-3 py-2 rounded hover:bg-gray-50 text-secondary ${pathname === "/" ? "font-bold text-blue-700" : ""}`}
+            className={`block px-3 py-2 rounded hover:bg-background text-secondary ${pathname === "/" ? "font-bold text-blue-700" : ""}`}
             onClick={() => setIsOpen(false)}
           >
             {t('common:navigation.home')}
           </Link>
           <Link
             href="/recommendations"
-            className={`block px-3 py-2 rounded hover:bg-gray-50 text-secondary ${pathname === "/recommendations" ? "font-bold text-blue-700" : ""}`}
+            className={`block px-3 py-2 rounded hover:bg-background text-secondary ${pathname === "/recommendations" ? "font-bold text-blue-700" : ""}`}
             onClick={() => setIsOpen(false)}
           >
             {t('common:navigation.recommendations')}
           </Link>
           <Link
             href="/faq"
-            className={`block px-3 py-2 rounded hover:bg-gray-50 text-secondary ${pathname === "/faq" ? "font-bold text-blue-700" : ""}`}
+            className={`block px-3 py-2 rounded hover:bg-background text-secondary ${pathname === "/faq" ? "font-bold text-blue-700" : ""}`}
             onClick={() => setIsOpen(false)}
           >
             {t('common:navigation.faq')}
           </Link>
           <Link
             href="/contact-us"
-            className={`block px-3 py-2 rounded hover:bg-gray-50 text-secondary ${pathname === "/contact-us" ? "font-bold text-blue-700" : ""}`}
+            className={`block px-3 py-2 rounded hover:bg-background text-secondary ${pathname === "/contact-us" ? "font-bold text-blue-700" : ""}`}
             onClick={() => setIsOpen(false)}
           >
             {t('common:navigation.contactUs')}
@@ -203,14 +203,14 @@ export default function NavBar() {
             <>
               <Link
                 href="/playlists"
-                className={`block px-3 py-2 rounded hover:bg-gray-50 text-secondary ${pathname === "/playlists" ? "font-bold text-blue-700" : ""}`}
+                className={`block px-3 py-2 rounded hover:bg-background text-secondary ${pathname === "/playlists" ? "font-bold text-blue-700" : ""}`}
                 onClick={() => setIsOpen(false)}
               >
                 {t('common:navigation.myPlaylists')}
               </Link>
               <Link
                 href="/settings"
-                className={`block px-3 py-2 rounded hover:bg-gray-50 text-secondary ${pathname === "/settings" ? "font-bold text-blue-700" : ""}`}
+                className={`block px-3 py-2 rounded hover:bg-background text-secondary ${pathname === "/settings" ? "font-bold text-blue-700" : ""}`}
                 onClick={() => setIsOpen(false)}
               >
                 {t('common:navigation.settings')}
@@ -220,7 +220,7 @@ export default function NavBar() {
                   handleSignOut();
                   setIsOpen(false);
                 }}
-                className="block w-full text-left px-3 py-2 rounded hover:bg-gray-50 text-red-600"
+                className="block w-full text-left px-3 py-2 rounded hover:bg-background text-red-600"
               >
                 {t('auth:signOut')}
               </button>
@@ -229,14 +229,14 @@ export default function NavBar() {
             <>
               <Link
                 href="/sign-in"
-                className="block px-3 py-2 rounded hover:bg-gray-50 text-secondary"
+                className="block px-3 py-2 rounded hover:bg-background text-secondary"
                 onClick={() => setIsOpen(false)}
               >
                 {t('auth:signIn')}
               </Link>
               <Link
                 href="/sign-up"
-                className="block px-3 py-2 rounded hover:bg-gray-50 text-secondary"
+                className="block px-3 py-2 rounded hover:bg-background text-secondary"
                 onClick={() => setIsOpen(false)}
               >
                 {t('auth:signUp')}
@@ -246,7 +246,7 @@ export default function NavBar() {
           
           <Link
             href="/privacy-policy"
-            className={`block px-3 py-2 rounded hover:bg-gray-50 text-secondary ${pathname === "/privacy-policy" ? "font-bold text-blue-700" : ""}`}
+            className={`block px-3 py-2 rounded hover:bg-background text-secondary ${pathname === "/privacy-policy" ? "font-bold text-blue-700" : ""}`}
             onClick={() => setIsOpen(false)}
           >
             {t('common:navigation.privacyPolicy')}

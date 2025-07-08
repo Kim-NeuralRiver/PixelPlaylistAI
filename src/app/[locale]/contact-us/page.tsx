@@ -25,7 +25,7 @@ export default function ContactUsPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center py-10 px-4">
-      <div className="bg-white w-full max-w-md p-6 rounded-md shadow-md">
+      <div className="bg-card w-full max-w-md p-6 rounded-md shadow-md">
         <h1 className="text-2xl font-bold mb-4 text-center text-button-primary">
           {t('contact:title')}
         </h1>
@@ -37,7 +37,7 @@ export default function ContactUsPage() {
 
         <form onSubmit={handleFormSubmit} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="name" className="block text-sm font-medium text-card">
               {t('contact:nameLabel')}
             </label>
             <input
@@ -46,12 +46,12 @@ export default function ContactUsPage() {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-success-border"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 text-card rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-success-border"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm font-medium text-card">
               {t('contact:emailLabel')}
             </label>
             <input
@@ -60,12 +60,12 @@ export default function ContactUsPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-success-border"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 text-card rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-success-border"
             />
           </div>
 
           <div>
-            <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="message" className="block text-sm font-medium text-card">
               {t('contact:messageLabel')}
             </label>
             <textarea
@@ -74,7 +74,7 @@ export default function ContactUsPage() {
               required
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-success-border"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 text-card rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-success-border"
             />
           </div>
 
@@ -86,7 +86,7 @@ export default function ContactUsPage() {
           </button>
         </form>
 
-        <div className="mt-6 text-gray-500 text-sm">
+        <div className="mt-6 text-secondary500 text-sm">
           <p>
             {t(
               'contact:lorem'

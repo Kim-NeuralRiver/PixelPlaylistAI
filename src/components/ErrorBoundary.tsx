@@ -40,8 +40,8 @@ const ErrorFallback: React.FC<{ error?: Error }> = ({ error }) => {
   const { t } = useTranslation(['error', 'common']);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="max-w-md w-full bg-card shadow-lg rounded-lg p-6">
         <h2 className="text-xl font-bold text-red-600 mb-4">{t('error:title')}</h2>
         <p className="text-secondary mb-4">
           {error?.message || t('error:message')}

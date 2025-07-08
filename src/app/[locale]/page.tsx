@@ -52,7 +52,7 @@ const Home: React.FC = () => {
       <div className="flex gap-4 mb-4">
         <button
           onClick={() => router.push('/sign-up')}
-          className="bg-green-400 text-white px-2 py-2 rounded hover:bg-green-700"
+          className="bg-success-foreground text-white px-2 py-2 rounded hover:bg-success-foreground"
         >
           {t('auth:signUp')}
         </button>

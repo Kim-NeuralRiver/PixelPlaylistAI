@@ -169,16 +169,16 @@ const UserSettings: React.FC = () => {
   if (!isAuthenticated || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <span className="text-gray-500 animate-pulse">{t('common:loading')}</span>
+        <span className="text-secondary500 animate-pulse">{t('common:loading')}</span>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto space-y-8">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-extrabold text-gray-900">{t('settings:title')}</h1>
+          <h1 className="text-3xl font-extrabold text-secondary900">{t('settings:title')}</h1>
           <button
             onClick={signOut}
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
@@ -224,15 +224,15 @@ const UserSettings: React.FC = () => {
           </div>
         )}
 
-        <div className="bg-white shadow sm:rounded-lg">
+        <div className="bg-card shadow sm:rounded-lg">
           <div className="px-4 py-5 sm:p-6">
-            <h2 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+            <h2 className="text-lg leading-6 font-medium text-secondary900 mb-4">
               {t('settings:personalInfo')}
             </h2>
             <form onSubmit={handlePersonalInfoSubmit} className="space-y-4">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="firstName" className="block text-sm font-medium text-card">
                     {t('settings:firstName')}
                   </label>
                   <input
@@ -244,7 +244,7 @@ const UserSettings: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="lastName" className="block text-sm font-medium text-card">
                     {t('settings:lastName')}
                   </label>
                   <input
@@ -257,7 +257,7 @@ const UserSettings: React.FC = () => {
                 </div>
               </div>
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="username" className="block text-sm font-medium text-card">
                   {t('settings:username')}
                 </label>
                 <input
@@ -265,11 +265,11 @@ const UserSettings: React.FC = () => {
                   id="username"
                   value={username}
                   disabled
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-gray-50 text-gray-500"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-background text-secondary500"
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="email" className="block text-sm font-medium text-card">
                   {t('settings:email')}
                 </label>
                 <input
@@ -277,9 +277,9 @@ const UserSettings: React.FC = () => {
                   id="email"
                   value={email}
                   disabled
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-gray-50 text-gray-500"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-background text-secondary500"
                 />
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-secondary500">
                   {t('settings:emailNote')}
                 </p>
               </div>
@@ -293,14 +293,14 @@ const UserSettings: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white shadow sm:rounded-lg">
+        <div className="bg-card shadow sm:rounded-lg">
           <div className="px-4 py-5 sm:p-6">
-            <h2 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+            <h2 className="text-lg leading-6 font-medium text-secondary900 mb-4">
               {t('settings:changePassword')}
             </h2>
             <form onSubmit={handlePasswordChange} className="space-y-4">
               <div>
-                <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="currentPassword" className="block text-sm font-medium text-card">
                   {t('settings:currentPassword')}
                 </label>
                 <input
@@ -313,7 +313,7 @@ const UserSettings: React.FC = () => {
                 />
               </div>
               <div>
-                <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="newPassword" className="block text-sm font-medium text-card">
                   {t('settings:newPassword')}
                 </label>
                 <input
@@ -325,12 +325,12 @@ const UserSettings: React.FC = () => {
                   minLength={8}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
                 />
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-secondary500">
                   {t('settings:passwordRequirements')}
                 </p>
               </div>
               <div>
-                <label htmlFor="confirmNewPassword" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="confirmNewPassword" className="block text-sm font-medium text-card">
                   {t('settings:confirmNewPassword')}
                 </label>
                 <input

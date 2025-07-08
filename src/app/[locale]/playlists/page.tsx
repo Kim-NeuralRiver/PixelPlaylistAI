@@ -49,7 +49,7 @@ export default function PlaylistsPage() {
 }, [t]);
 
   return ( // Render the playlists page
-    <main className="p-6 max-w-4xl mx-auto min-h-screen bg-gray-50">
+    <main className="p-6 max-w-4xl mx-auto min-h-screen bg-background">
       <h1 className="text-2xl font-bold mb-6">{t('playlists:title')}</h1> 
       {error && <p className="text-red-600 mb-4">{error}</p>}
       {playlists.length === 0 ? ( 
@@ -57,7 +57,7 @@ export default function PlaylistsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {playlists.map((playlist, index) => (
-            <div key={playlist.id} className="bg-white border-green-200 border-2 rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg"> {/* Playlist card */}
+            <div key={playlist.id} className="bg-card border-green-200 border-2 rounded-xl shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg"> {/* Playlist card */}
               {playlist.games.length > 0 && playlist.games[0].cover_url && ( // Display cover image if available
                <div className="relative h-64 w-full mb-2 rounded overflow-hidden">
                 <Image
@@ -74,7 +74,7 @@ export default function PlaylistsPage() {
               <p className="text-sm text-secondary mb-2"> 
                 {t('playlists:savedOn')}: {new Date(playlist.created_at).toLocaleDateString()} {/* Display creation date */}
               </p>
-              <ul className="list-disc list-inside text-sm text-gray-800">
+              <ul className="list-disc list-inside text-sm text-secondary800">
                 {playlist.games.slice(0, 7).map((game, i) => ( // Display up to 7 games in the playlist
                   <li key={i} className="truncate">
                     {game.price?.url ? (

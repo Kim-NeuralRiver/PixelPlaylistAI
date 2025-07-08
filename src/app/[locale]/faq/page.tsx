@@ -7,8 +7,8 @@ export default function FAQPage() {
   const { t } = useTranslation(['faq']);
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center py-8 px-4 bg-gray-50">
-      <div className="bg-white w-full max-w-2xl p-6 rounded-md shadow-md">
+    <main className="min-h-screen flex flex-col items-center justify-center py-8 px-4 bg-background">
+      <div className="bg-card w-full max-w-2xl p-6 rounded-md shadow-md">
         <h1 className="text-2xl font-bold mb-6 text-center text-button-primary">
           {t('faq:title')}
         </h1>
@@ -18,7 +18,7 @@ export default function FAQPage() {
           <h2 className="text-lg font-semibold mb-2 text-button-primary">
             {t('faq:q1.question')}
           </h2>
-          <p className="text-gray-700">
+          <p className="text-secondary">
             {t(
               'faq:q1.answer'
             )}
@@ -30,7 +30,7 @@ export default function FAQPage() {
           <h2 className="text-lg font-semibold mb-2 text-button-primary">
             {t('faq:q2.question')}
           </h2>
-          <p className="text-gray-700">
+          <p className="text-secondary">
             {t(
               'faq:q2.answer'
             )}
@@ -42,7 +42,7 @@ export default function FAQPage() {
           <h2 className="text-lg font-semibold mb-2 text-button-primary">
             {t('faq:q3.question')}
           </h2>
-          <p className="text-gray-700">
+          <p className="text-secondary">
             {t(
               'faq:q3.answer1'
             )}
@@ -65,7 +65,7 @@ export default function FAQPage() {
           <h2 className="text-lg font-semibold mb-2 text-button-primary">
             {t('faq:q4.question')}
           </h2>
-          <p className="text-gray-700">
+          <p className="text-secondary">
             {t(
               'faq:q4.answer'
             )}
