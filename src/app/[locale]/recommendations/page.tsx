@@ -242,14 +242,14 @@ export default function RecommendationsPage() {
               )}
               <h2 className="text-xl font-semibold text-card">{game.title}</h2>
             {game.blurb ? (
-              <p className="mt-2 text-sm text-secondary bg-success-background border border-success-border p-2 rounded">
+              <p className="mt-2 text-sm text-card bg-success-background border border-success-border p-2 rounded">
                 {game.blurb}
               </p>
             ) : (
               <p className="text-sm text-secondary mt-1">{t('recommendations:noBlurb')}</p>
             )}
 
-             <div className="mt-2 text-sm text-secondary bg-info-background border border-success-border p-2 rounded">
+             <div className="mt-2 text-sm text-info bg-info-background border border-info-border p-2 rounded">
               {/* Update all text elements to use theme-aware colors */}
               {Array.isArray(game.genres) && (
                 <p className="text-sm text-secondary">

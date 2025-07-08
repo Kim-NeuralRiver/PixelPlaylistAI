@@ -41,6 +41,11 @@ export default {
           secondaryHover: "var(--button-secondary-hover)",
           back: "var(--back-button)",
         },
+        info: {
+          DEFAULT: "var(--info-foreground)",
+          background: "var(--info-background)",
+          foreground: "var(--info-foreground)",
+        },
       },
       fontFamily: {
         'pixelify': ['var(--font-pixelify-sans)'],

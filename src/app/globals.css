@@ -90,6 +90,18 @@ body {
   border-color: var(--input-border);
 }
 
+.bg-info-background {
+  background-color: var(--info-background);
+}
+
+.border-info-border {
+  border-color: var(--info-foreground);
+}
+
+.text-info {
+  color: var(--info-foreground);
+}
+
 .text-secondary {
   color: var(--secondary-text);
 }
