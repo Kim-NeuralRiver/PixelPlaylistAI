@@ -130,7 +130,7 @@ export default function AuthModal({
 
                         <button
                             onClick={onClose}
-                            className="mt-4 text-sm bg:back-button text-secondary500 hover:text-card"
+                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent bg:button-back-button text-secondary500 hover:foreground focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-md"
                         >
                             {t('auth:continueWithoutSignIn')}
                         </button>
