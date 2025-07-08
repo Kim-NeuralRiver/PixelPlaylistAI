@@ -95,7 +95,7 @@ export default function AuthModal({
 
     return (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-card rounded-lg shadow-lg max-w-md w-full mx-4 p-6 relative">
+            <div className="bg-card rounded-lg border:modal-border shadow-lg max-w-md w-full mx-4 p-6 relative">
                 {mode === 'prompt' && (
                     <>
                     <div className="mx-auto flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full border-green-100 border-2 mb-4">
@@ -115,14 +115,14 @@ export default function AuthModal({
                     <div className="flex flex-col sm:flex-row gap-3">
                         <button
                             onClick={() => setMode('signup')}
-                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent bg-button-primary text-white text-sm font-medium rounded-md hover:bg-button-primaryHover focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent bg-button-primary text-white text-sm font-medium rounded-md hover:bg-button-primary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         >
                             {t('auth:createAccount')}
                         </button>
 
                         <button
                             onClick={() => setMode('signin')}
-                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent bg-card text-button-primary text-sm font-medium rounded-md hover:bg-background focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent bg-button-secondary text-white text-sm font-medium rounded-md hover:button-secondary-hover focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         >
                             {t('auth:signIn')}
                         </button>
@@ -130,7 +130,7 @@ export default function AuthModal({
 
                         <button
                             onClick={onClose}
-                            className="mt-4 text-sm text-secondary500 hover:text-card"
+                            className="mt-4 text-sm bg:back-button text-secondary500 hover:text-card"
                         >
                             {t('auth:continueWithoutSignIn')}
                         </button>

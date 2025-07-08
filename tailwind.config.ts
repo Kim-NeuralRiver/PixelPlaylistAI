@@ -36,6 +36,7 @@ export default {
           primaryHover: "var(--button-primary-hover)",
           secondary: "var(--button-secondary)",
           secondaryHover: "var(--button-secondary-hover)",
+          back: "var(--back-button)",
         },
       },
       fontFamily: {

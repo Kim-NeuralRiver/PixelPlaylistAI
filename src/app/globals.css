@@ -9,7 +9,9 @@
   --card-foreground: #171717;
   --input-background: #ffffff;
   --input-foreground: #171717;
-  --input-border: #bbf7d0;
+  --input-border: #10b981;
+  --modal-border: #059669;
+  --back-button: #ff6767;
   --button-primary: #2563eb;
   --button-primary-hover: #1d4ed8;
   --button-secondary: #10b981;
@@ -32,7 +34,9 @@
     --card-foreground: #f9fafb;
     --input-background: #374151;
     --input-foreground: #f9fafb;
-    --input-border: #6b7280;
+    --input-border: #bbf7d0;
+    --modal-border: #4fffc7;
+    --back-button: #af0000;
     --button-primary: #3b82f6;
     --button-primary-hover: #2563eb;
     --button-secondary: #10b981;
@@ -95,4 +99,8 @@ body {
 
 .button-secondary:hover {
   background-color: var(--button-secondary-hover);
+}
+
+.modal-border {
+  border-color: var(--modal-border);
 }
