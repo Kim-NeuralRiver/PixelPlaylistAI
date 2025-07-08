@@ -80,7 +80,7 @@ const SignIn: React.FC = () => {
           </h2>
           <p className="mt-2 text-center text-sm text-secondary">
             {t('auth:or')}{' '}
-            <Link href="/sign-up" className="font-medium text-blue-400 hover:text-card">
+            <Link href="/sign-up" className="font-medium text-blue-400 hover:text-blue-700 hover:underline">
               {t('auth:createAccount')}
             </Link>
           </p>

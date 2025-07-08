@@ -31,6 +31,9 @@ export default {
           border: "var(--error-border)",
         },
         secondary: "var(--secondary-text)",
+        modal: {
+          border: "var(--modal-border)",
+        },
         button: {
           primary: "var(--button-primary)",
           primaryHover: "var(--button-primary-hover)",

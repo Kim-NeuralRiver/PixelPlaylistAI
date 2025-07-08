@@ -95,7 +95,7 @@ export default function AuthModal({
 
     return (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-card rounded-lg border:modal-border shadow-lg max-w-md w-full mx-4 p-6 relative">
+            <div className="bg-card rounded-lg border border-modal-border shadow-lg max-w-md w-full mx-4 p-6 relative">
                 {mode === 'prompt' && (
                     <>
                     <div className="mx-auto flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full border-green-100 border-2 mb-4">
