@@ -115,14 +115,14 @@ export default function AuthModal({
                     <div className="flex flex-col sm:flex-row gap-3">
                         <button
                             onClick={() => setMode('signup')}
-                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent bg-button-primary text-white text-sm font-medium rounded-md hover:bg-button-primary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent text-white text-sm font-medium rounded-md bg-button-primary hover:bg-button-primaryHover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                         >
                             {t('auth:createAccount')}
                         </button>
 
                         <button
                             onClick={() => setMode('signin')}
-                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent bg-button-secondary text-white text-sm font-medium rounded-md hover:button-secondary-hover focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent text-white text-sm font-medium rounded-md bg-button-secondary hover:bg-button-secondaryHover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                         >
                             {t('auth:signIn')}
                         </button>
@@ -130,7 +130,7 @@ export default function AuthModal({
 
                         <button
                             onClick={onClose}
-                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent bg:button-back-button text-secondary500 hover:foreground focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-md"
+                            className="w-full sm:w-auto inline-flex justify-center px-4 py-2 border border-transparent text-white text-sm font-medium rounded-md bg-button-back hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                         >
                             {t('auth:continueWithoutSignIn')}
                         </button>

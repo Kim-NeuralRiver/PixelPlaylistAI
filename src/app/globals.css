@@ -12,6 +12,7 @@
   --input-border: #10b981;
   --modal-border: #059669;
   --back-button: #ff6767;
+  --back-button-hover: #d24949;
   --button-primary: #2563eb;
   --button-primary-hover: #1d4ed8;
   --button-secondary: #10b981;
@@ -37,6 +38,7 @@
     --input-border: #bbf7d0;
     --modal-border: #4fffc7;
     --back-button: #af0000;
+    --back-button-hover: #770000;
     --button-primary: #3b82f6;
     --button-primary-hover: #2563eb;
     --button-secondary: #10b981;
@@ -88,7 +90,7 @@ body {
   color: var(--foreground);
 }
 
-.button-primary:hover {
+.button-primaryHover {
   background-color: var(--button-primary-hover);
 }
 
@@ -97,10 +99,22 @@ body {
   color: var(--foreground);
 }
 
-.button-secondary:hover {
+.button-secondaryHover {
   background-color: var(--button-secondary-hover);
+}
+
+.bg-button-back {
+  background-color: var(--back-button);
 }
 
 .modal-border {
   border-color: var(--modal-border);
+}
+
+.hover\:bg-button-primaryHover:hover {
+  background-color: var(--button-primary-hover);
+}
+
+.hover\:bg-button-secondaryHover:hover {
+  background-color: var(--button-secondary-hover);
 }
