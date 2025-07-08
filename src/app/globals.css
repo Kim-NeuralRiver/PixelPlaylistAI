@@ -17,6 +17,8 @@
   --button-primary-hover: #1d4ed8;
   --button-secondary: #10b981;
   --button-secondary-hover: #059669;
+  --info-background: #dbeafe;
+  --info-foreground: #1e3a8a;
   --success-background: #f0fdf4;
   --success-foreground: #15803d;
   --success-border: #bbf7d0;
@@ -43,6 +45,8 @@
     --button-primary-hover: #2563eb;
     --button-secondary: #10b981;
     --button-secondary-hover: #059669;
+    --info-background: #4168c4;
+    --info-foreground: #00306b;
     --success-background: #064e3b;
     --success-foreground: #10b981;
     --success-border: #047857;
@@ -71,6 +75,11 @@ body {
 
 .bg-input {
   background-color: var(--input-background);
+}
+
+.bg-info {
+  background-color: var(--info-background);
+  color: var(--info-foreground);
 }
 
 .text-input {
