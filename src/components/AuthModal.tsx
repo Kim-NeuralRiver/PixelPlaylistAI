@@ -41,15 +41,15 @@ export default function AuthModal({
 
         try {
             if (mode === 'signin') { 
-                if (!email.trim()) {
-                    throw new Error(t('auth:emailRequired')); 
+                if (!email.trim() && !username.trim()) {
+                    throw new Error(t('auth:emailOrUsernameRequired')); 
                 }
                 
                 if (!password.trim()) {
                     throw new Error(t('auth:passwordRequired')); 
                 }
                 
-                const result = await signIn(email, password);
+                const result = await signIn(email, username, password);
 
                 if (!result.success) {
                     throw new Error(result.error || t('auth:signInFailed'));
@@ -152,17 +152,6 @@ export default function AuthModal({
 
                         {mode === 'signup' && (
                             <input
-                            type="text"
-                            placeholder={t('auth:usernamePlaceholder')}
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm"
-                            required
-                            />
-                        )}
-
-                        {mode === 'signup' && (
-                            <input
                                 type="text"
                                 placeholder={t('auth:usernamePlaceholder')}
                                 value={username}
@@ -184,12 +173,12 @@ export default function AuthModal({
                             
 
                         <input
-                            type="email"
+                            type={mode === 'signin' ? 'text' : 'email'}
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm"
-                            placeholder={t('auth:emailPlaceholder')}
+                            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-success-border"
+                            placeholder={mode === 'signin' ? t('auth:emailOrUsernamePlaceholder') : t('auth:emailPlaceholder')}
                         />
 
                         <input
@@ -197,7 +186,7 @@ export default function AuthModal({
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm"
+                            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-success-border"
                             placeholder={t('auth:passwordPlaceholder')}
                         />
 

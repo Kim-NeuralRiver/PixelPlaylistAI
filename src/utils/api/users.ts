@@ -33,6 +33,7 @@ export async function registerUser(userData: RegisterUserData): Promise<Register
 export async function updateUserProfile(profileData: { 
   first_name?: string;
   email?: string;
+  username?: string;
 }): Promise<{success: boolean; data?: any; error?: string; fieldErrors?: Record<string, string>}> {
   try {
     const data = await api.patch('api/user/profile/', profileData, { requiresAuth: true });

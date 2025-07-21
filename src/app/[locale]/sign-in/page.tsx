@@ -9,10 +9,12 @@ import { useAuth } from '@/hooks/useAuth';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
+  const [usernameError, setUsernameError] = useState('');
   const router = useRouter();
   const { t } = useTranslation(['auth']);
   const { signIn } = useAuth();
@@ -20,8 +22,8 @@ const SignIn: React.FC = () => {
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim()) {
-      setEmailError(t('auth:emailRequired'));
-      return false;
+      setEmailError('');
+      return true;
     }
     if (!emailRegex.test(email)) {
       setEmailError(t('auth:emailInvalid'));
@@ -30,6 +32,29 @@ const SignIn: React.FC = () => {
     setEmailError('');
     return true;
   };
+
+  const validateUsername = (username: string) => {
+    if (!username.trim()) {
+      setUsernameError('');
+      return true;
+    }
+    setUsernameError('');
+    return true;
+  };
+
+  const validateCredentials = () => {
+    const emailValid = validateEmail(email);
+    const usernameValid = validateUsername(username);
+
+    // At least email or username must be provided
+    if (!email.trim() && !username.trim()) {
+      setEmailError(t('auth:emailOrUsernameRequired'));
+      setUsernameError(t('auth:emailOrUsernameRequired'));
+      return false;
+    }
+
+    return emailValid && usernameValid;
+  }
 
   const handleCredentialsSubmit = async (e: React.FormEvent) => {
     console.log('Form submit triggered, event:', e); // Debug log
@@ -40,9 +65,9 @@ const SignIn: React.FC = () => {
     setMessage('');
     setLoading(true);
 
-    console.log('Email:', email, 'Password length:', password.length); // Debug log
+    console.log('Email:', email, 'Username:', username, 'Password length:', password.length); // Debug log
 
-    if (!validateEmail(email)) {
+    if (!validateCredentials()) {
       setLoading(false);
       return;
     }
@@ -54,7 +79,7 @@ const SignIn: React.FC = () => {
   
     try {
       console.log('Calling signIn...'); // Debug log
-      const result = await signIn(email, password);
+      const result = await signIn(email, username, password);
       console.log('Sign in result:', result); // Debug log
 
       if (result.success) {
@@ -125,6 +150,29 @@ const SignIn: React.FC = () => {
             />
             {emailError && (
               <p className="mt-1 text-sm text-error">{emailError}</p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium text-card">
+              {t('auth:username')} <span className="text-secondary">({t('auth:optional')})</span>
+            </label>
+            <input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                if (usernameError) validateUsername(e.target.value);
+              }}
+              onBlur={(e) => validateUsername(e.target.value)}
+              className={`mt-1 block w-full px-3 py-2 border rounded-md bg-input text-input focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm ${
+                usernameError ? 'border-red-500' : 'border-input'
+              }`}
+              placeholder={t('auth:usernamePlaceholder')}
+            />
+            {usernameError && (
+              <p className="mt-1 text-sm text-error">{usernameError}</p>
             )}
           </div>
 

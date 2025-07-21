@@ -31,17 +31,17 @@ export const useAuth = () => {
   }, [isAuthenticated, dispatch]); // Run on mount and when isAuthenticated or dispatch changes
   // Runs on mount to check if user is auth based on token presence or lack thereof
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, username: string, password: string) => {
     try {
       // Input validation
-    if (!email.trim() || !password.trim()) {
-      return { success: false, error: 'Please enter both email and password' };
+    if (!email.trim() && !username.trim() || !password.trim()) {
+      return { success: false, error: 'Please provide either your username or email, and password.' };
     }
 
     try {
       const data = await api.post<{access: string, refresh: string}>(
         'api/token/', 
-        { email: email.trim(), username: email.trim(), password },
+        { email: email.trim(), username: username.trim(), password },
         { requiresAuth: false }
       );
       
@@ -50,7 +50,7 @@ export const useAuth = () => {
       }
       
       tokenManager.setTokens(data.access, data.refresh);
-      dispatch(login(email));
+      dispatch(login(email.trim() || username.trim())); // Dispatch login with email OR username
       
       return { success: true };
     } catch (error: any) {
@@ -76,7 +76,12 @@ export const useAuth = () => {
   password: string,
   name?: string ) => {
     try {
-      await api.post('api/users/', { username, email, password, name }, { requiresAuth: false });
+      await api.post('api/users/', { 
+        username: username.trim(), 
+        email: email.trim(), 
+        password, 
+        name 
+      }, { requiresAuth: false });
       return { success: true, message: 'Account created successfully! You may now sign in. :)' };
     } catch (error: any) {
       return { success: false, error: error.message || 'An unexpected error occurred' };
