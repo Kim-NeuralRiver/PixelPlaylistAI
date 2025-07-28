@@ -53,13 +53,13 @@ const SignIn: React.FC = () => {
       return false;
     }
 
-    // Clear any errors if one or other field is provided and valid
+/*     // Clear any errors if one or other field is provided and valid
     if (email.trim() && !emailValid) {
       return false;
     }
     if (username.trim() && !usernameValid) {
       return false;
-    }
+    } */
 
     // Clear 'field required' errors if either field has content
     if (email.trim() || username.trim()) {
@@ -96,8 +96,21 @@ const SignIn: React.FC = () => {
     }
   
     try {
-      console.log('Calling signIn...'); // Debug log
-      const result = await signIn(email, username, password);
+      const emailPresent = email.trim();
+      const usernamePresent = username.trim();
+
+      console.log('Parameters being sent:', { 
+        email: emailPresent || 'EMPTY', 
+        username: usernamePresent || 'EMPTY', 
+        password: password ? 'PROVIDED' : 'EMPTY' 
+      }); // Debug log
+
+      const result = await signIn( // Pass only the provided credentials
+        emailPresent ? email : '', // Use email if provided
+        usernamePresent ? username : '', // Use username if provided
+        password
+      );
+
       console.log('Sign in result:', result); // Debug log
 
       if (result.success) {
