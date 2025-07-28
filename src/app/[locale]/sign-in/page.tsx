@@ -53,6 +53,24 @@ const SignIn: React.FC = () => {
       return false;
     }
 
+    // Clear any errors if one or other field is provided and valid
+    if (email.trim() && !emailValid) {
+      return false;
+    }
+    if (username.trim() && !usernameValid) {
+      return false;
+    }
+
+    // Clear 'field required' errors if either field has content
+    if (email.trim() || username.trim()) {
+      if (emailError === t('auth:emailOrUsernameRequired')) {
+        setEmailError('');
+      }
+      if (usernameError === t('auth:emailOrUsernameRequired')) {
+        setUsernameError('');
+      }
+    }
+
     return emailValid && usernameValid;
   }
 
@@ -136,11 +154,15 @@ const SignIn: React.FC = () => {
             <input
               id="email"
               type="email"
-              required
+              required={!username.trim()}
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
                 if (emailError) validateEmail(e.target.value);
+                // clear required error when user starts typing
+                if (emailError === t('auth:emailOrUsernameRequired') && e.target.value.trim()) {
+                  setEmailError('');
+                }
               }}
               onBlur={(e) => validateEmail(e.target.value)}
               className={`mt-1 block w-full px-3 py-2 border rounded-md bg-input text-input focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm ${
@@ -155,15 +177,20 @@ const SignIn: React.FC = () => {
 
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-card">
-              {t('auth:username')} <span className="text-secondary">({t('auth:optional')})</span>
+              {t('auth:username')} {!email.trim() && <span className="text-secondary">*</span>}
             </label>
             <input
               id="username"
               type="text"
+              required={!email.trim()}
               value={username}
-              onChange={(e) => {
+              onChange={(e) => { 
                 setUsername(e.target.value);
-                if (usernameError) validateUsername(e.target.value);
+                if (usernameError) validateUsername(e.target.value); 
+                // Clear required error when user types
+                if (usernameError === t('auth:emailOrUsernameRequired') && e.target.value.trim()) {
+                  setUsernameError('');
+                }
               }}
               onBlur={(e) => validateUsername(e.target.value)}
               className={`mt-1 block w-full px-3 py-2 border rounded-md bg-input text-input focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm ${
