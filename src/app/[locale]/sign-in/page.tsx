@@ -154,7 +154,7 @@ const SignIn: React.FC = () => {
             <input
               id="email"
               type="email"
-              required={!username.trim()}
+              // required={!username.trim()}
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -182,7 +182,7 @@ const SignIn: React.FC = () => {
             <input
               id="username"
               type="text"
-              required={!email.trim()}
+              // required={!email.trim()}
               value={username}
               onChange={(e) => { 
                 setUsername(e.target.value);
@@ -210,7 +210,7 @@ const SignIn: React.FC = () => {
             <input
               id="password"
               type="password"
-              required
+              // required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-input bg-input text-input rounded-md focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm"
