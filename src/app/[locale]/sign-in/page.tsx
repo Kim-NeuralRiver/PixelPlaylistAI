@@ -8,71 +8,40 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 
 const SignIn: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
+  const [credential, setCredential] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [emailError, setEmailError] = useState('');
-  const [usernameError, setUsernameError] = useState('');
+  const [credentialError, setCredentialError] = useState('');
   const router = useRouter();
   const { t } = useTranslation(['auth']);
   const { signIn } = useAuth();
 
-  const validateEmail = (email: string) => {
+  // Sign in form update - added helper function to determine if the input is an email 
+
+  const isEmail = (input: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.trim()) {
-      setEmailError('');
-      return true;
-    }
-    if (!emailRegex.test(email)) {
-      setEmailError(t('auth:emailInvalid'));
-      return false;
-    }
-    setEmailError('');
-    return true;
-  };
-
-  const validateUsername = (username: string) => {
-    if (!username.trim()) {
-      setUsernameError('');
-      return true;
-    }
-    setUsernameError('');
-    return true;
-  };
-
-  const validateCredentials = () => {
-    const emailValid = validateEmail(email);
-    const usernameValid = validateUsername(username);
-
-    // At least email or username must be provided
-    if (!email.trim() && !username.trim()) {
-      setEmailError(t('auth:emailOrUsernameRequired'));
-      setUsernameError(t('auth:emailOrUsernameRequired'));
-      return false;
-    }
-
-/*     // Clear any errors if one or other field is provided and valid
-    if (email.trim() && !emailValid) {
-      return false;
-    }
-    if (username.trim() && !usernameValid) {
-      return false;
-    } */
-
-    // Clear 'field required' errors if either field has content
-    if (email.trim() || username.trim()) {
-      if (emailError === t('auth:emailOrUsernameRequired')) {
-        setEmailError('');
-      }
-      if (usernameError === t('auth:emailOrUsernameRequired')) {
-        setUsernameError('');
-      }
-    }
-
-    return emailValid && usernameValid;
+    return emailRegex.test(input);
   }
+
+  const validateCredential =  (input: string) => {
+    if (!input.trim()) {
+      setCredentialError(t('auth:emailOrUsernameRequired'));
+      return false;
+    }
+
+    // If it has email regex, validate email format
+    if (input.includes('@')) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(input)) {
+        setCredentialError(t('auth:invalidEmail'));
+        return false;
+      }
+    }
+
+    setCredentialError('');
+    return true;
+  };
 
   const handleCredentialsSubmit = async (e: React.FormEvent) => {
     console.log('Form submit triggered, event:', e); // Debug log
@@ -83,12 +52,13 @@ const SignIn: React.FC = () => {
     setMessage('');
     setLoading(true);
 
-    console.log('Email:', email, 'Username:', username, 'Password length:', password.length); // Debug log
+    console.log('Credential', credential, 'Password length:', password.length); // Debug log
 
-    if (!validateCredentials()) {
+    if (!validateCredential(credential)) {
       setLoading(false);
       return;
     }
+
     if (!password.trim()) {
       setMessage(t('auth:passwordRequired'));
       setLoading(false);
@@ -96,18 +66,19 @@ const SignIn: React.FC = () => {
     }
   
     try {
-      const emailPresent = email.trim();
-      const usernamePresent = username.trim();
+      // Determine email vs username and prepare params
+      const trimmedCredential = credential.trim();
+      const isEmailInput = isEmail(trimmedCredential);
 
       console.log('Parameters being sent:', { 
-        email: emailPresent || 'EMPTY', 
-        username: usernamePresent || 'EMPTY', 
+        credential: trimmedCredential || 'EMPTY',
+        isEmail: isEmailInput || 'EMPTY', 
         password: password ? 'PROVIDED' : 'EMPTY' 
       }); // Debug log
 
       const result = await signIn( // Pass only the provided credentials
-        emailPresent ? email : '', // Use email if provided
-        usernamePresent ? username : '', // Use username if provided
+        isEmailInput ? trimmedCredential : '', // Use email if provided
+        isEmailInput ? '' : trimmedCredential, // Use username if provided
         password
       );
 
@@ -161,61 +132,30 @@ const SignIn: React.FC = () => {
         {/* Simplified credentials form */}
         <form onSubmit={handleCredentialsSubmit} className="mt-8 space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-card">
-              {t('auth:emailAddress')}
+            <label htmlFor="credential" className="block text-sm font-medium text-card">
+              {t('auth:emailOrUsername')}
             </label>
             <input
-              id="email"
-              type="email"
-              // required={!username.trim()}
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (emailError) validateEmail(e.target.value);
-                // clear required error when user starts typing
-                if (emailError === t('auth:emailOrUsernameRequired') && e.target.value.trim()) {
-                  setEmailError('');
-                }
-              }}
-              onBlur={(e) => validateEmail(e.target.value)}
-              className={`mt-1 block w-full px-3 py-2 border rounded-md bg-input text-input focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm ${
-                emailError ? 'border-red-500' : 'border-input'
-              }`}
-              placeholder={t('auth:emailPlaceholder')}
-            />
-            {emailError && (
-              <p className="mt-1 text-sm text-error">{emailError}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="username" className="block text-sm font-medium text-card">
-              {t('auth:username')} {!email.trim() && <span className="text-secondary">*</span>}
-            </label>
-            <input
-              id="username"
+              id="credential"
               type="text"
-              // required={!email.trim()}
-              value={username}
-              onChange={(e) => { 
-                setUsername(e.target.value);
-                if (usernameError) validateUsername(e.target.value); 
-                // Clear required error when user types
-                if (usernameError === t('auth:emailOrUsernameRequired') && e.target.value.trim()) {
-                  setUsernameError('');
+              value={credential}
+              onChange={(e) => {
+                setCredential(e.target.value);
+                if (credentialError && e.target.value.trim()) {
+                // clear credential required error when user starts typing
+                  setCredentialError('');
                 }
               }}
-              onBlur={(e) => validateUsername(e.target.value)}
+              onBlur={(e) => validateCredential(e.target.value)}
               className={`mt-1 block w-full px-3 py-2 border rounded-md bg-input text-input focus:outline-none focus:ring-blue-500 focus:border-success-border sm:text-sm ${
-                usernameError ? 'border-red-500' : 'border-input'
+                credentialError ? 'border-red-500' : 'border-input'
               }`}
-              placeholder={t('auth:usernamePlaceholder')}
+              placeholder={t('auth:emailOrUsernamePlaceholder')}
             />
-            {usernameError && (
-              <p className="mt-1 text-sm text-error">{usernameError}</p>
+            {credentialError && (
+              <p className="mt-1 text-sm text-error">{credentialError}</p>
             )}
           </div>
-
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-card">
               {t('auth:password')}
