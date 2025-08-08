@@ -133,7 +133,7 @@ const SignIn: React.FC = () => {
         <form onSubmit={handleCredentialsSubmit} className="mt-8 space-y-6">
           <div>
             <label htmlFor="credential" className="block text-sm font-medium text-card">
-              {t('auth:emailOrUsername')}
+              {t('auth:enterEmailOrUsername')}
             </label>
             <input
               id="credential"
