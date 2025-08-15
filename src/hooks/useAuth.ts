@@ -69,6 +69,31 @@ export const useAuth = () => {
     }
   };
 
+  // Function to send welcome email after sign up
+  const sendWelcomeEmail = async (email: string, name: string) => {
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': process.env.NEXT_PUBLIC_EMAIL_API_KEY || '',
+        },
+        body: JSON.stringify({
+          to: email,
+          name: name,
+          url: `${window.location.origin}/sign-in`
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send welcome email');
+      }
+    } catch (error) {
+      console.error('Error sending welcome email:', error);
+      throw error; // Re-throw to handle in signUp
+    }
+  };
+
   // Sign up
   const signUp = async (
   username: string,
@@ -82,6 +107,13 @@ export const useAuth = () => {
         password, 
         name 
       }, { requiresAuth: false });
+
+      // Send welcome email after successful sign up
+      try {
+        await sendWelcomeEmail(email.trim(), name || username.trim());
+      } catch (emailError) {
+        console.error('Failed to send welcome email:', emailError);
+      }
       return { success: true, message: 'Account created successfully! You may now sign in. :)' };
     } catch (error: any) {
       return { success: false, error: error.message || 'An unexpected error occurred' };
