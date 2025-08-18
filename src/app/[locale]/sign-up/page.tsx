@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -18,12 +18,95 @@ const SignUp: React.FC = () => {
   const { t } = useTranslation(['auth']);
   const { signUp } = useAuth();
 
+  const sessionId = useRef(`signup-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`);
+
+  useEffect(() => {
+    console.log(`[${sessionId.current}] Sign-up page mounted`, {
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      referrer: document.referrer || 'direct',
+    });
+
+    return () => {
+      console.log(`[${sessionId.current}] Sign-up page unmounted`, {
+        timestamp: new Date().toISOString(),
+      });
+    };
+  }, []);
+
+  const handleNavigation = (destination: string, context: string) => {
+    const navigationId = `nav-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+
+    console.log(`[${navigationId}] Navigation initiated`, {
+      navigationId,
+      timestamp: new Date().toISOString(),
+      destination,
+      context,
+      currentPath: window.location.pathname,
+      formData: {
+        usernameLength: username.length,
+        nameLength: name.length,
+        emailLength: email.length,
+        passwordLength: password.length,
+      },
+    });
+
+    try {
+      router.push(destination);
+
+      console.log(`[${sessionId.current}] Router.push executed successfully`, {
+        navigationId,
+        timestamp: new Date().toISOString(),
+        destination,
+        context,
+      });
+    } catch (error) {
+      console.error(`[${sessionId.current}] Error during navigation`, {
+        navigationId,
+        timestamp: new Date().toISOString(),
+        destination,
+        context,
+        error: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+      });
+    }
+  };
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const submissionId = `submit-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+    const startTime = Date.now(); 
+
+    console.log(`[${sessionId.current}] Form submission started`, {
+      submissionId,
+      timestamp: new Date().toISOString(),
+      formData: {
+        username: username ? 'provided' : 'empty',
+        name: name ? 'provided' : 'empty',
+        email: email ? 'provided' : 'empty',
+        password: password ? 'provided' : 'empty',
+        confirmPassword: confirmPassword ? 'provided' : 'empty',
+        usernameLength: username.length,
+        nameLength: name.length,
+        emailLength: email.length,
+        passwordLength: password.length,
+      },
+    });
+
     setMessage('');
     setLoading(true);
 
     if (password !== confirmPassword) {
+
+      const duration = Date.now() - startTime;
+      console.warn(`[${sessionId.current}] Password mismatch validation failed`, {
+        submissionId,
+        timestamp: new Date().toISOString(),
+        duration: `${duration}ms`,
+        validationError: 'password_mismatch',
+      });
+
       setMessage(t('auth:passwordMismatch').toString()); // Use toString because setMessage expects a string
       setMessageType('error');
       setLoading(false);
@@ -31,6 +114,15 @@ const SignUp: React.FC = () => {
     }
 
     if (password.length < 8) {
+      const duration = Date.now() - startTime;
+      console.warn(`[${sessionId.current}] Password length validation failed`, {
+        submissionId,
+        timestamp: new Date().toISOString(),
+        duration: `${duration}ms`,
+        validationError: 'password_too_short',
+        passwordLength: password.length,
+      });
+
       setMessage(t('auth:passwordTooShort').toString());
       setMessageType('error');
       setLoading(false);
@@ -38,24 +130,82 @@ const SignUp: React.FC = () => {
     }
 
     try {
+      console.log(`[${sessionId.current}] Calling signUp API`, {
+        submissionId,
+        timestamp: new Date().toISOString(),
+        username: username ? 'provided' : 'empty',
+        email: email ? 'provided' : 'empty',
+      });
+
       const result = await signUp(username, email, password, name);
+      const duration = Date.now() - startTime;
 
       if (result.success) {
+        console.log(`[${sessionId.current}] Sign-up successful`, {
+          submissionId,
+          timestamp: new Date().toISOString(),
+          duration: `${duration}ms`,
+          username,
+          email,
+          redirectPending: true,
+        });
+
         setMessage(t('auth:signUpSuccess', { defaultValue: result.message ?? '' }).toString()); // Pass defaultValue to ensure str is returned
         setMessageType('success');
+
+        console.log(`[${sessionId.current}] Scheduling redirect to sign-in`, {
+          submissionId,
+          timestamp: new Date().toISOString(),
+          redirectDelay: '2000ms',
+        });
+
         setTimeout(() => {
-          router.push('/sign-in');
+          console.log(`[${sessionId.current}] Executing delayed redirect`, {
+            submissionId,
+            timestamp: new Date().toISOString(),
+            destination: '/sign-in',
+          });
+          handleNavigation('/sign-in', 'post-signup-redirect');
         }, 2000);
+
       } else {
+        const duration = Date.now() - startTime;
+        console.error(`[${sessionId.current}] Sign-up failed`, {
+          submissionId,
+          timestamp: new Date().toISOString(),
+          duration: `${duration}ms`,
+          error: result.error,
+          username,
+          email,
+        });
+
         setMessage(t('auth:signUpFail', result.error).toString());
         setMessageType('error');
       }
+
     } catch (err: any) {
+      const duration = Date.now() - startTime;
+      console.error(`[${sessionId.current}] Sign-up exception`, {
+        submissionId,
+        timestamp: new Date().toISOString(),
+        duration: `${duration}ms`,
+        error: err.message,
+        errorStack: err.stack,
+        username,
+        email,
+      });
+
       setMessage(t('auth:signUpUnexpectedError', err.message).toString());
       setMessageType('error');
-      console.error('Sign up error:', err);
     } finally {
       setLoading(false);
+      const finalDuration = Date.now() - startTime;
+      console.log(`[${sessionId.current}] Form submission completed`, {
+        submissionId,
+        timestamp: new Date().toISOString(),
+        totalDuration: `${finalDuration}ms`,
+        loading: false,
+      });
     }
   };
 
